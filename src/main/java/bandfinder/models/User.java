@@ -16,6 +16,10 @@ public class User {
         this.stageName = stageName;
     }
 
+    public User(String email, String passwordHash, String firstName, String surname, String stageName) {
+        this(-1, email, passwordHash, firstName, surname, stageName);
+    }
+
     public int getId() {
         return id;
     }
