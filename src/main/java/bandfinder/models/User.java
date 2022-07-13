@@ -7,7 +7,6 @@ public class User {
     private String firstName;
     private String surname;
     private String stageName;
-
     public User(int id, String email, String passwordHash, String firstName, String surname, String stageName) {
         this.id = id;
         this.email = email;
@@ -65,4 +64,13 @@ public class User {
         this.stageName = stageName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        return id == user.id;
+    }
 }
