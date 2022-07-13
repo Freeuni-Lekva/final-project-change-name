@@ -1,5 +1,7 @@
 package bandfinder.models;
 
+import java.util.Objects;
+
 public class Band {
     private int id;
     private String name;
@@ -30,8 +32,10 @@ public class Band {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        Band other = (Band) obj;
-        return other.getId() == this.getId();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Band band = (Band) o;
+        return id == band.id;
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class HashmapBandDAO implements BandDAO{
     private final HashMap<Integer, Band> map;
-    private final HashMap<Integer, ArrayList<User>> bandMembersMap; // band id -> list of members
+    private final HashMap<Integer, ArrayList<Integer>> bandMembersMap; // band id -> list of members
 
     public HashmapBandDAO() {
         this.map = new HashMap<>();
@@ -21,7 +21,7 @@ public class HashmapBandDAO implements BandDAO{
         int newId = map.size();
         model.setId(newId);
         map.put(newId,model);
-        bandMembersMap.put(model.getId(),new ArrayList<User>());
+        bandMembersMap.put(model.getId(),new ArrayList<>());
         return map.get(model.getId());
     }
 
@@ -51,36 +51,42 @@ public class HashmapBandDAO implements BandDAO{
     }
 
     @Override
-    public boolean isUserInBand(User user, Band band) {
-        if(!bandMembersMap.containsKey(band.getId())) return false; //band does not exist in database
-        return bandMembersMap.get(band.getId()).contains(user);
+    public boolean isUserInBand(int user_id, int band_id) {
+        if(!bandMembersMap.containsKey(band_id)) {
+            return false; //band does not exist in database
+        }
+        return bandMembersMap.get(band_id).contains(user_id);
     }
 
     @Override
-    public boolean addMemberToBand(User member, Band band) {
-        if(isUserInBand(member,band)) return false;
-        bandMembersMap.get(band.getId()).add(member);
+    public boolean addMemberToBand(int member_id, int band_id) {
+        if(isUserInBand(member_id,band_id)) {
+            return false;
+        }
+        bandMembersMap.get(band_id).add(member_id);
         return true;
     }
 
     @Override
-    public boolean removeMemberFromBand(User member, Band band) {
-        if(!isUserInBand(member,band)) return false;
-        bandMembersMap.get(band.getId()).remove(member); //band stays in cache if all users are gone
+    public boolean removeMemberFromBand(int member_id, int band_id) {
+        if(!isUserInBand(member_id,band_id)) {
+            return false;
+        }
+        bandMembersMap.get(band_id).remove(Integer.valueOf(member_id)); //band stays in cache if all users are gone
         return true;
     }
 
     @Override
-    public List<User> getBandMembers(Band band) {
-        return bandMembersMap.get(band.getId());
+    public List<Integer> getBandMemberIDs(int band_id) {
+        return bandMembersMap.get(band_id);
     }
 
     @Override
-    public List<Band> getAllBandsForUser(User user) {
-        ArrayList<Band> res = new ArrayList<>();
+    public List<Integer> getAllBandIDsForUser(int user_id) {
+        ArrayList<Integer> res = new ArrayList<>();
         for(int i : bandMembersMap.keySet()) {
-            if(bandMembersMap.get(i).contains(user)){
-                res.add(getById(i));
+            if(bandMembersMap.get(i).contains(user_id)){
+                res.add(i);
             }
         }
         return res;
