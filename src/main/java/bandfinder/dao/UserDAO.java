@@ -6,5 +6,5 @@ public interface UserDAO extends DAO<User>{
     String ATTRIBUTE_NAME = "UserDAO";
 
     // Debatable
-    User getUserByEmail(String mail);
+    User getUserByEmail(String email);
 }
