@@ -18,11 +18,14 @@ public class HashmapBandDAO implements BandDAO{
 
     @Override
     public Band create(Band model) {
-        int newId = map.size();
-        model.setId(newId);
-        map.put(newId,model);
+        int id = model.getId();
+        if(model.getId() == -1) {
+            id = map.size() + 1;
+            model.setId(id);
+        }
+        map.put(id, model);
         bandMembersMap.put(model.getId(),new ArrayList<>());
-        return map.get(model.getId());
+        return model;
     }
 
     @Override
@@ -33,7 +36,12 @@ public class HashmapBandDAO implements BandDAO{
 
     @Override
     public boolean delete(int id) {
-        return map.remove(id) != null;
+        Band deletedBand = map.remove(id);
+        if(deletedBand != null) {
+            deletedBand.setId(-1);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -51,41 +59,41 @@ public class HashmapBandDAO implements BandDAO{
     }
 
     @Override
-    public boolean isUserInBand(int user_id, int band_id) {
-        if(!bandMembersMap.containsKey(band_id)) {
+    public boolean isUserInBand(int userId, int bandId) {
+        if(!bandMembersMap.containsKey(bandId)) {
             return false; //band does not exist in database
         }
-        return bandMembersMap.get(band_id).contains(user_id);
+        return bandMembersMap.get(bandId).contains(userId);
     }
 
     @Override
-    public boolean addMemberToBand(int member_id, int band_id) {
-        if(isUserInBand(member_id,band_id)) {
+    public boolean addMemberToBand(int memberId, int bandId) {
+        if(isUserInBand(memberId,bandId)) {
             return false;
         }
-        bandMembersMap.get(band_id).add(member_id);
+        bandMembersMap.get(bandId).add(memberId);
         return true;
     }
 
     @Override
-    public boolean removeMemberFromBand(int member_id, int band_id) {
-        if(!isUserInBand(member_id,band_id)) {
+    public boolean removeMemberFromBand(int memberId, int bandId) {
+        if(!isUserInBand(memberId,bandId)) {
             return false;
         }
-        bandMembersMap.get(band_id).remove(Integer.valueOf(member_id)); //band stays in cache if all users are gone
+        bandMembersMap.get(bandId).remove(Integer.valueOf(memberId)); //band stays in cache if all users are gone
         return true;
     }
 
     @Override
-    public List<Integer> getBandMemberIDs(int band_id) {
-        return bandMembersMap.get(band_id);
+    public List<Integer> getBandMemberIDs(int bandId) {
+        return bandMembersMap.get(bandId);
     }
 
     @Override
-    public List<Integer> getAllBandIDsForUser(int user_id) {
+    public List<Integer> getAllBandIDsForUser(int userId) {
         ArrayList<Integer> res = new ArrayList<>();
         for(int i : bandMembersMap.keySet()) {
-            if(bandMembersMap.get(i).contains(user_id)){
+            if(bandMembersMap.get(i).contains(userId)){
                 res.add(i);
             }
         }
