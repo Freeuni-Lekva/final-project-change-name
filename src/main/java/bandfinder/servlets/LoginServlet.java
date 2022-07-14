@@ -1,6 +1,7 @@
 package bandfinder.servlets;
 
 import bandfinder.dao.UserDAO;
+import bandfinder.infrastructure.AutoInjectable;
 import bandfinder.models.User;
 
 import javax.servlet.*;
@@ -9,7 +10,8 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 
 @WebServlet(name = "LoginServlet", value = "/login")
-public class LoginServlet extends HttpServlet {
+public class LoginServlet extends ServletBase {
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

@@ -1,0 +1,17 @@
+bandfinder/models/User.class
+bandfinder/servlets/RegistrationServlet.class
+bandfinder/dao/DAO.class
+bandfinder/infrastructure/Injector$Scope.class
+bandfinder/infrastructure/Injector.class
+bandfinder/listeners/InitializationListener.class
+bandfinder/serviceimplementations/HashingServiceImpl.class
+bandfinder/dao/UserDAO.class
+bandfinder/infrastructure/Config.class
+bandfinder/services/HashingService.class
+bandfinder/infrastructure/Injector$ClassItem.class
+bandfinder/dao/HashMapUserDAO.class
+bandfinder/SampleClass.class
+bandfinder/servlets/ServletBase.class
+bandfinder/infrastructure/ServiceValueSetter.class
+bandfinder/infrastructure/AutoInjectable.class
+bandfinder/servlets/LoginServlet.class
