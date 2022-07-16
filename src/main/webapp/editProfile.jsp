@@ -14,7 +14,7 @@
             elemID -> div that contains pure text
             buttonID -> edit button
 
-            Changes div with elemID id into a text field.
+            Changes div with elemID id into a text field (with elemID as its name, which is used inside the servlet later).
             Text field value is set to the text contained by the div.
          */
         function changeEditText(elemID, buttonID){
