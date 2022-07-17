@@ -1,10 +1,4 @@
-<%@ page import="bandfinder.models.User" %><%--
-  Created by IntelliJ IDEA.
-  User: nick
-  Date: 11.07.22
-  Time: 21:21
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="bandfinder.models.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% User user = (User) session.getAttribute("Authenticated User"); %>
 <html>
