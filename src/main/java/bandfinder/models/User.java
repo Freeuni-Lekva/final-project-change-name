@@ -7,7 +7,6 @@ public class User {
     private String firstName;
     private String surname;
     private String stageName;
-
     public User(int id, String email, String passwordHash, String firstName, String surname, String stageName) {
         this.id = id;
         this.email = email;
@@ -15,6 +14,10 @@ public class User {
         this.firstName = firstName;
         this.surname = surname;
         this.stageName = stageName;
+    }
+
+    public User(String email, String passwordHash, String firstName, String surname, String stageName) {
+        this(-1, email, passwordHash, firstName, surname, stageName);
     }
 
     public int getId() {
@@ -65,4 +68,13 @@ public class User {
         this.stageName = stageName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        return id == user.id;
+    }
 }
