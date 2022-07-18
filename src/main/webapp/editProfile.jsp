@@ -9,7 +9,6 @@
     %>
 
     <title>Profile</title>
-    <script src="editProfile.js"></script>
 </head>
 <body>
     <form action="EditProfileServlet" method="post">
@@ -39,5 +38,7 @@
     <br>
 
     <button id="password-button" onmouseup="changePassword('password-button')">Edit Password</button>
+
+    <script src="editProfile.js"></script>
 </body>
 </html>
