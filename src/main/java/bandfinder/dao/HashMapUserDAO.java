@@ -14,11 +14,14 @@ public class HashMapUserDAO implements UserDAO {
     }
 
     @Override
-    public User create(User model) {
-        int newId = map.size();
-        model.setId(newId);
-        map.put(newId, model);
-        return map.get(model.getId());
+    public synchronized User create(User model) {
+        int id = model.getId();
+        if(model.getId() == -1) {
+            id = map.size() + 1;
+            model.setId(id);
+        }
+        map.put(id, model);
+        return model;
     }
 
     @Override
@@ -29,7 +32,12 @@ public class HashMapUserDAO implements UserDAO {
 
     @Override
     public boolean delete(int id) {
-        return map.remove(id) != null;
+        User deletedUser = map.remove(id);
+        if(deletedUser != null) {
+            deletedUser.setId(-1); // Needed to behave correctly when re-adding elements with the same id
+            return true;
+        }
+        return false;
     }
 
     @Override
