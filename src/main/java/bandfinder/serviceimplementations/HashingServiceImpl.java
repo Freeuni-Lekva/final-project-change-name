@@ -25,12 +25,12 @@ public class HashingServiceImpl implements HashingService {
         SecretKeyFactory skf = SecretKeyFactory.getInstance(ALGORITHM);
 
         byte[] hash = skf.generateSecret(spec).getEncoded();
-        return ITERATIONS + DELIMITER + toHex(salt) + DELIMITER + toHex(hash);
+        return String.valueOf(ITERATIONS) + DELIMITER + toHex(salt) + DELIMITER + toHex(hash);
     }
 
     @Override
     public boolean validateHash(String password, String storedHash) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        String[] parts = storedHash.split(String.valueOf(ITERATIONS));
+        String[] parts = storedHash.split(String.valueOf(DELIMITER));
         int iterations = Integer.parseInt(parts[0]);
 
         byte[] salt = fromHex(parts[1]);

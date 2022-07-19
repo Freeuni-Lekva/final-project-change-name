@@ -1,5 +1,6 @@
 package bandfinder.dao;
 
+import bandfinder.serviceimplementations.SQLUserDAO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 

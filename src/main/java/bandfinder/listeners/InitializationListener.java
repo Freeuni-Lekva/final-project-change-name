@@ -1,6 +1,6 @@
 package bandfinder.listeners;
 
-import bandfinder.dao.HashMapUserDAO;
+import bandfinder.serviceimplementations.HashMapUserDAO;
 import bandfinder.dao.UserDAO;
 import bandfinder.infrastructure.Config;
 import bandfinder.models.User;
