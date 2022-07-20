@@ -1,5 +1,6 @@
-package bandfinder.dao;
+package bandfinder.serviceimplementations;
 
+import bandfinder.dao.BandDAO;
 import bandfinder.models.Band;
 import bandfinder.models.User;
 
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class HashmapBandDAO implements BandDAO{
+public class HashmapBandDAO implements BandDAO {
     private final HashMap<Integer, Band> map;
     private final HashMap<Integer, ArrayList<Integer>> bandMembersMap; // band id -> list of members
 

@@ -1,5 +1,6 @@
-package bandfinder.dao;
+package bandfinder.serviceimplementations;
 
+import bandfinder.dao.UserDAO;
 import bandfinder.models.User;
 
 import java.sql.*;
