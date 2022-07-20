@@ -4,8 +4,6 @@ import bandfinder.models.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.sql.DriverManager;
-
 abstract class UserDAOTest {
     protected UserDAO dao;
 

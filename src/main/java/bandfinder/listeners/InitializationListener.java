@@ -1,16 +1,19 @@
 package bandfinder.listeners;
 
-import bandfinder.dao.HashMapUserDAO;
+import bandfinder.serviceimplementations.HashMapUserDAO;
 import bandfinder.dao.UserDAO;
+import bandfinder.infrastructure.Config;
 import bandfinder.models.User;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
-import java.sql.DriverManager;
 
 @WebListener
-public class InitializationListener implements ServletContextListener, HttpSessionListener, HttpSessionAttributeListener {
+public class InitializationListener implements
+        ServletContextListener,
+        HttpSessionListener,
+        HttpSessionAttributeListener {
     public InitializationListener() {
     }
 
@@ -19,6 +22,8 @@ public class InitializationListener implements ServletContextListener, HttpSessi
         UserDAO currentUserDAO = new HashMapUserDAO();
         currentUserDAO.create(new User(1, "guja@gmail.com", "pass", "gujaboi", "sth", "none"));
         sce.getServletContext().setAttribute(UserDAO.ATTRIBUTE_NAME, currentUserDAO);
+
+        Config.ConfigureServices();
     }
 
     @Override
