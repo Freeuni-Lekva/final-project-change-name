@@ -15,19 +15,26 @@ public class UserProfileServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String email = req.getParameter("email");
-        String name = req.getParameter("name");
-        String surname = req.getParameter("surname");
-        String stageName = req.getParameter("stageName");
+        String email = req.getParameter("field-email");
+        String name = req.getParameter("field-name");
+        String surname = req.getParameter("field-surname");
+        String stageName = req.getParameter("field-stageName");
 
-        //TODO: Change this later, as we don't store the user inside the session yet!
         User user = (User) req.getSession().getAttribute("user");
+
+        if(user == null){
+            System.out.println("User object not available!");
+            return;
+        }
+
         user.setEmail(email);
         user.setFirstName(name);
         user.setSurname(surname);
         user.setStageName(stageName);
 
-        UserDAO userDao = (UserDAO) req.getSession().getAttribute(UserDAO.ATTRIBUTE_NAME);
+        UserDAO userDao = (UserDAO) req.getServletContext().getAttribute(UserDAO.ATTRIBUTE_NAME);
         userDao.update(user);
+
+        resp.sendRedirect("editProfile.jsp");
     }
 }

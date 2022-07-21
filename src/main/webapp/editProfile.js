@@ -1,52 +1,95 @@
-/*
-            elemID -> div that contains pure text
-            buttonID -> edit button
+var topSelected = false
+var bottomSelected = false
 
-            Changes div with elemID id into a text field (with elemID as its name, which is used inside the servlet later).
-            Text field value is set to the text contained by the div.
-         */
-function changeEditText(elemID, buttonID){
-    const divElem = document.getElementById(elemID)
-    const button = document.getElementById(buttonID)
+const itemsInForm = document.getElementById('user-info').getElementsByTagName('li')
+const passwordButton = document.getElementById('password-button')
+const editButton = document.getElementById('edit-button')
+const passwordForm = createPasswordForm()
 
 
-    const textField = createInputField('text', elemID)
-    textField.setAttribute('value', divElem.textContent)
+function selectTop(){
+    if(bottomSelected){
+        deselectBottom()
+    }
 
-    const saveButton = createSubmitButton('save')
+    for (var i = 0; i < itemsInForm.length; i++){
+        const divElem = itemsInForm[i].firstElementChild
+        const textDiv = divElem.getElementsByTagName('div')[0]
+        const elemID = textDiv.getAttribute('id')
 
-    button.replaceWith(saveButton)
-    divElem.firstChild.replaceWith(textField)
+        const textField = createInputField('text', 'field-' + elemID, 'field-' + elemID, textDiv.textContent)
+
+        textDiv.innerHTML = ''
+        textDiv.appendChild(textField)
+    }
+
+    const editBtn = document.getElementById('edit-button')
+    const saveBtn = createInputField('submit', '', 'save-button', 'save')
+    editBtn.replaceWith(saveBtn)
+
+    topSelected = true
 }
 
-/*
-    Change the button with the given buttonID into a div
-    containing a form with two password input fields and a submit button.
+function selectBottom(){
+    if(topSelected){
+        deselectTop()
+    }
 
-    Two password fields are created for inputting the current and the new password.
- */
-function changePassword(buttonID){
+    passwordButton.replaceWith(passwordForm)
+
+    bottomSelected = true
+}
+
+function deselectTop(){
+    for (var i = 0; i < itemsInForm.length; i++){
+        const divElem = itemsInForm[i].firstElementChild
+        const textDiv = divElem.getElementsByTagName('div')[0]
+        const elemID = textDiv.getAttribute('id')
+
+        const oldValue = document.getElementById('hidden-' + elemID).getAttribute('value')
+
+        textDiv.innerHTML = oldValue
+    }
+
+    const saveBtn = document.getElementById('save-button')
+    saveBtn.replaceWith(editButton)
+    topSelected = false
+}
+
+function deselectBottom(){
+    passwordForm.replaceWith(passwordButton)
+
+    bottomSelected = false
+}
+
+
+function createPasswordForm(){
     const divElem = document.createElement('div')
+    divElem.setAttribute('id', 'edit-password-div')
     const form = document.createElement('form')
 
     form.setAttribute('action', 'EditPasswordServlet')
     form.setAttribute('method', 'post')
 
-    const curPassword = createInputField('password', 'currentPassword')
-    curPassword.setAttribute('id', 'cur-password')
-    const newPassword = createInputField('password', 'newPassword')
-    newPassword.setAttribute('id', 'new-password')
+    const curPassword = createInputField('password', 'currentPassword', 'cur-password', '')
+    const newPassword = createInputField('password', 'newPassword', 'new-password', '')
 
     const curPasswordLabel = createLabelFor('cur-password', 'Current Password: ')
     const newPasswordLabel = createLabelFor('new-password', 'New Password: ')
 
-    const saveButton = createSubmitButton('save')
-    divElem.appendChild(saveButton)
+    const saveButton = createInputField('submit', '', '', 'save')
+
+    form.appendChild(saveButton)
+
+    const breakLine1 = document.createElement('br')
+
+    form.appendChild(breakLine1)
 
     form.appendChild(curPasswordLabel)
     form.appendChild(curPassword)
 
     const breakLine = document.createElement('br')
+
     form.appendChild(breakLine)
 
     form.appendChild(newPasswordLabel)
@@ -54,8 +97,7 @@ function changePassword(buttonID){
 
     divElem.appendChild(form)
 
-    const button = document.getElementById(buttonID)
-    button.replaceWith(divElem)
+    return divElem
 }
 
 function createLabelFor(forID, text){
@@ -65,16 +107,19 @@ function createLabelFor(forID, text){
     return label
 }
 
-function createSubmitButton(val){
-    const saveButton = document.createElement('input')
-    saveButton.setAttribute('type', 'submit')
-    saveButton.setAttribute('value', val)
-    return saveButton
-}
-
-function createInputField(type, name){
+function createInputField(type, name, id, value){
     const field = document.createElement('input')
-    field.setAttribute('name', name)
-    field.setAttribute('type', type)
+    if(name != ''){
+        field.setAttribute('name', name)
+    }
+    if(type != ''){
+        field.setAttribute('type', type)
+    }
+    if(id != ''){
+        field.setAttribute('id', id)
+    }
+    if(value != ''){
+        field.setAttribute('value', value)
+    }
     return field
 }

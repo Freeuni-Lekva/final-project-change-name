@@ -4,6 +4,8 @@ import bandfinder.serviceimplementations.HashMapUserDAO;
 import bandfinder.dao.UserDAO;
 import bandfinder.infrastructure.Config;
 import bandfinder.models.User;
+import bandfinder.serviceimplementations.HashingServiceImpl;
+import bandfinder.services.HashingService;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -20,8 +22,8 @@ public class InitializationListener implements
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         UserDAO currentUserDAO = new HashMapUserDAO();
-        currentUserDAO.create(new User(1, "guja@gmail.com", "pass", "gujaboi", "sth", "none"));
         sce.getServletContext().setAttribute(UserDAO.ATTRIBUTE_NAME, currentUserDAO);
+        currentUserDAO.create(new User(1, "guja@gmail.com", "pass", "gujaboi", "sth", "none"));
 
         Config.ConfigureServices();
     }
