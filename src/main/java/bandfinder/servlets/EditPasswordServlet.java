@@ -40,6 +40,13 @@ public class EditPasswordServlet extends ServletBase {
                 String newPasswordHash = hashingService.hash(newPassword);
                 curUser.setPasswordHash(newPasswordHash);
                 userDAO.update(curUser);
+
+                if(req.getSession().getAttribute("passwordIncorrect") != null){
+                    req.getSession().removeAttribute("passwordIncorrect");
+                }
+            }else{
+                String message = "Password is incorrect!";
+                req.getSession().setAttribute("passwordIncorrect", message);
             }
             resp.sendRedirect("editProfile.jsp");
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {

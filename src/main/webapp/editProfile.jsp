@@ -1,11 +1,23 @@
 <%@ page import="bandfinder.models.User" %>
 <%@ page import="bandfinder.dao.UserDAO" %>
+<%@ page import="java.nio.file.FileStore" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
 
     <%
         User user = (User) session.getAttribute("user");
+
+        String passwordIncorrectMessage = (String) session.getAttribute("passwordIncorrect");
+    %>
+
+    <%!
+        private boolean passwordIsIncorrect(String message){
+            if(message == null){
+                return false;
+            }
+            return true;
+        }
     %>
 
     <title>Profile</title>
@@ -46,6 +58,12 @@
     </form>
 
     <br>
+
+    <%
+        if(passwordIsIncorrect(passwordIncorrectMessage)){
+            out.println("<div style=\"color: darkred\">" + passwordIncorrectMessage + "</div>");
+        }
+    %>
 
     <button id="password-button" onmouseup="selectBottom()">Edit Password</button>
 

@@ -35,6 +35,10 @@ public class UserProfileServlet extends HttpServlet {
         UserDAO userDao = (UserDAO) req.getServletContext().getAttribute(UserDAO.ATTRIBUTE_NAME);
         userDao.update(user);
 
+        if(req.getSession().getAttribute("passwordIncorrect") != null){
+            req.getSession().removeAttribute("passwordIncorrect");
+        }
+
         resp.sendRedirect("editProfile.jsp");
     }
 }
