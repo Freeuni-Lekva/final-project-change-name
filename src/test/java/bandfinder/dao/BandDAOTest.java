@@ -2,15 +2,20 @@ package bandfinder.dao;
 
 import bandfinder.models.Band;
 import bandfinder.models.User;
+import bandfinder.serviceimplementations.HashMapUserDAO;
+import bandfinder.serviceimplementations.HashmapBandDAO;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-abstract class BandDAOTest {
+public class BandDAOTest {
 
-    protected BandDAO dao;
-    
-    public abstract void setUp();
+    private BandDAO dao;
 
+    @BeforeEach
+    public void setUp() {
+        this.dao = new HashmapBandDAO();
+    }
     @Test
     void testPack1() {
         //this testpack tests the general functions of the dao class:

@@ -8,24 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLUserDAO implements UserDAO {
-    private static SQLUserDAO instance = null;
-
-    public static SQLUserDAO getInstance() throws SQLException, ClassNotFoundException {
-        if (instance == null) {
-            synchronized (SQLUserDAO.class) {
-                if (instance == null) {
-                    instance = new SQLUserDAO();
-                }
-            }
-        }
-        return instance;
-    }
 
     private final Connection connection;
-    private SQLUserDAO() throws ClassNotFoundException, SQLException {
+
+    public SQLUserDAO() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost/bandfinder?user=root&password=pass");
+                "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot");
     }
 
     @Override
@@ -68,6 +57,7 @@ public class SQLUserDAO implements UserDAO {
             statement.setString(4, model.getSurname());
             statement.setString(5, model.getStageName());
             statement.executeUpdate();
+            statement.close();
             return model;
         } catch (SQLException e) {
             throw new RuntimeException(e);

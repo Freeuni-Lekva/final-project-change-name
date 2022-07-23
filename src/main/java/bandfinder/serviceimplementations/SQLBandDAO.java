@@ -12,22 +12,12 @@ public class SQLBandDAO implements BandDAO {
     private final Connection connection;
 
     private static final String CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost/bandfinder";
-    private SQLBandDAO() throws ClassNotFoundException, SQLException {
+    private static final String URL = "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot";
+
+    public SQLBandDAO() throws ClassNotFoundException, SQLException {
         Class.forName(CLASS_NAME);
         connection = DriverManager.getConnection(URL);
     }
-
-    private static SQLBandDAO instance = null;
-
-    public static synchronized SQLBandDAO getInstance() throws SQLException, ClassNotFoundException {
-        if(instance == null) {
-            instance = new SQLBandDAO();
-        }
-        return instance;
-    }
-
-    ////////////// originally BandDAO instances
 
     private static final String IS_USER_IN_BAND_QUERY = "SELECT id FROM band_users " +
                                                         "WHERE band_id = ? AND user_id = ?;";
@@ -125,8 +115,6 @@ public class SQLBandDAO implements BandDAO {
             throw new RuntimeException(e);
         }
     }
-
-    ///////////////// instance methods inherited from generic DAO
 
     private static final String CREATE_QUERY = "INSERT INTO bands (name) VALUES (?);";
 
