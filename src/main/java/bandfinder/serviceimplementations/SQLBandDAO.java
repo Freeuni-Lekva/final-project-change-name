@@ -1,5 +1,6 @@
-package bandfinder.dao;
+package bandfinder.serviceimplementations;
 
+import bandfinder.dao.BandDAO;
 import bandfinder.models.Band;
 
 import java.sql.*;

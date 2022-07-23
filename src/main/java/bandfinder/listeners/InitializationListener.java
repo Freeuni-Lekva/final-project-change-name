@@ -1,5 +1,6 @@
 package bandfinder.listeners;
 
+import bandfinder.infrastructure.DatabaseMigrator;
 import bandfinder.serviceimplementations.HashMapUserDAO;
 import bandfinder.dao.UserDAO;
 import bandfinder.infrastructure.Config;
@@ -19,6 +20,8 @@ public class InitializationListener implements
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+        DatabaseMigrator.migrate();
+
         UserDAO currentUserDAO = new HashMapUserDAO();
         currentUserDAO.create(new User(1, "guja@gmail.com", "pass", "gujaboi", "sth", "none"));
         sce.getServletContext().setAttribute(UserDAO.ATTRIBUTE_NAME, currentUserDAO);
