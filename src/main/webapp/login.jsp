@@ -4,7 +4,7 @@
         <title>Login</title>
     </head>
 <body>
-    <a href="/register">Register</a>
+    <a href="/register.jsp">Register</a>
     <form method="POST" action="/login">
         <label>Username</label>
         <input type="text" name="email"/><br/>
