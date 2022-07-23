@@ -1,13 +1,19 @@
 package bandfinder.dao;
 
+import bandfinder.infrastructure.AutoInjectable;
 import bandfinder.models.User;
+import bandfinder.serviceimplementations.HashMapUserDAO;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-abstract class UserDAOTest {
-    protected UserDAO dao;
+public class UserDAOTest {
+    private UserDAO dao;
 
-    public abstract void setUp();
+    @BeforeEach
+    public void setUp() {
+        this.dao = new HashMapUserDAO();
+    }
 
     @Test
     public void testCreate() {

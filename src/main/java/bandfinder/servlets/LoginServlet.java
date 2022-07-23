@@ -1,7 +1,9 @@
 package bandfinder.servlets;
 
+import bandfinder.dao.BandDAO;
 import bandfinder.dao.UserDAO;
 import bandfinder.infrastructure.AutoInjectable;
+import bandfinder.models.Band;
 import bandfinder.models.User;
 import bandfinder.services.HashingService;
 
@@ -15,6 +17,8 @@ import java.security.spec.InvalidKeySpecException;
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends ServletBase {
 
+    @AutoInjectable
+    private BandDAO bandDAO;
     @AutoInjectable
     private UserDAO userDAO;
 
