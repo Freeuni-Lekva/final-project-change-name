@@ -26,3 +26,13 @@ CREATE TABLE IF NOT EXISTS band_users
   FOREIGN KEY (user_id) references users(id),
   FOREIGN KEY (band_id) references bands(id)
 );
+
+CREATE TABLE IF NOT EXISTS follows
+(
+    id INT AUTO_INCREMENT,
+    follower INT NOT NULL,
+    followee INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (follower) REFERENCES users(id),
+    FOREIGN KEY (followee) REFERENCES users(id)
+);
