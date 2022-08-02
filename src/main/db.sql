@@ -26,3 +26,10 @@ CREATE TABLE IF NOT EXISTS band_users
   FOREIGN KEY (user_id) references users(id),
   FOREIGN KEY (band_id) references bands(id)
 );
+
+CREATE TABLE IF NOT EXISTS tags
+(
+  id INT AUTO_INCREMENT,
+  name VARCHAR(255),
+  PRIMARY KEY (id)
+);
