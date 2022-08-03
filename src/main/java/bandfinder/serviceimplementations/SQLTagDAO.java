@@ -17,48 +17,34 @@ public class SQLTagDAO implements TagDAO {
         connection = DriverManager.getConnection(URL);
     }
 
-    private static final String ADD_TAG_TO_BAND_QUERY = "INSERT INTO band_tags (band_id, tag_id) " +
-            "VALUES (?, ?);";
+    private boolean addTagToObject(int tagId, int objectId, String query){
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, objectId);
+            statement.setInt(2, tagId);
+            int rowsAffected = statement.executeUpdate();
+
+            statement.close();
+            return rowsAffected == 1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public boolean addTagToBand(int tagId, int bandId) {
-        try {
-            PreparedStatement statement = connection.prepareStatement(ADD_TAG_TO_BAND_QUERY);
-            statement.setInt(1, bandId);
-            statement.setInt(2, tagId);
-            int rowsAffected = statement.executeUpdate();
-
-            statement.close();
-            return rowsAffected == 1;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return addTagToObject(tagId,bandId,"INSERT INTO band_tags (band_id, tag_id) " + "VALUES (?, ?);");
     }
 
-    private static final String ADD_TAG_TO_USER_QUERY = "INSERT INTO user_tags (user_id, tag_id) " +
-            "VALUES (?, ?);";
     @Override
     public boolean addTagToUser(int tagId, int userId) {
+        return addTagToObject(tagId,userId,"INSERT INTO user_tags (user_id, tag_id) " +  "VALUES (?, ?);");
+    }
+
+    private boolean removeTagFromObject(int tagId, int objectId,String query) {
         try {
-            PreparedStatement statement = connection.prepareStatement(ADD_TAG_TO_USER_QUERY);
-            statement.setInt(1, userId);
-            statement.setInt(2, tagId);
-            int rowsAffected = statement.executeUpdate();
-
-            statement.close();
-            return rowsAffected == 1;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }    }
-
-    private static final String REMOVE_TAG_FROM_BAND_QUERY = "DELETE FROM band_tags" +
-            "WHERE band_id = ? AND tag_id = ?;";
-
-    @Override
-    public boolean removeTagFromBand(int tagId, int bandId) {
-        try {
-            PreparedStatement statement = connection.prepareStatement(REMOVE_TAG_FROM_BAND_QUERY);
-            statement.setInt(1, bandId);
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, objectId);
             statement.setInt(2, tagId);
             int rowsAffected = statement.executeUpdate();
 
@@ -68,78 +54,49 @@ public class SQLTagDAO implements TagDAO {
             throw new RuntimeException(e);
         }
     }
-
-    private static final String REMOVE_TAG_FROM_USER_QUERY = "DELETE FROM user_tags" +
-            "WHERE user_id = ? AND tag_id = ?;";
+    @Override
+    public boolean removeTagFromBand(int tagId, int bandId) {
+        return removeTagFromObject(tagId,bandId,"DELETE FROM band_tags" + "WHERE band_id = ? AND tag_id = ?;");
+    }
 
     @Override
     public boolean removeTagFromUser(int tagId, int userId) {
+        return removeTagFromObject(tagId,userId,"DELETE FROM user_tags" + "WHERE user_id = ? AND tag_id = ?;");
+    }
+
+    private boolean objectHasTag(int tagId, int objectId, String query) {
         try {
-            PreparedStatement statement = connection.prepareStatement(REMOVE_TAG_FROM_USER_QUERY);
-            statement.setInt(1, userId);
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, objectId);
             statement.setInt(2, tagId);
-            int rowsAffected = statement.executeUpdate();
+            ResultSet rs = statement.executeQuery();
+
+            if(rs.next()) {
+                statement.close();
+                return true;
+            }
 
             statement.close();
-            return rowsAffected == 1;
+            return false;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
-    private static final String BAND_HAS_TAG_QUERY = "SELECT id FROM band_tags " +
-            "WHERE band_id = ? AND tag_id = ?;";
 
     @Override
     public boolean bandHasTag(int tagId, int bandId) {
-        try {
-            PreparedStatement statement = connection.prepareStatement(BAND_HAS_TAG_QUERY);
-            statement.setInt(1, bandId);
-            statement.setInt(2, tagId);
-            ResultSet rs = statement.executeQuery();
-
-            if(rs.next()) {
-                statement.close();
-                return true;
-            }
-
-            statement.close();
-            return false;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return objectHasTag(tagId,bandId,"SELECT id FROM band_tags " + "WHERE band_id = ? AND tag_id = ?;");
     }
-
-    private static final String USER_HAS_TAG_QUERY = "SELECT id FROM user_tags " +
-            "WHERE user_id = ? AND tag_id = ?;";
 
     @Override
     public boolean userHasTag(int tagId, int userId) {
-        try {
-            PreparedStatement statement = connection.prepareStatement(USER_HAS_TAG_QUERY);
-            statement.setInt(1, userId);
-            statement.setInt(2, tagId);
-            ResultSet rs = statement.executeQuery();
-
-            if(rs.next()) {
-                statement.close();
-                return true;
-            }
-
-            statement.close();
-            return false;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return objectHasTag(tagId,userId,"SELECT id FROM user_tags " + "WHERE user_id = ? AND tag_id = ?;");
     }
 
-    private static final String GET_BAND_TAG_IDS_QUERY = "SELECT tag_id FROM band_tags WHERE band_id = ?;";
-
-    @Override
-    public List<Integer> getBandTagIDs(int bandId) {
+    public List<Integer> getObjectTagIDs(int objectId,String query) {
         try {
-            PreparedStatement statement = connection.prepareStatement(GET_BAND_TAG_IDS_QUERY);
-            statement.setInt(1, bandId);
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, objectId);
             ResultSet rs = statement.executeQuery();
 
             List<Integer> tagIds = new ArrayList<>();
@@ -151,24 +108,14 @@ public class SQLTagDAO implements TagDAO {
             throw new RuntimeException(e);
         }
     }
-
-    private static final String GET_USER_TAG_IDS_QUERY = "SELECT tag_id FROM user_tags WHERE band_id = ?;";
+    @Override
+    public List<Integer> getBandTagIDs(int bandId) {
+        return  getObjectTagIDs(bandId,"SELECT tag_id FROM band_tags WHERE band_id = ?;");
+    }
 
     @Override
     public List<Integer> getUserTagIDs(int userId) {
-        try {
-            PreparedStatement statement = connection.prepareStatement(GET_USER_TAG_IDS_QUERY);
-            statement.setInt(1, userId);
-            ResultSet rs = statement.executeQuery();
-
-            List<Integer> tagIds = new ArrayList<>();
-            while(rs.next()) tagIds.add(rs.getInt(1));
-
-            statement.close();
-            return tagIds;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return  getObjectTagIDs(userId,"SELECT tag_id FROM user_tags WHERE user_id = ?;");
     }
 
     private static final String CREATE_QUERY = "INSERT INTO tags (name) VALUES (?);";
