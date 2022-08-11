@@ -12,4 +12,5 @@ public interface BandDAO extends DAO<Band>{
     boolean removeMemberFromBand(int memberId, int bandId);
     List<Integer> getBandMemberIDs(int bandId);
     List<Integer> getAllBandIDsForUser(int userId);
+    List<Band> searchBands(String query);
 }

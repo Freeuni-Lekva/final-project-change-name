@@ -2,11 +2,12 @@ package bandfinder.dao;
 
 import bandfinder.models.Band;
 import bandfinder.models.User;
-import bandfinder.serviceimplementations.HashMapUserDAO;
 import bandfinder.serviceimplementations.HashmapBandDAO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 public class BandDAOTest {
 
@@ -41,10 +42,10 @@ public class BandDAOTest {
         //testing dao getall
         Assertions.assertEquals(dao.getAll().size(),0);
 
-        dao.create(new Band("Messhugah"));
-        dao.create(new Band("Lamb of god"));
-        Band lastband = dao.create(new Band("Korn"));
-        dao.delete(lastband.getId());
+        dao.create(new Band("Meshuggah"));
+        dao.create(new Band("Lamb of God"));
+        Band lastBand = dao.create(new Band("Korn"));
+        dao.delete(lastBand.getId());
 
         Assertions.assertEquals(dao.getAll().size(),2);
     }
@@ -82,6 +83,25 @@ public class BandDAOTest {
 
         Assertions.assertEquals(1,dao.getAllBandIDsForUser(user1.getId()).size()); //user 1 is in band 2
         Assertions.assertEquals(2,dao.getAllBandIDsForUser(user2.getId()).size()); //user 2 is in band 1 and band 2
+    }
+
+    @Test
+    public void testSearch() {
+        Band band1 = new Band(1, "Gojira");
+        dao.create(band1);
+        Band band2 = new Band(2, "Guns N' Roses");
+        dao.create(band2);
+
+        List<Band> list1 = dao.searchBands("j");
+        Assertions.assertEquals(1, list1.size());
+        Assertions.assertEquals(band1, list1.get(0));
+
+        List<Band> emptyList = dao.searchBands("Trio Mandili");
+        Assertions.assertTrue(emptyList.isEmpty());
+
+        List<Band> list2 = dao.searchBands("Ns n' rO");
+        Assertions.assertEquals(1, list2.size());
+        Assertions.assertEquals(band2, list2.get(0));
 
     }
 }

@@ -152,4 +152,30 @@ public class SQLUserDAO implements UserDAO {
         }
     }
 
+    @Override
+    public List<User> searchUsers(String query) {
+        query = query.trim();
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM users WHERE LOWER(CONCAT(first_name, ' ', surname, ' ', stage_name)) LIKE CONCAT('%', ?, '%');"
+            );
+            statement.setString(1, query);
+            ResultSet resultSet = statement.executeQuery();
+            List<User> resultList = new ArrayList<>();
+            while(resultSet.next()) {
+                User currentUser = new User( resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6));
+                resultList.add(currentUser);
+            }
+            statement.close();
+            return resultList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
