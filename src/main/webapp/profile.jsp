@@ -1,6 +1,17 @@
 <%@ page import="bandfinder.models.User" %>
+<%@ page import="bandfinder.infrastructure.AutoInjectable" %>
+<%@ page import="bandfinder.dao.UserDAO" %>
+<%@ page import="bandfinder.infrastructure.ServiceValueSetter" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<% User user = (User) session.getAttribute("Authenticated User"); %>
+<%!
+  @AutoInjectable
+  private UserDAO userDAO;
+%>
+
+<%
+  ServiceValueSetter.setAutoInjectableFieldValues(this);
+  User user = userDAO.getById(Integer.parseInt(request.getParameter("id")));
+%>
 <html>
   <head>
     <title><%= user.getStageName() %> | Profile</title>
