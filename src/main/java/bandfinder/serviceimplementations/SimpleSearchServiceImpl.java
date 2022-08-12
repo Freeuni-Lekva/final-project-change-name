@@ -20,12 +20,9 @@ public class SimpleSearchServiceImpl implements SearchService {
         ServiceValueSetter.setAutoInjectableFieldValues(this);
     }
 
-    private boolean searchPredicate(String query, String toCompare) {
-        return toCompare.contains(query);
-    }
     @Override
     public List<Band> searchBands(String query) {
-        return bandDAO.getAll().stream().filter((band) -> searchPredicate(query, band.getName())).toList();
+        return bandDAO.searchBands(query);
     }
 
     @Override
