@@ -68,6 +68,12 @@ public class User {
         this.stageName = stageName;
     }
 
+    public String getFullName() {
+        if(stageName.isBlank()) {
+            return firstName + ' ' + surname;
+        }
+        return firstName + " \"" + stageName + "\" " + surname;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -100,4 +100,16 @@ public class HashmapBandDAO implements BandDAO {
         }
         return res;
     }
+
+    @Override
+    public List<Band> searchBands(String query) {
+        query = query.toLowerCase();
+        List<Band> bands = new ArrayList<>();
+        for(Band b : map.values()) {
+            if(b.getName().toLowerCase().contains(query)) {
+                bands.add(b);
+            }
+        }
+        return bands;
+    }
 }
