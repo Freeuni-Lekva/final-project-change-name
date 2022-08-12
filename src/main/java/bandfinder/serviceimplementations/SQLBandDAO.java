@@ -215,11 +215,18 @@ public class SQLBandDAO implements BandDAO {
 
     @Override
     public List<Band> searchBands(String query) {
-        query = query.trim();
+        query = query.trim().toLowerCase();
         try {
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * FROM bands WHERE LOWER(name) LIKE CONCAT('%', ?, '%');"
-            );
+            PreparedStatement statement;
+            if(query.length() <= 2) {
+                statement = connection.prepareStatement(
+                        "SELECT * FROM bands WHERE LOWER(name) = ?;"
+                );
+            } else {
+                statement = connection.prepareStatement(
+                        "SELECT * FROM bands WHERE MATCH(name) AGAINST(? IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION);"
+                );
+            }
             statement.setString(1, query);
             ResultSet resultSet = statement.executeQuery();
             List<Band> resultList = new ArrayList<>();

@@ -19,7 +19,8 @@
         if(!userResults.isEmpty()) {
             out.println("<ul>");
             for (User u : userResults) {
-                out.println("<li>" + u.getFullName() + "</li>");
+                out.println("<li><a href=\"/profile.jsp?id=" + u.getId() +
+                        "\">" + u.getFullName() + "</a></li>");
             }
             out.println("</ul>");
         } else {
@@ -30,7 +31,8 @@
         if(!bandResults.isEmpty()) {
             out.println("<ul>");
             for (Band b : bandResults) {
-                out.println("<li>" + b.getName() + "</li>");
+                out.println("<li> <a href=\"/bandPage.jsp?bandId=" + b.getId() +
+                        "\">" + b.getName() + "</a></li>");
             }
             out.println("</ul>");
         } else {
