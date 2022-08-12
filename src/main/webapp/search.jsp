@@ -19,7 +19,7 @@
         if(!userResults.isEmpty()) {
             out.println("<ul>");
             for (User u : userResults) {
-                out.println("<li>" + u.getFirstName() + " " + u.getSurname() + "</li>");
+                out.println("<li>" + u.getFullName() + "</li>");
             }
             out.println("</ul>");
         } else {

@@ -21,7 +21,7 @@
                 List<User> users = userDAO.getAll();
                 for(User u : users) {
                     out.println("<li> <a href=\"/profile.jsp?id=" + u.getId() +
-                            "\">" + u.getFirstName() + " " + u.getSurname() + "</a></li>");
+                            "\">" + u.getFullName() + "</a></li>");
                 }
             %>
         </ul>
