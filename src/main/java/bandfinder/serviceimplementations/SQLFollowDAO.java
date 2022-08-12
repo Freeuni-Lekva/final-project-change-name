@@ -113,7 +113,47 @@ public class SQLFollowDAO implements FollowDAO {
                 Follow follow = new Follow(id, follower, followee);
                 follows.add(follow);
             }
+            statement.close();
             return follows;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final String GET_FOLLOW_QUERY = "SELECT * FROM follows WHERE follower=? AND followee=?;";
+
+    @Override
+    public boolean followExists(Follow follow) {
+        try{
+            PreparedStatement statement = connection.prepareStatement(GET_FOLLOW_QUERY);
+            statement.setInt(1, follow.getFollowerID());
+            statement.setInt(2, follow.getFolloweeID());
+            statement.executeQuery();
+            ResultSet resultSet = statement.getResultSet();
+
+            if(resultSet.isBeforeFirst()){
+                statement.close();
+                return true;
+            }
+
+            statement.close();
+            return false;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final String DELETE_WITH_FOLLOWER_AND_FOLLOWEE = "DELETE FROM follows WHERE follower=? AND followee=?;";
+
+    @Override
+    public boolean delete(Follow follow) {
+        try{
+            PreparedStatement statement = connection.prepareStatement(DELETE_WITH_FOLLOWER_AND_FOLLOWEE);
+            statement.setInt(1, follow.getFollowerID());
+            statement.setInt(2, follow.getFolloweeID());
+            int rowsDeleted = statement.executeUpdate();
+            statement.close();
+            return rowsDeleted > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

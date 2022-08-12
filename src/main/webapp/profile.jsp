@@ -2,15 +2,22 @@
 <%@ page import="bandfinder.infrastructure.AutoInjectable" %>
 <%@ page import="bandfinder.dao.UserDAO" %>
 <%@ page import="bandfinder.infrastructure.ServiceValueSetter" %>
+<%@ page import="bandfinder.dao.FollowDAO" %>
+<%@ page import="bandfinder.models.Follow" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%!
   @AutoInjectable
   private UserDAO userDAO;
+
+  @AutoInjectable
+  private FollowDAO followDAO;
 %>
 
 <%
   ServiceValueSetter.setAutoInjectableFieldValues(this);
   User user = userDAO.getById(Integer.parseInt(request.getParameter("id")));
+
+  User loggedUser = (User) session.getAttribute("user");
 %>
 <html>
   <head>
@@ -26,6 +33,23 @@
       <input type="submit" value="Edit Profile"/>
     </form>
   <body>
-  
+    <%
+
+
+      Follow follow = new Follow(-1, user.getId());
+      if(loggedUser != null){
+        follow.setFollowerID(loggedUser.getId());
+      }
+
+      if(loggedUser == null || !followDAO.followExists(follow)){
+        out.println("<form action=\"FollowServlet\" method=\"post\">");
+        out.println("<input type=\"submit\" value=\"Follow\"/>");
+      }else if(followDAO.followExists(follow)){
+        out.println("<form action=\"UnfollowServlet\" method=\"post\">");
+        out.println("<input type=\"submit\" value=\"Unfollow\"/>");
+      }
+      out.println("<input type=\"hidden\" name=\"user_id\" value=\"" + user.getId() + "\" />");
+      out.println("</form>");
+    %>
   </body>
 </html>
