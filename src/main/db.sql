@@ -9,14 +9,16 @@ CREATE TABLE IF NOT EXISTS users
     first_name VARCHAR(255) NOT NULL,
     surname VARCHAR(255),
     stage_name VARCHAR(255),
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FULLTEXT (first_name, surname, stage_name)
 );
 
 CREATE TABLE IF NOT EXISTS bands
 (
   id INT AUTO_INCREMENT,
   name VARCHAR(255),
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  FULLTEXT(name)
 );
 
 CREATE TABLE IF NOT EXISTS band_users
