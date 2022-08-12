@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 public class UserDAOTest {
     private UserDAO dao;
 
@@ -86,5 +88,27 @@ public class UserDAOTest {
         Assertions.assertEquals("u2", returnedUser2.getFirstName());
         Assertions.assertEquals("s2", returnedUser2.getSurname());
         Assertions.assertEquals("sn2", returnedUser2.getStageName());
+    }
+
+    @Test
+    public void testSearch() {
+        User user1 = new User(1, "t@t.t", "tt.tt", "John", "Doe", "");
+        dao.create(user1);
+        User user2 = new User(2, "t@t.t", "tt.tt", "rAnDoM", "cAsE", "qUeRy");
+        dao.create(user2);
+
+        // Full name search
+        List<User> list1 = dao.searchUsers("John Doe");
+        Assertions.assertEquals(1, list1.size());
+        Assertions.assertEquals(user1, list1.get(0));
+
+        // No result search
+        List<User> emptyList = dao.searchUsers("__wrong__query__");
+        Assertions.assertTrue(emptyList.isEmpty());
+
+        // Mixed case search
+        List<User> list2 = dao.searchUsers("random case query");
+        Assertions.assertEquals(1, list2.size());
+        Assertions.assertEquals(user2, list2.get(0));
     }
 }

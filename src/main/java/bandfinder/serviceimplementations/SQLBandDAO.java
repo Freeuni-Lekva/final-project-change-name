@@ -2,6 +2,7 @@ package bandfinder.serviceimplementations;
 
 import bandfinder.dao.BandDAO;
 import bandfinder.models.Band;
+import bandfinder.models.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -171,6 +172,7 @@ public class SQLBandDAO implements BandDAO {
     }
 
     private static final String GET_BY_ID_QUERY = "SELECT name FROM bands WHERE id = ?;";
+
     @Override
     public Band getById(int id) {
         try {
@@ -190,7 +192,6 @@ public class SQLBandDAO implements BandDAO {
             throw new RuntimeException(e);
         }
     }
-
     private static final String GET_ALL_QUERY = "SELECT * FROM bands;";
 
     @Override
@@ -207,6 +208,34 @@ public class SQLBandDAO implements BandDAO {
 
             statement.close();
             return bands;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Band> searchBands(String query) {
+        query = query.trim().toLowerCase();
+        try {
+            PreparedStatement statement;
+            if(query.length() <= 2) {
+                statement = connection.prepareStatement(
+                        "SELECT * FROM bands WHERE LOWER(name) = ?;"
+                );
+            } else {
+                statement = connection.prepareStatement(
+                        "SELECT * FROM bands WHERE MATCH(name) AGAINST(? IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION);"
+                );
+            }
+            statement.setString(1, query);
+            ResultSet resultSet = statement.executeQuery();
+            List<Band> resultList = new ArrayList<>();
+            while(resultSet.next()) {
+                Band currentBand = new Band(resultSet.getInt(1), resultSet.getString(2));
+                resultList.add(currentBand);
+            }
+            statement.close();
+            return resultList;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
