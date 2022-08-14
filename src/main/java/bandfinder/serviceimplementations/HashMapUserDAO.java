@@ -65,4 +65,18 @@ public class HashMapUserDAO implements UserDAO {
         }
         return null;
     }
+
+    @Override
+    public List<User> searchUsers(String query) {
+        query = query.toLowerCase();
+        List<User> users = new ArrayList<>();
+        for(User u : map.values()) {
+            String fullName = u.getFirstName() + " " + u.getSurname() + " " + u.getStageName();
+            fullName = fullName.toLowerCase();
+            if(fullName.contains(query)) {
+                users.add(u);
+            }
+        }
+        return users;
+    }
 }
