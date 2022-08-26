@@ -39,9 +39,17 @@
       Follow follow = new Follow(-1, user.getId());
       if(loggedUser != null){
         follow.setFollowerID(loggedUser.getId());
+
+        //If the logged user is visiting their own profile
+        if(loggedUser.getId() == user.getId()){
+          return;
+        }
+      }else{
+        //If the user is not logged in
+        return;
       }
 
-      if(loggedUser == null || !followDAO.followExists(follow)){
+      if(!followDAO.followExists(follow)){
         out.println("<form action=\"FollowServlet\" method=\"post\">");
         out.println("<input type=\"submit\" value=\"Follow\"/>");
       }else if(followDAO.followExists(follow)){
