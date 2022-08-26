@@ -158,4 +158,44 @@ public class SQLFollowDAO implements FollowDAO {
             throw new RuntimeException(e);
         }
     }
+
+    private static final String GET_FOLLOWER_COUNT_QUERY = "SELECT COUNT(DISTINCT follower) FROM follows WHERE followee=?;";
+
+    @Override
+    public int getFollowerCount(int userId) {
+        try{
+            PreparedStatement statement = connection.prepareStatement(GET_FOLLOWER_COUNT_QUERY);
+            statement.setInt(1, userId);
+            statement.executeQuery();
+            ResultSet resultSet = statement.getResultSet();
+
+            resultSet.next();
+            int count = resultSet.getInt(1);
+
+            statement.close();
+            return count;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final String GET_FOLLOWEE_COUNT_QUERY = "SELECT COUNT(DISTINCT followee) FROM follows WHERE follower=?;";
+
+    @Override
+    public int getFolloweeCount(int userId) {
+        try{
+            PreparedStatement statement = connection.prepareStatement(GET_FOLLOWEE_COUNT_QUERY);
+            statement.setInt(1, userId);
+            statement.executeQuery();
+            ResultSet resultSet = statement.getResultSet();
+
+            resultSet.next();
+            int count = resultSet.getInt(1);
+
+            statement.close();
+            return count;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

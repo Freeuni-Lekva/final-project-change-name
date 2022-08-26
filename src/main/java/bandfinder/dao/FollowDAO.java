@@ -8,4 +8,7 @@ public interface FollowDAO extends DAO<Follow>{
 
     boolean delete(Follow follow);
 
+    int getFollowerCount(int userId);
+
+    int getFolloweeCount(int userId);
 }
