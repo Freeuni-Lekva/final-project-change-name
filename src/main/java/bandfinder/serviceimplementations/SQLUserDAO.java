@@ -159,14 +159,16 @@ public class SQLUserDAO implements UserDAO {
             PreparedStatement statement;
             if(query.length() <= 2) {
                 statement = connection.prepareStatement(
-                        "SELECT * FROM users WHERE ? IN(LOWER(first_name), LOWER(surname), LOWER(stage_name));"
+                        "SELECT * FROM users WHERE ? IN(LOWER(first_name), LOWER(surname), LOWER(stage_name)) OR LOWER(tags_string) LIKE CONCAT('% ', ?, ',')"
                 );
+                statement.setString(1, query);
+                statement.setString(2, query);
             } else {
                 statement = connection.prepareStatement(
-                        "SELECT * FROM users WHERE MATCH(first_name, surname, stage_name) AGAINST(? IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION);"
+                        "SELECT * FROM users WHERE MATCH(first_name, surname, stage_name, tags_string) AGAINST(? IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION);"
                 );
+                statement.setString(1, query);
             }
-            statement.setString(1, query);
             ResultSet resultSet = statement.executeQuery();
             List<User> resultList = new ArrayList<>();
             while(resultSet.next()) {
