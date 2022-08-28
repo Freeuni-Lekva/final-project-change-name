@@ -14,7 +14,7 @@ public class SQLUserDAO implements UserDAO {
     public SQLUserDAO() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot");
+                "jdbc:mysql://localhost/bandfinder?user=root&password=R00tR**t");
     }
 
     @Override

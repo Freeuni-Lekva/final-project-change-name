@@ -44,5 +44,19 @@
                 }
             %>
         </ul>
+
+        <h2>Tags</h2>
+        <ul>
+            <%
+                ArrayList<Integer> tagIds = (ArrayList)tagDAO.getBandTagIDs(id);
+                for(Integer tagId : tagIds){
+                    out.println("<li>"+ tagDAO.getById(tagId).getName() +"</li>");
+                }
+            %>
+        </ul>
+
+        <form method="post" action=<%= "/editBandTags.jsp?bandId=" + id %> >
+            <input type="submit" value="Edit tags"/>
+        </form>
     </body>
 </html>
