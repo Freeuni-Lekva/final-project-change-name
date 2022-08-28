@@ -1,9 +1,11 @@
 <%@ page import="bandfinder.models.Band" %>
 <%@ page import="bandfinder.models.User" %>
+<%@ page import="bandfinder.models.Tag" %>
 
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="bandfinder.dao.BandDAO" %>
 <%@ page import="bandfinder.dao.UserDAO" %>
+<%@ page import="bandfinder.dao.TagDAO" %>
 <%@ page import="bandfinder.infrastructure.AutoInjectable" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.*" %>
@@ -14,6 +16,7 @@
 <%
     final BandDAO bandDAO = Injector.getImplementation(BandDAO.class);
     final UserDAO userDAO = Injector.getImplementation(UserDAO.class);
+    final TagDAO tagDAO = Injector.getImplementation(TagDAO.class);
 
     Band band = null;
     Integer id = null;

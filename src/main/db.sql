@@ -38,3 +38,26 @@ CREATE TABLE IF NOT EXISTS follows
     FOREIGN KEY (follower) REFERENCES users(id),
     FOREIGN KEY (followee) REFERENCES users(id)
 );
+
+CREATE TABLE IF NOT EXISTS tags
+(
+  id INT AUTO_INCREMENT,
+  name VARCHAR(255),
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS band_tags
+(
+  tag_id INT,
+  band_id INT,
+  FOREIGN KEY (tag_id) references tags(id),
+  FOREIGN KEY (band_id) references bands(id)
+);
+
+CREATE TABLE IF NOT EXISTS user_tags
+(
+  tag_id INT,
+  user_id INT,
+  FOREIGN KEY (tag_id) references tags(id),
+  FOREIGN KEY (user_id) references users(id)
+);
