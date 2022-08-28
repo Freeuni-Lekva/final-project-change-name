@@ -45,7 +45,7 @@
             %>
         </ul>
 
-        <h2>Tags</h2>
+        <h2><small>Tags</small></h2>
         <ul>
             <%
                 ArrayList<Integer> tagIds = (ArrayList)tagDAO.getBandTagIDs(id);

@@ -1,6 +1,7 @@
 package bandfinder.infrastructure;
 
 import bandfinder.serviceimplementations.*;
+import bandfinder.services.DefaultTagsService;
 import bandfinder.services.HashingService;
 import bandfinder.services.SearchService;
 import org.apache.ibatis.jdbc.SQL;
@@ -16,6 +17,7 @@ public class Config {
         }
         Injector.injectSingleton(HashingService.class, HashingServiceImpl.class);
         Injector.injectSingleton(SearchService.class, SimpleSearchServiceImpl.class);
+        Injector.injectSingleton(DefaultTagsService.class,DefaultTagsServiceImpl.class);
         Injector.injectSingleton(UserDAO.class, SQLUserDAO.class);
         Injector.injectSingleton(BandDAO.class, SQLBandDAO.class);
         Injector.injectSingleton(TagDAO.class, SQLTagDAO.class);

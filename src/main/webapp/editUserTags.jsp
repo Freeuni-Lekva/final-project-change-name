@@ -1,4 +1,4 @@
-<%@ page import="bandfinder.dao.BandDAO" %>
+<%@ page import="bandfinder.dao.UserDAO" %>
 <%@ page import="bandfinder.dao.UserDAO" %>
 <%@ page import="bandfinder.dao.TagDAO" %>
 <%@ page import="bandfinder.services.DefaultTagsService" %>
@@ -12,14 +12,13 @@
 --%>
 
 <%!
-    private BandDAO bandDAO = Injector.getImplementation(BandDAO.class);
     private UserDAO userDAO = Injector.getImplementation(UserDAO.class);
     private TagDAO tagDAO = Injector.getImplementation(TagDAO.class);
 %>
 
 <%
     User user = (User) request.getSession().getAttribute("user");
-    int bandId = Integer.parseInt(request.getParameter("bandId"));
+    int userId = Integer.parseInt(request.getParameter("userId"));
     DefaultTagsService defTags = Injector.getImplementation(DefaultTagsService.class);
 %>
 
@@ -33,7 +32,7 @@
             let tags = document.getElementById("tagsListModule").children;
             for(let i = 0; i < tags.length; i++) {
                 if(tags[i].checked) {
-                    if(confirm("By clicking \"OK\" marked tags will be removed from the band."))
+                    if(confirm("By clicking \"OK\" marked tags will be removed from the user."))
                         document.getElementById("removeForm").submit();
                     return;
                 }
@@ -75,7 +74,7 @@
 <body>
     <div id="tagsListModule">
         <%
-            List<Integer> tagIds = tagDAO.getBandTagIDs(bandId);
+            List<Integer> tagIds = tagDAO.getUserTagIDs(userId);
             for(Integer tagId : tagIds){
                 String name = tagDAO.getById(tagId).getName();
                 out.println("<li name=\"" + name + "\" id=\"" + tagId +"\">" + name + "</li>");
@@ -88,9 +87,9 @@
             <button id="removeButton" onclick="removeTags()">Remove</button>
         </div>
 
-        <form id="removeForm" method="post" action=<%= "/removeBandTags?bandId=" + bandId %>></form>
+        <form id="removeForm" method="post" action=<%= "/removeUserTags?userId=" + userId %>></form>
 
-        <form id="cancelForm" method="post" action=<%= "/editBandTags.jsp?bandId=" + bandId %>></form>
+        <form id="cancelForm" method="post" action=<%= "/editUserTags.jsp?userId=" + userId %>></form>
     </div>
 
     <script>
@@ -103,7 +102,7 @@
         }
     </script>
 
-    <form id="tagEnterForm" method="POST" action="/addBandTag">
+    <form id="tagEnterForm" method="POST" action="/addUserTag">
 
         <input list="defaultTags" name="tagName">
         <datalist id="defaultTags">
@@ -111,7 +110,7 @@
 
         <button type="submit">Add tag</button>
 
-        <input type="hidden" name="bandId" id="addTagButton" value=<%= bandId %>>
+        <input type="hidden" name="userId" id="addTagButton" value=<%= userId %>>
 
     </form>
 
