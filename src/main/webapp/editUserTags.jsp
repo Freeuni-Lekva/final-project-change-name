@@ -1,7 +1,7 @@
 <%@ page import="bandfinder.dao.UserDAO" %>
 <%@ page import="bandfinder.dao.UserDAO" %>
 <%@ page import="bandfinder.dao.TagDAO" %>
-<%@ page import="bandfinder.services.DefaultTagsService" %>
+<%@ page import="bandfinder.services.TagAutoComplete" %>
 <%@ page import="bandfinder.infrastructure.AutoInjectable" %>
 <%@ page import="bandfinder.infrastructure.Injector" %>
 <%@ page import="java.util.List" %>
@@ -19,7 +19,7 @@
 <%
     User user = (User) request.getSession().getAttribute("user");
     int userId = Integer.parseInt(request.getParameter("userId"));
-    DefaultTagsService defTags = Injector.getImplementation(DefaultTagsService.class);
+    TagAutoComplete defTags = Injector.getImplementation(TagAutoComplete.class);
 %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -106,6 +106,12 @@
 
         <input list="defaultTags" name="tagName">
         <datalist id="defaultTags">
+            <%
+                List<Tag> tags = defTags.get();
+                for(Tag tag: tags){
+                    out.println("<option value=\""+tag.getName()+"\" />");
+                }
+            %>
         </datalist>
 
         <button type="submit">Add tag</button>
@@ -113,20 +119,6 @@
         <input type="hidden" name="userId" id="addTagButton" value=<%= userId %>>
 
     </form>
-
-    <script language="javascript">
-        var str=''; // variable to store the options
-
-        var tagList = new Array("EXAMPLE_TAG1","EXAMPLE_TAG2");
-        
-        //use defTags.getTags();
-
-        for (var i=0; i < tagList.length;++i){
-        str += '<option value="'+tagList[i]+'" />'; // Storing options in variable
-        }
-        var my_list=document.getElementById("defaultTags");
-        my_list.innerHTML = str;
-    </script>
 
 </body>
 </html>

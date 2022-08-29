@@ -1,20 +1,14 @@
 package bandfinder.listeners;
 
 import bandfinder.infrastructure.DatabaseMigrator;
-import bandfinder.infrastructure.Injector;
-import bandfinder.serviceimplementations.DefaultTagsServiceImpl;
 import bandfinder.serviceimplementations.HashMapUserDAO;
 import bandfinder.dao.UserDAO;
 import bandfinder.infrastructure.Config;
 import bandfinder.models.User;
-import bandfinder.serviceimplementations.HashingServiceImpl;
-import bandfinder.services.DefaultTagsService;
-import bandfinder.services.HashingService;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
-import java.util.ArrayList;
 
 @WebListener
 public class InitializationListener implements

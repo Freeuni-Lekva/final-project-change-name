@@ -1,7 +1,20 @@
 <%@ page import="bandfinder.models.User" %>
 <%@ page import="java.util.List" %>
 <%@ page import="bandfinder.models.Band" %>
+<%@ page import="bandfinder.services.TagAutoComplete" %>
+<%@ page import="bandfinder.services.UserAutoComplete" %>
+<%@ page import="bandfinder.infrastructure.AutoInjectable" %>
+<%@ page import="bandfinder.infrastructure.Injector" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="bandfinder.models.User" %>
+<%@ page import="bandfinder.models.Tag" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    TagAutoComplete defTags = Injector.getImplementation(TagAutoComplete.class);
+    UserAutoComplete defUsers = Injector.getImplementation(UserAutoComplete.class);
+%>
 <html>
 <head>
     <title>Search</title>
@@ -9,7 +22,20 @@
 <body>
     <h1>Search</h1>
     <form action="/search">
-        <input type="text" name="query">
+        <input list="defaults" name="query">
+        <datalist id="defaults">
+        <%
+            List<Tag> tags = defTags.get();
+            for(Tag tag: tags){
+                out.println("<option value=\""+tag.getName()+"\" />");
+            }
+            List<User> users = defUsers.get();
+            for(User user: users){
+                out.println("<option value=\""+user.getFullName()+"\" />");
+            }
+        %>
+        </datalist>
+
         <button type="submit">Search</button>
     </form>
 
