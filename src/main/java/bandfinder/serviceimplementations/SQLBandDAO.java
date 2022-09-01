@@ -60,7 +60,7 @@ public class SQLBandDAO implements BandDAO {
         }
     }
 
-    private static final String REMOVE_MEMBER_FROM_BAND_QUERY = "DELETE FROM band_users" +
+    private static final String REMOVE_MEMBER_FROM_BAND_QUERY = "DELETE FROM band_users " +
                                                                 "WHERE band_id = ? AND user_id = ?;";
 
     @Override
