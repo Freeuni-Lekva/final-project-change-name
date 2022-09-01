@@ -19,13 +19,13 @@ public class SQLBandDAO implements BandDAO {
         connection = DriverManager.getConnection(URL);
     }
 
-    private static final String IS_USER_IN_BAND_QUERY = "SELECT id FROM band_users " +
+    private static final String IS_USER_IN_BAND = "SELECT id FROM band_users " +
                                                         "WHERE band_id = ? AND user_id = ?;";
 
     @Override
     public boolean isUserInBand(int userId, int bandId) {
         try {
-            PreparedStatement statement = connection.prepareStatement(IS_USER_IN_BAND_QUERY);
+            PreparedStatement statement = connection.prepareStatement(IS_USER_IN_BAND);
             statement.setInt(1, bandId);
             statement.setInt(2, userId);
             ResultSet rs = statement.executeQuery();
@@ -42,48 +42,89 @@ public class SQLBandDAO implements BandDAO {
         }
     }
 
-    private static final String ADD_MEMBER_TO_BAND_QUERY = "INSERT INTO band_users (band_id, user_id) " +
+    private static final String ADD_MEMBER_TO_BAND = "INSERT INTO band_users (band_id, user_id) " +
                                                            "VALUES (?, ?);";
 
     @Override
     public boolean addMemberToBand(int memberId, int bandId) {
         try {
-            PreparedStatement statement = connection.prepareStatement(ADD_MEMBER_TO_BAND_QUERY);
+            PreparedStatement statement = connection.prepareStatement(ADD_MEMBER_TO_BAND);
             statement.setInt(1, bandId);
             statement.setInt(2, memberId);
             int rowsAffected = statement.executeUpdate();
-
             statement.close();
+
+            int numBandMembers = countBandMembers(bandId);
+            updateNumberOfBandMembers(numBandMembers + 1, bandId);
+
             return rowsAffected == 1;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static final String REMOVE_MEMBER_FROM_BAND_QUERY = "DELETE FROM band_users" +
-                                                                "WHERE band_id = ? AND user_id = ?;";
+    private static final String REMOVE_MEMBER_FROM_BAND = "DELETE FROM band_users WHERE band_id = ? AND user_id = ?;";
 
     @Override
     public boolean removeMemberFromBand(int memberId, int bandId) {
         try {
-            PreparedStatement statement = connection.prepareStatement(REMOVE_MEMBER_FROM_BAND_QUERY);
-            statement.setInt(1, bandId);
-            statement.setInt(2, memberId);
-            int rowsAffected = statement.executeUpdate();
+            PreparedStatement removeStatement = connection.prepareStatement(REMOVE_MEMBER_FROM_BAND);
+            removeStatement.setInt(1, bandId);
+            removeStatement.setInt(2, memberId);
+            int rowsAffected = removeStatement.executeUpdate();
+            removeStatement.close();
 
-            statement.close();
+            int numBandMembers = countBandMembers(bandId);
+            updateNumberOfBandMembers(numBandMembers - 1, bandId);
+
             return rowsAffected == 1;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static final String GET_BAND_MEMBER_IDS_QUERY = "SELECT user_id FROM band_users WHERE band_id = ?;";
+    private static final String UPDATE_NUMBER_OF_BAND_MEMBERS = "UPDATE bands SET num_members = ? WHERE id = ?;";
+
+    private boolean updateNumberOfBandMembers(int n, int bandId) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(UPDATE_NUMBER_OF_BAND_MEMBERS);
+            statement.setInt(1, n);
+            statement.setInt(2, bandId);
+            int numRowsAffected = statement.executeUpdate();
+
+            statement.close();
+
+            return numRowsAffected == 1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final String GET_NUMBER_OF_BAND_MEMBERS = "SELECT num_members FROM bands WHERE id = ?;";
+
+    @Override
+    public int countBandMembers(int bandId) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(GET_NUMBER_OF_BAND_MEMBERS);
+            statement.setInt(1, bandId);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            int numMembers = rs.getInt(1);
+
+            statement.close();
+
+            return numMembers;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final String GET_BAND_MEMBER_IDS = "SELECT user_id FROM band_users WHERE band_id = ?;";
 
     @Override
     public List<Integer> getBandMemberIDs(int bandId) {
         try {
-            PreparedStatement statement = connection.prepareStatement(GET_BAND_MEMBER_IDS_QUERY);
+            PreparedStatement statement = connection.prepareStatement(GET_BAND_MEMBER_IDS);
             statement.setInt(1, bandId);
             ResultSet rs = statement.executeQuery();
 
@@ -97,12 +138,12 @@ public class SQLBandDAO implements BandDAO {
         }
     }
 
-    private static final String GET_BAND_IDS_FOR_USER_QUERY = "SELECT band_id FROM band_users WHERE user_id = ?;";
+    private static final String GET_BAND_IDS_FOR_USER = "SELECT band_id FROM band_users WHERE user_id = ?;";
 
     @Override
     public List<Integer> getAllBandIDsForUser(int userId) {
         try {
-            PreparedStatement statement = connection.prepareStatement(GET_BAND_IDS_FOR_USER_QUERY);
+            PreparedStatement statement = connection.prepareStatement(GET_BAND_IDS_FOR_USER);
             statement.setInt(1, userId);
             ResultSet rs = statement.executeQuery();
 
@@ -116,12 +157,12 @@ public class SQLBandDAO implements BandDAO {
         }
     }
 
-    private static final String CREATE_QUERY = "INSERT INTO bands (name) VALUES (?);";
+    private static final String CREATE_BAND = "INSERT INTO bands (name) VALUES (?);";
 
     @Override
     public Band create(Band model) {
         try {
-            PreparedStatement statement = connection.prepareStatement(CREATE_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement(CREATE_BAND, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, model.getName());
             statement.executeUpdate();
 
@@ -137,12 +178,12 @@ public class SQLBandDAO implements BandDAO {
         }
     }
 
-    private static final String UPDATE_QUERY = "UPDATE bands SET name = ? WHERE id = ?;";
+    private static final String UPDATE_BAND = "UPDATE bands SET name = ? WHERE id = ?;";
 
     @Override
     public Band update(Band model) {
         try {
-            PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY);
+            PreparedStatement statement = connection.prepareStatement(UPDATE_BAND);
             statement.setInt(2, model.getId());
             statement.setString(1, model.getName());
             statement.executeUpdate();
@@ -154,12 +195,12 @@ public class SQLBandDAO implements BandDAO {
         }
     }
 
-    private static final String DELETE_QUERY = "DELETE FROM bands WHERE id = ?;";
+    private static final String DELETE_BAND = "DELETE FROM bands WHERE id = ?;";
 
     @Override
     public boolean delete(int id) {
         try {
-            PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
+            PreparedStatement statement = connection.prepareStatement(DELETE_BAND);
             statement.setInt(1, id);
             int rowsAffected = statement.executeUpdate();
 
@@ -170,11 +211,11 @@ public class SQLBandDAO implements BandDAO {
         }
     }
 
-    private static final String GET_BY_ID_QUERY = "SELECT name FROM bands WHERE id = ?;";
+    private static final String GET_BY_ID = "SELECT name FROM bands WHERE id = ?;";
     @Override
     public Band getById(int id) {
         try {
-            PreparedStatement statement = connection.prepareStatement(GET_BY_ID_QUERY);
+            PreparedStatement statement = connection.prepareStatement(GET_BY_ID);
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
 
@@ -191,13 +232,13 @@ public class SQLBandDAO implements BandDAO {
         }
     }
 
-    private static final String GET_ALL_QUERY = "SELECT * FROM bands;";
+    private static final String GET_ALL = "SELECT * FROM bands;";
 
     @Override
     public List<Band> getAll() {
         try {
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(GET_ALL_QUERY);
+            ResultSet rs = statement.executeQuery(GET_ALL);
 
             List<Band> bands = new ArrayList<>();
             while(rs.next()) {

@@ -10,6 +10,7 @@ public interface BandDAO extends DAO<Band>{
     boolean isUserInBand(int userId,int bandId);
     boolean addMemberToBand(int memberId, int bandId);
     boolean removeMemberFromBand(int memberId, int bandId);
+    int countBandMembers(int bandId);
     List<Integer> getBandMemberIDs(int bandId);
     List<Integer> getAllBandIDsForUser(int userId);
 }

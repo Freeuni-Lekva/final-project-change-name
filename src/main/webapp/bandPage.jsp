@@ -27,8 +27,21 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
+    <style>
+        button {
+            font-size: 14px;
+        }
+    </style>
+
     <head>
         <title>Band Page</title>
+
+        <script>
+            function confirmLeaving() {
+                if(confirm("By clicking \"OK\" you will leave the band."))
+                    document.getElementById("leaveForm").submit();
+            }
+        </script>
     </head>
     <body>
         <h1><%=band.getName()%></h1>
@@ -41,5 +54,20 @@
                 }
             %>
         </ul>
+
+        <form id="leaveForm" method="post" action=<%= "/leaveBand?bandId=" + id %>></form>
+
+        <div>
+            <form method="post" action=<%= "/manageMembers.jsp?bandId=" + id %>>
+                <button>Manage Members</button>
+            </form>
+
+            <form method="post" action=<%= "/bandProperties.jsp?bandId=" + id %>>
+                <button>Band Properties</button>
+            </form>
+
+            <button onclick="confirmLeaving()">Leave Band</button>
+        </div>
+
     </body>
 </html>

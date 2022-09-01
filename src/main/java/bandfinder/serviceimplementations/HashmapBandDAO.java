@@ -86,6 +86,11 @@ public class HashmapBandDAO implements BandDAO {
     }
 
     @Override
+    public int countBandMembers(int bandId) {
+        return bandMembersMap.get(bandId).size();
+    }
+
+    @Override
     public List<Integer> getBandMemberIDs(int bandId) {
         return bandMembersMap.get(bandId);
     }

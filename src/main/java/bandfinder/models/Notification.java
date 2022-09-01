@@ -1,17 +1,23 @@
 package bandfinder.models;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+
 public class Notification {
 
     private int id;
     private int userId;
     private boolean isRead;
     private String message;
+    private Timestamp date;
 
-    public Notification(int id, int userId, boolean isRead, String message) {
+
+    public Notification(int id, int userId, boolean isRead, String message, Timestamp date) {
         this.id = id;
         this.userId = userId;
         this.isRead = isRead;
         this.message = message;
+        this.date = date;
     }
 
     public int getId() {
@@ -42,8 +48,14 @@ public class Notification {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String message) { this.message = message; }
+
+    public Timestamp getDate() {
+        return this.date;
+    }
+
+    public void setDate(Timestamp date) {
+        this.date = date;
     }
 
     @Override
