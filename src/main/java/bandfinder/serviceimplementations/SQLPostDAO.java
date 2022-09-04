@@ -34,12 +34,22 @@ public class SQLPostDAO implements PostDAO {
     }
 
     @Override
+    public List<Post> getUserFeedPosts(int userId) {
+        return null;
+    }
+
+    @Override
     public List<Post> getUserPosts(int userId) {
         return null;
     }
 
     @Override
-    public List<Post> getUserPostsByDate(int userId, Timestamp startDate, Timestamp endDate) {
+    public List<Post> getBandPosts(int bandId) {
+        return null;
+    }
+
+    @Override
+    public List<Post> getBandPostsByMember(int memberId) {
         return null;
     }
 }
