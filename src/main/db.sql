@@ -51,3 +51,14 @@ CREATE TABLE IF NOT EXISTS user_tags
   FOREIGN KEY (tag_id) references tags(id),
   FOREIGN KEY (user_id) references users(id)
 );
+
+CREATE TABLE IF NOT EXISTS posts
+(
+    id INT,
+    user_id INT,
+    band_id INT,
+    text VARCHAR(65535),
+    date Timestamp,
+    FOREIGN KEY (user_id) references users(id),
+    FOREIGN KEY (band_id) references bands(id)
+);
