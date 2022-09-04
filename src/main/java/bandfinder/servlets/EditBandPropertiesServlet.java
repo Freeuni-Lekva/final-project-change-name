@@ -9,8 +9,8 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
-@WebServlet(name = "editBandPropertiesServlet", value = "/editBandProperties")
-public class editBandPropertiesServlet extends ServletBase {
+@WebServlet(name = "EditBandPropertiesServlet", value = "/editBandProperties")
+public class EditBandPropertiesServlet extends ServletBase {
     @AutoInjectable
     private BandDAO bandDAO;
 
