@@ -22,9 +22,23 @@
       <li>Surname: <%= user.getSurname() %></li>
       <li>Email: <%= user.getEmail() %></li>
     </ul>
-    <form action="editProfile" method="post">
-      <input type="submit" value="Edit Profile"/>
-    </form>
+    <%
+      User loggedInUser = (User) request.getSession().getAttribute("user");
+      if(loggedInUser != null) {
+        if(loggedInUser.equals(user)){
+          out.println("<form action=\"editProfile\" method=\"post\">\n" +
+                  "      <input type=\"submit\" value=\"Edit Profile\"/>\n" +
+                  "    </form>");
+        } else {
+          out.println("<form action=\"/chat.jsp\" method=\"get\">\n" +
+                  "    <input type=\"hidden\" name=\"id\" value=\"" + user.getId() + "\"/>\n" +
+                  "    <input type=\"submit\" value=\"Chat\"/>\n" +
+                  "  </form>");
+        }
+      }
+    %>
+
+
   <body>
   
   </body>
