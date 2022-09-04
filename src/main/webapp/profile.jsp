@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="bandfinder.models.User" %>
 <%@ page import="bandfinder.infrastructure.AutoInjectable" %>
 <%@ page import="bandfinder.dao.UserDAO" %>
@@ -14,10 +15,13 @@
 %>
 
 <%
-  ServiceValueSetter.setAutoInjectableFieldValues(this);
-  User user = userDAO.getById(Integer.parseInt(request.getParameter("id")));
+  if(request.getAttribute("following") == null){
+    request.getRequestDispatcher("LoadUserProfileServlet").forward(request, response);
+  }
 
-  User loggedUser = (User) session.getAttribute("user");
+  ServiceValueSetter.setAutoInjectableFieldValues(this);
+
+  User user = userDAO.getById(Integer.parseInt(request.getParameter("id")));
 %>
 <html>
   <head>
@@ -65,28 +69,31 @@
       <li>Email: <%= user.getEmail() %></li>
     </ul>
 
-    <%
-      Follow follow = new Follow(-1, user.getId());
-      if(loggedUser != null){
-        follow.setFollowerID(loggedUser.getId());
+    <c:if test="${loggedUser}">
+      <c:choose>
+        <c:when test="${sameUser}">
+          <form action="editProfile.jsp" method="post" style="display: inline-flex; position: fixed; bottom: 3%; left: 2%">
+            <input type="submit" value="Edit Profile"/>
+          </form>
+        </c:when>
 
-        //If the logged user is visiting their own profile
-        if(loggedUser.getId() == user.getId()){
-          out.println("<form action=\"editProfile.jsp\" method=\"post\" style=\"display: inline-flex; position: fixed; bottom: 3%; left: 2%\">");
-          out.println("<input type=\"submit\" value=\"Edit Profile\"/>");
-          out.println("</form>");
-        }else{
-          if(!followDAO.followExists(follow)){
-            out.println("<form action=\"FollowServlet\" method=\"post\">");
-            out.println("<input type=\"submit\" value=\"Follow\"/>");
-          }else if(followDAO.followExists(follow)){
-            out.println("<form action=\"UnfollowServlet\" method=\"post\">");
-            out.println("<input type=\"submit\" value=\"Unfollow\"/>");
-          }
-          out.println("<input type=\"hidden\" name=\"user_id\" value=\"" + user.getId() + "\" />");
-          out.println("</form>");
-        }
-      }
-    %>
+        <c:when test="${!sameUser}">
+          <c:choose>
+            <c:when test="${!following}">
+              <form action="FollowServlet" method="post">
+                <input type="submit" value="Follow"/>
+                <input type="hidden" name="user_id" value= <%= user.getId() %> />
+              </form>
+            </c:when>
+            <c:when test="${following}">
+              <form action="UnfollowServlet" method="post">
+                <input type="submit" value="Unfollow"/>
+                <input type="hidden" name="user_id" value= <%= user.getId() %> />
+              </form>
+            </c:when>
+          </c:choose>
+        </c:when>
+      </c:choose>
+    </c:if>
   </body>
 </html>
