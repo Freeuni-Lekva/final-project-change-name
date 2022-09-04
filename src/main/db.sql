@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS user_tags
 
 CREATE TABLE IF NOT EXISTS posts
 (
-    id INT,
+    id INT AUTO_INCREMENT,
     user_id INT,
     band_id INT,
     text VARCHAR(65535),
