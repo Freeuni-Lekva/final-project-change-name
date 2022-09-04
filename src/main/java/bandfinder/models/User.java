@@ -69,7 +69,7 @@ public class User {
     }
 
     public String getFullName() {
-        if(stageName.isBlank()) {
+        if(stageName == null || stageName.isBlank()) {
             return firstName + ' ' + surname;
         }
         return firstName + " \"" + stageName + "\" " + surname;
