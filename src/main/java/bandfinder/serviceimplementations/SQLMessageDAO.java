@@ -5,8 +5,6 @@ import bandfinder.models.Message;
 import bandfinder.models.MessageViewModel;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,15 +131,6 @@ public class SQLMessageDAO implements MessageDAO {
         return firstName + " \"" + stageName + "\" " + surname;
     }
 
-    private String formatTimestamp(Timestamp t) {
-        String pattern;
-        if(!t.toLocalDateTime().toLocalDate().isBefore(LocalDate.now())) {
-            pattern = "HH:mm";
-        } else {
-            pattern = "HH:mm dd/MM/yyyy";
-        }
-        return new SimpleDateFormat(pattern).format(t);
-    }
 
     @Override
     public MessageViewModel getMessageViewForId(int id) {
@@ -161,7 +150,7 @@ public class SQLMessageDAO implements MessageDAO {
             String senderFullName = getFullName(resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
             String receiverFullName = getFullName(resultSet.getString(7), resultSet.getString(8), resultSet.getString(9));
             Timestamp timestamp = resultSet.getTimestamp(3);
-            String time = formatTimestamp(timestamp);
+            String time = MessageViewModel.formatTimestamp(timestamp);
             return new MessageViewModel(
                     resultSet.getInt(1),
                     senderFullName,
@@ -198,7 +187,7 @@ public class SQLMessageDAO implements MessageDAO {
                 String senderFullName = getFullName(resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
                 String receiverFullName = getFullName(resultSet.getString(7), resultSet.getString(8), resultSet.getString(9));
                 Timestamp timestamp = resultSet.getTimestamp(3);
-                String time = formatTimestamp(timestamp);
+                String time = MessageViewModel.formatTimestamp(timestamp);
                 MessageViewModel msg = new MessageViewModel(
                     resultSet.getInt(1),
                     senderFullName,
@@ -239,7 +228,7 @@ public class SQLMessageDAO implements MessageDAO {
                 String senderFullName = getFullName(resultSet.getString(4), resultSet.getString(5), resultSet.getString(6));
                 String receiverFullName = getFullName(resultSet.getString(7), resultSet.getString(8), resultSet.getString(9));
                 Timestamp timestamp = resultSet.getTimestamp(3);
-                String time = formatTimestamp(timestamp);
+                String time = MessageViewModel.formatTimestamp(timestamp);
                 MessageViewModel msg = new MessageViewModel(
                         resultSet.getInt(1),
                         senderFullName,
