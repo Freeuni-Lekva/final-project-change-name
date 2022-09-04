@@ -81,7 +81,7 @@ proc_block: BEGIN
 
     OPEN cur;
     concat_strings: LOOP
-        FETCH FROM cur INTO current_tag_id;
+        FETCH cur INTO current_tag_id;
         IF is_done THEN LEAVE concat_strings; END IF;
         SELECT name INTO current_tag_name FROM tags WHERE id = current_tag_id;
         SET result_string = CONCAT(result_string, ' ', current_tag_name, ',');
@@ -106,7 +106,7 @@ proc_block: BEGIN
 
     OPEN cur;
     concat_strings: LOOP
-        FETCH FROM cur INTO current_tag_id;
+        FETCH cur INTO current_tag_id;
         IF is_done THEN LEAVE concat_strings; END IF;
         SELECT name INTO current_tag_name FROM tags WHERE id = current_tag_id;
         SET result_string = CONCAT(result_string, ' ', current_tag_name, ',');
@@ -161,7 +161,7 @@ BEGIN
 
     OPEN users_cursor;
     update_users: LOOP
-        FETCH FROM users_cursor INTO current_id;
+        FETCH users_cursor INTO current_id;
         IF is_done THEN LEAVE update_users; END IF;
         CALL p_match_user_tags_string_with_tags_table(current_id);
     END LOOP;
@@ -170,7 +170,7 @@ BEGIN
     SET is_done = FALSE;
     OPEN bands_cursor;
     update_bands: LOOP
-        FETCH FROM bands_cursor INTO current_id;
+        FETCH bands_cursor INTO current_id;
         IF is_done THEN LEAVE update_bands; END IF;
         CALL p_match_band_tags_string_with_tags_table(current_id);
     END LOOP;
@@ -178,6 +178,7 @@ BEGIN
 END //
 
 DELIMITER ;
+
 CREATE TABLE IF NOT EXISTS posts
 (
     id INT AUTO_INCREMENT,
@@ -185,6 +186,17 @@ CREATE TABLE IF NOT EXISTS posts
     band_id INT,
     text VARCHAR(65535),
     date Timestamp,
+    PRIMARY KEY(id),
     FOREIGN KEY (user_id) references users(id),
     FOREIGN KEY (band_id) references bands(id)
+);
+
+CREATE TABLE IF NOT EXISTS band_followers
+(
+    id INT AUTO_INCREMENT,
+    band_id INT,
+    user_id INT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(band_id) references bands(id),
+    FOREIGN KEY (user_id) references users(id)
 );
