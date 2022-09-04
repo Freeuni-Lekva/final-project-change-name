@@ -2,7 +2,6 @@ package bandfinder.serviceimplementations;
 
 import bandfinder.dao.BandDAO;
 import bandfinder.models.Band;
-import bandfinder.models.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ public class SQLBandDAO implements BandDAO {
         connection = DriverManager.getConnection(URL);
     }
 
-    private static final String IS_USER_IN_BAND_QUERY = "SELECT id FROM band_users " +
+    private static final String IS_USER_IN_BAND_QUERY = "SELECT * FROM band_users " +
                                                         "WHERE band_id = ? AND user_id = ?;";
 
     @Override
@@ -61,7 +60,7 @@ public class SQLBandDAO implements BandDAO {
         }
     }
 
-    private static final String REMOVE_MEMBER_FROM_BAND_QUERY = "DELETE FROM band_users" +
+    private static final String REMOVE_MEMBER_FROM_BAND_QUERY = "DELETE FROM band_users " +
                                                                 "WHERE band_id = ? AND user_id = ?;";
 
     @Override
@@ -220,14 +219,16 @@ public class SQLBandDAO implements BandDAO {
             PreparedStatement statement;
             if(query.length() <= 2) {
                 statement = connection.prepareStatement(
-                        "SELECT * FROM bands WHERE LOWER(name) = ?;"
+                        "SELECT * FROM bands WHERE LOWER(name) = ? OR LOWER(tags_string) LIKE CONCAT('% ', ?, ',')"
                 );
+                statement.setString(1, query);
+                statement.setString(2, query);
             } else {
                 statement = connection.prepareStatement(
-                        "SELECT * FROM bands WHERE MATCH(name) AGAINST(? IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION);"
+                        "SELECT * FROM bands WHERE MATCH(name, tags_string) AGAINST(? IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION);"
                 );
+                statement.setString(1, query);
             }
-            statement.setString(1, query);
             ResultSet resultSet = statement.executeQuery();
             List<Band> resultList = new ArrayList<>();
             while(resultSet.next()) {
