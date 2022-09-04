@@ -1,6 +1,7 @@
 package bandfinder.servlets;
 
 import bandfinder.dao.UserDAO;
+import bandfinder.infrastructure.AutoInjectable;
 import bandfinder.models.User;
 
 import javax.servlet.ServletException;
@@ -11,7 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name="EditProfileServlet", value="/EditProfileServlet")
-public class UserProfileServlet extends HttpServlet {
+public class UserProfileServlet extends ServletBase {
+
+    @AutoInjectable
+    UserDAO userDao;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -32,8 +36,8 @@ public class UserProfileServlet extends HttpServlet {
         user.setSurname(surname);
         user.setStageName(stageName);
 
-        UserDAO userDao = (UserDAO) req.getServletContext().getAttribute(UserDAO.ATTRIBUTE_NAME);
         userDao.update(user);
+        req.getSession().setAttribute("user", user);
 
         if(req.getSession().getAttribute("passwordIncorrect") != null){
             req.getSession().removeAttribute("passwordIncorrect");
