@@ -1,3 +1,4 @@
+-- Init table
 CREATE DATABASE IF NOT EXISTS bandfinder;
 USE bandfinder;
 
@@ -16,44 +17,57 @@ CREATE TABLE IF NOT EXISTS users
 
 CREATE TABLE IF NOT EXISTS bands
 (
-  id INT AUTO_INCREMENT,
-  name VARCHAR(255),
-  tags_string VARCHAR(4095),
-  PRIMARY KEY (id),
-  FULLTEXT(name, tags_string)
+    id INT AUTO_INCREMENT,
+    name VARCHAR(255),
+    tags_string VARCHAR(4095),
+    PRIMARY KEY (id),
+    FULLTEXT(name, tags_string)
 );
 
 CREATE TABLE IF NOT EXISTS band_users
 (
-  user_id INT,
-  band_id INT,
-  FOREIGN KEY (user_id) references users(id),
-  FOREIGN KEY (band_id) references bands(id)
+    user_id INT,
+    band_id INT,
+    FOREIGN KEY (user_id) references users(id),
+    FOREIGN KEY (band_id) references bands(id)
 );
 
 CREATE TABLE IF NOT EXISTS tags
 (
-  id INT AUTO_INCREMENT,
-  name VARCHAR(255),
-  PRIMARY KEY (id)
+    id INT AUTO_INCREMENT,
+    name VARCHAR(255),
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS band_tags
 (
-  tag_id INT,
-  band_id INT,
-  FOREIGN KEY (tag_id) references tags(id),
-  FOREIGN KEY (band_id) references bands(id)
+    tag_id INT,
+    band_id INT,
+    FOREIGN KEY (tag_id) references tags(id),
+    FOREIGN KEY (band_id) references bands(id)
 );
 
 CREATE TABLE IF NOT EXISTS user_tags
 (
-  tag_id INT,
-  user_id INT,
-  FOREIGN KEY (tag_id) references tags(id),
-  FOREIGN KEY (user_id) references users(id)
+    tag_id INT,
+    user_id INT,
+    FOREIGN KEY (tag_id) references tags(id),
+    FOREIGN KEY (user_id) references users(id)
 );
 
+CREATE TABLE IF NOT EXISTS messages
+(
+    id INT AUTO_INCREMENT,
+    sender_id INT,
+    receiver_id INT,
+    content TEXT,
+    time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (sender_id) references users(id),
+    FOREIGN KEY (receiver_id) references users(id),
+    PRIMARY KEY (id)
+);
+
+-- Handle tag updates
 DELIMITER //
 
 CREATE PROCEDURE p_match_user_tags_string_with_tags_table(p_user_id INT)
@@ -107,38 +121,38 @@ proc_block: BEGIN
 END//
 
 CREATE TRIGGER add_user_tag_trigger AFTER INSERT ON user_tags
-FOR EACH ROW
-CALL p_match_user_tags_string_with_tags_table(NEW.user_id)//
+    FOR EACH ROW
+    CALL p_match_user_tags_string_with_tags_table(NEW.user_id)//
 
 CREATE TRIGGER remove_user_tag_trigger AFTER DELETE ON user_tags
-FOR EACH ROW
-CALL p_match_user_tags_string_with_tags_table(OLD.user_id)//
+    FOR EACH ROW
+    CALL p_match_user_tags_string_with_tags_table(OLD.user_id)//
 
 CREATE TRIGGER change_user_tag_trigger AFTER UPDATE ON user_tags
-FOR EACH ROW
+    FOR EACH ROW
 BEGIN
-  CALL p_match_user_tags_string_with_tags_table(OLD.user_id);
-  CALL p_match_user_tags_string_with_tags_table(NEW.user_id);
+    CALL p_match_user_tags_string_with_tags_table(OLD.user_id);
+    CALL p_match_user_tags_string_with_tags_table(NEW.user_id);
 END//
 
 CREATE TRIGGER add_band_tag_trigger AFTER INSERT ON band_tags
-FOR EACH ROW
-CALL p_match_band_tags_string_with_tags_table(NEW.band_id);
+    FOR EACH ROW
+    CALL p_match_band_tags_string_with_tags_table(NEW.band_id);
 
 CREATE TRIGGER remove_band_tag_trigger AFTER DELETE ON band_tags
-FOR EACH ROW
-CALL p_match_band_tags_string_with_tags_table(OLD.band_id)//
+    FOR EACH ROW
+    CALL p_match_band_tags_string_with_tags_table(OLD.band_id)//
 
 CREATE TRIGGER change_band_tag_trigger AFTER UPDATE ON band_tags
-FOR EACH ROW
+    FOR EACH ROW
 BEGIN
-  CALL p_match_band_tags_string_with_tags_table(OLD.band_id);
-  CALL p_match_band_tags_string_with_tags_table(NEW.band_id);
+    CALL p_match_band_tags_string_with_tags_table(OLD.band_id);
+    CALL p_match_band_tags_string_with_tags_table(NEW.band_id);
 END//
 
 
 CREATE TRIGGER change_tag_trigger AFTER UPDATE ON tags
-FOR EACH ROW
+    FOR EACH ROW
 BEGIN
     DECLARE is_done BOOLEAN DEFAULT FALSE;
     DECLARE current_id INT;
