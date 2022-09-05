@@ -8,9 +8,11 @@ import java.util.List;
 public interface PostDAO extends DAO<Post> {
     String ATTRIBUTE = "PostDAO";
 
-    List<Post> getUserFeedPosts(int userId, int postsToSkip, int postsToFetch);
+    public Timestamp now();
 
-    List<Post> getUserPosts(int userId, int postsToSkip, int postsToFetch);
+    List<Post> getUserFeedPosts(int userId, Timestamp olderThan, int numPosts);
 
-    List<Post> getBandPosts(int bandId, int postsToSkip, int postsToFetch);
+    List<Post> getUserPosts(int userId, Timestamp olderThan, int numPosts);
+
+    List<Post> getBandPosts(int bandId, Timestamp olderThan, int numPosts);
 }

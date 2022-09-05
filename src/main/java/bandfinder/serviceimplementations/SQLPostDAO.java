@@ -131,19 +131,19 @@ public class SQLPostDAO implements PostDAO {
         }
     }
 
-    private static final String USER_FEED_POSTS = "SELECT * FROM posts WHERE " +
-            "author_band IS NULL AND EXISTS(SELECT * FROM follows WHERE follower=? AND followee=author_user) " +
-            "OR author_band IS NOT NULL AND EXISTS(SELECT * FROM band_followers WHERE follower=? AND followee_band=author_band) " +
-            "ORDER BY id LIMIT ? OFFSET ?;";
+    private static final String USER_FEED_POSTS = "SELECT * FROM posts WHERE date < ? AND " +
+            "(author_band IS NULL AND EXISTS(SELECT * FROM follows WHERE follower=? AND followee=author_user) " +
+            "OR author_band IS NOT NULL AND EXISTS(SELECT * FROM band_followers WHERE follower=? AND followee_band=author_band)) " +
+            "ORDER BY date DESC LIMIT ?;";
 
     @Override
-    public List<Post> getUserFeedPosts(int userId, int postsToSkip, int postsToFetch) {
+    public List<Post> getUserFeedPosts(int userId, Timestamp olderThan, int numPosts) {
         try {
             PreparedStatement statement = connection.prepareStatement(USER_FEED_POSTS);
-            statement.setInt(1, userId);
+            statement.setTimestamp(1, olderThan);
             statement.setInt(2, userId);
-            statement.setInt(3, postsToFetch);
-            statement.setInt(4, postsToSkip);
+            statement.setInt(3, userId);
+            statement.setInt(4, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> feedPosts = createPostsFromResultSet(rs);
             statement.close();
@@ -154,15 +154,15 @@ public class SQLPostDAO implements PostDAO {
     }
 
     private static final String USER_POSTS = "SELECT * FROM posts WHERE author_user=? AND author_band IS NULL " +
-            "ORDER BY id LIMIT ? OFFSET ?;";
+            "AND date < ? ORDER BY date DESC LIMIT ?;";
 
     @Override
-    public List<Post> getUserPosts(int userId, int postsToSkip, int postsToFetch) {
+    public List<Post> getUserPosts(int userId, Timestamp olderThan, int numPosts) {
         try {
             PreparedStatement statement = connection.prepareStatement(USER_POSTS);
             statement.setInt(1, userId);
-            statement.setInt(2, postsToFetch);
-            statement.setInt(3, postsToSkip);
+            statement.setTimestamp(2, olderThan);
+            statement.setInt(3, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> userPosts = createPostsFromResultSet(rs);
             statement.close();
@@ -172,15 +172,15 @@ public class SQLPostDAO implements PostDAO {
         }
     }
 
-    private static final String BAND_POSTS = "SELECT * FROM posts WHERE author_band=? ORDER BY id LIMIT ? OFFSET ?;";
+    private static final String BAND_POSTS = "SELECT * FROM posts WHERE author_band=? AND date < ? ORDER BY date LIMIT ?;";
 
     @Override
-    public List<Post> getBandPosts(int bandId, int postsToSkip, int postsToFetch) {
+    public List<Post> getBandPosts(int bandId, Timestamp olderThan, int numPosts) {
         try {
             PreparedStatement statement = connection.prepareStatement(BAND_POSTS);
             statement.setInt(1, bandId);
-            statement.setInt(2, postsToFetch);
-            statement.setInt(3, postsToSkip);
+            statement.setTimestamp(2, olderThan);
+            statement.setInt(3, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> bandPosts = createPostsFromResultSet(rs);
             statement.close();
@@ -188,5 +188,10 @@ public class SQLPostDAO implements PostDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Timestamp now() {
+        return new Timestamp(System.currentTimeMillis());
     }
 }
