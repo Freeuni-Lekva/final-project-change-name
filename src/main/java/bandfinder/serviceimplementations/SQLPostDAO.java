@@ -150,20 +150,26 @@ public class SQLPostDAO implements PostDAO {
         }
     }
 
-    private static final String USER_FEED_POSTS = "SELECT * FROM posts WHERE id < ? AND " +
-            "(author_band IS NULL AND EXISTS(SELECT * FROM follows WHERE follower=? AND followee=author_user) " +
-            "OR author_band IS NOT NULL AND EXISTS(SELECT * FROM band_followers WHERE follower=? AND followee_band=author_band)) " +
-            "ORDER BY id DESC LIMIT ?;";
+    private static final String USER_FEED_POSTS = "(SELECT * FROM posts " +
+                                                  "JOIN (SELECT followee_band FROM band_followers WHERE follower=?) AS followed_bands " +
+                                                  "ON posts.author_band=followed_bands.followee_band " +
+                                                  "WHERE posts.id < ?) " +
+                                                  "UNION" +
+                                                  "(SELECT * FROM posts " +
+                                                  "JOIN (SELECT followee FROM follows WHERE follower=?) AS followees " +
+                                                  "WHERE posts.id < ? AND posts.author_band IS NULL)" +
+                                                  "ORDER BY posts.id DESC LIMIT ?;";
 
 
     @Override
     public List<Post> getUserFeedPosts(int userId, int lastPostFetchedId, int numPosts) {
         try {
             PreparedStatement statement = connection.prepareStatement(USER_FEED_POSTS);
-            statement.setInt(1, lastPostFetchedId);
-            statement.setInt(2, userId);
+            statement.setInt(1, userId);
+            statement.setInt(2, lastPostFetchedId);
             statement.setInt(3, userId);
-            statement.setInt(4, numPosts);
+            statement.setInt(4, lastPostFetchedId);
+            statement.setInt(5, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> feedPosts = createPostsFromResultSet(rs);
             statement.close();
