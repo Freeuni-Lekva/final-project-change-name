@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS band_users
 
 CREATE TABLE IF NOT EXISTS notifications
 (
-    id INT,
+    id INT AUTO_INCREMENT,
     user_id INT,
     is_read BOOLEAN,
     message VARCHAR(65535),

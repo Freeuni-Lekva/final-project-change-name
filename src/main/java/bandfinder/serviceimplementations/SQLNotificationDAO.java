@@ -28,7 +28,7 @@ public class SQLNotificationDAO implements NotificationDAO {
             statement.setInt(1, model.getUserId());
             statement.setBoolean(2, model.isRead());
             statement.setString(3, model.getMessage());
-            statement.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+            statement.setTimestamp(4, model.getDate());
             statement.executeUpdate();
 
             ResultSet rs = statement.getGeneratedKeys();
@@ -108,6 +108,8 @@ public class SQLNotificationDAO implements NotificationDAO {
         }
     }
 
+
+
     private static final String ALL_NOTIFS = "SELECT * FROM notifications;";
 
     @Override
@@ -115,22 +117,25 @@ public class SQLNotificationDAO implements NotificationDAO {
         try {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(ALL_NOTIFS);
-
-            List<Notification> notifications = new ArrayList<>();
-            while(rs.next()) {
-                Notification notification = new Notification(rs.getInt(1),
-                                                             rs.getInt(2),
-                                                             rs.getBoolean(3),
-                                                             rs.getString(4),
-                                                             rs.getTimestamp(5));
-                notifications.add(notification);
-            }
-
+            List<Notification> notifications = getNotifsFromResultSet(rs);
             statement.close();
             return notifications;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private List<Notification> getNotifsFromResultSet(ResultSet rs) throws SQLException {
+        List<Notification> notifications = new ArrayList<>();
+        while(rs.next()) {
+            Notification notification = new Notification(rs.getInt(1),
+                    rs.getInt(2),
+                    rs.getBoolean(3),
+                    rs.getString(4),
+                    rs.getTimestamp(5));
+            notifications.add(notification);
+        }
+        return notifications;
     }
 
 
@@ -170,15 +175,7 @@ public class SQLNotificationDAO implements NotificationDAO {
 
             ResultSet rs = statement.executeQuery();
 
-            List<Notification> notifications = new ArrayList<>();
-            while(rs.next()) {
-                Notification notification = new Notification(rs.getInt(1),
-                                                             userId,
-                                                             rs.getBoolean(3),
-                                                             rs.getString(4),
-                                                             rs.getTimestamp(5));
-                notifications.add(notification);
-            }
+            List<Notification> notifications = getNotifsFromResultSet(rs);
 
             statement.close();
             return notifications;

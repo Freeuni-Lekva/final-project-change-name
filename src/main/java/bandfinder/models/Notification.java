@@ -20,6 +20,14 @@ public class Notification {
         this.date = date;
     }
 
+    public Notification(int userId, boolean isRead, String message, Timestamp date) {
+        this.id = -1;
+        this.userId = userId;
+        this.isRead = isRead;
+        this.message = message;
+        this.date = date;
+    }
+
     public int getId() {
         return id;
     }
