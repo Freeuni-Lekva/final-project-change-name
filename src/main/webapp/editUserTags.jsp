@@ -18,7 +18,7 @@
 
 <%
     User user = (User) request.getSession().getAttribute("user");
-    int userId = Integer.parseInt(request.getParameter("userId"));
+    int userId = user.getId();
     TagAutoComplete defTags = Injector.getImplementation(TagAutoComplete.class);
 %>
 
