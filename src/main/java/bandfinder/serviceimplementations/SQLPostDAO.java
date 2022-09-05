@@ -20,7 +20,7 @@ public class SQLPostDAO implements PostDAO {
     }
 
     private static final String CREATE = "INSERT INTO posts (author_user, author_band, text, date) " +
-                                         "VALUES (?, ?, ?, ?);";
+            "VALUES (?, ?, ?, ?);";
 
     @Override
     public Post create(Post model) {
@@ -87,7 +87,7 @@ public class SQLPostDAO implements PostDAO {
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
 
-            if(rs.next()) {
+            if (rs.next()) {
                 Integer authorUser = rs.getInt(2) == 0 ? null : rs.getInt(2);
                 Integer authorBand = rs.getInt(3) == 0 ? null : rs.getInt(3);
                 String text = rs.getString(4);
@@ -105,7 +105,7 @@ public class SQLPostDAO implements PostDAO {
 
     private List<Post> createPostsFromResultSet(ResultSet rs) throws SQLException {
         List<Post> posts = new ArrayList<>();
-        while(rs.next()) {
+        while (rs.next()) {
             int id = rs.getInt(1);
             Integer authorUser = rs.getInt(2) == 0 ? null : rs.getInt(2);
             Integer authorBand = rs.getInt(3) == 0 ? null : rs.getInt(3);
@@ -131,16 +131,36 @@ public class SQLPostDAO implements PostDAO {
         }
     }
 
-    private static final String USER_FEED_POSTS = "SELECT * FROM posts WHERE date < ? AND " +
-            "(author_band IS NULL AND EXISTS(SELECT * FROM follows WHERE follower=? AND followee=author_user) " +
-            "OR author_band IS NOT NULL AND EXISTS(SELECT * FROM band_followers WHERE follower=? AND followee_band=author_band)) " +
-            "ORDER BY date DESC LIMIT ?;";
+    private static final String LAST_POST_ID = "SELECT id FROM posts ORDER BY id DESC LIMIT 1;";
 
     @Override
-    public List<Post> getUserFeedPosts(int userId, Timestamp olderThan, int numPosts) {
+    public Integer getLastPostId() {
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(LAST_POST_ID);
+            if(rs.next()) {
+                int lastPostId = rs.getInt(1);
+                statement.close();
+                return lastPostId;
+            }
+            statement.close();
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final String USER_FEED_POSTS = "SELECT * FROM posts WHERE id < ? AND " +
+            "(author_band IS NULL AND EXISTS(SELECT * FROM follows WHERE follower=? AND followee=author_user) " +
+            "OR author_band IS NOT NULL AND EXISTS(SELECT * FROM band_followers WHERE follower=? AND followee_band=author_band)) " +
+            "ORDER BY id DESC LIMIT ?;";
+
+
+    @Override
+    public List<Post> getUserFeedPosts(int userId, int lastPostFetchedId, int numPosts) {
         try {
             PreparedStatement statement = connection.prepareStatement(USER_FEED_POSTS);
-            statement.setTimestamp(1, olderThan);
+            statement.setInt(1, lastPostFetchedId);
             statement.setInt(2, userId);
             statement.setInt(3, userId);
             statement.setInt(4, numPosts);
@@ -154,14 +174,14 @@ public class SQLPostDAO implements PostDAO {
     }
 
     private static final String USER_POSTS = "SELECT * FROM posts WHERE author_user=? AND author_band IS NULL " +
-            "AND date < ? ORDER BY date DESC LIMIT ?;";
+            "AND id < ? ORDER BY id DESC LIMIT ?;";
 
     @Override
-    public List<Post> getUserPosts(int userId, Timestamp olderThan, int numPosts) {
+    public List<Post> getUserPosts(int userId, int lastPostFetchedId, int numPosts) {
         try {
             PreparedStatement statement = connection.prepareStatement(USER_POSTS);
             statement.setInt(1, userId);
-            statement.setTimestamp(2, olderThan);
+            statement.setInt(2, lastPostFetchedId);
             statement.setInt(3, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> userPosts = createPostsFromResultSet(rs);
@@ -172,14 +192,14 @@ public class SQLPostDAO implements PostDAO {
         }
     }
 
-    private static final String BAND_POSTS = "SELECT * FROM posts WHERE author_band=? AND date < ? ORDER BY date LIMIT ?;";
+    private static final String BAND_POSTS = "SELECT * FROM posts WHERE author_band=? AND id < ? ORDER BY id LIMIT ?;";
 
     @Override
-    public List<Post> getBandPosts(int bandId, Timestamp olderThan, int numPosts) {
+    public List<Post> getBandPosts(int bandId, int lastPostFetchedId, int numPosts) {
         try {
             PreparedStatement statement = connection.prepareStatement(BAND_POSTS);
             statement.setInt(1, bandId);
-            statement.setTimestamp(2, olderThan);
+            statement.setInt(2, lastPostFetchedId);
             statement.setInt(3, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> bandPosts = createPostsFromResultSet(rs);
@@ -188,10 +208,5 @@ public class SQLPostDAO implements PostDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public Timestamp timeNow() {
-        return new Timestamp(System.currentTimeMillis());
     }
 }
