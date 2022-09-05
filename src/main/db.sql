@@ -182,21 +182,21 @@ DELIMITER ;
 CREATE TABLE IF NOT EXISTS posts
 (
     id INT AUTO_INCREMENT,
-    user_id INT,
-    band_id INT,
+    author_user INT,
+    author_band INT,
     text VARCHAR(65535),
     date Timestamp,
     PRIMARY KEY(id),
-    FOREIGN KEY (user_id) references users(id),
-    FOREIGN KEY (band_id) references bands(id)
+    FOREIGN KEY (author_user) references users(id),
+    FOREIGN KEY (author_band) references bands(id)
 );
 
 CREATE TABLE IF NOT EXISTS band_followers
 (
     id INT AUTO_INCREMENT,
-    band_id INT,
-    user_id INT,
+    followee_band INT,
+    follower INT,
     PRIMARY KEY(id),
-    FOREIGN KEY(band_id) references bands(id),
-    FOREIGN KEY (user_id) references users(id)
+    FOREIGN KEY(followee_band) references bands(id),
+    FOREIGN KEY (follower) references users(id)
 );

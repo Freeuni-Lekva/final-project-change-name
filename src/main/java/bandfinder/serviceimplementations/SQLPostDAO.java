@@ -3,53 +3,190 @@ package bandfinder.serviceimplementations;
 import bandfinder.dao.PostDAO;
 import bandfinder.models.Post;
 
-import java.sql.Timestamp;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SQLPostDAO implements PostDAO {
 
+    private final Connection connection;
+
+    private static final String CLASS_NAME = "com.mysql.cj.jdbc.Driver";
+    private static final String URL = "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot";
+
+    public SQLPostDAO() throws ClassNotFoundException, SQLException {
+        Class.forName(CLASS_NAME);
+        connection = DriverManager.getConnection(URL);
+    }
+
+    private static final String CREATE = "INSERT INTO posts (author_user, author_band, text, date) " +
+                                         "VALUES (?, ?, ?, ?);";
+
     @Override
     public Post create(Post model) {
-        return null;
+        try {
+            PreparedStatement statement = connection.prepareStatement(CREATE,
+                    PreparedStatement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, model.getAuthorUser());
+            statement.setInt(2, model.getAuthorBand());
+            statement.setString(3, model.getText());
+            statement.setTimestamp(4, model.getDate());
+
+            statement.executeUpdate();
+            ResultSet rs = statement.getGeneratedKeys();
+            rs.next();
+            model.setId(rs.getInt(1));
+            statement.close();
+
+            return model;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    private static final String UPDATE = "UPDATE posts SET author_user=?, author_band=?, text=?, date=? WHERE id=?;";
 
     @Override
     public Post update(Post model) {
-        return null;
+        try {
+            PreparedStatement statement = connection.prepareStatement(UPDATE);
+            statement.setInt(1, model.getAuthorUser());
+            statement.setInt(2, model.getAuthorBand());
+            statement.setString(3, model.getText());
+            statement.setTimestamp(4, model.getDate());
+            statement.setInt(5, model.getId());
+            statement.executeUpdate();
+            statement.close();
+            return model;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    private static final String DELETE = "DELETE FROM posts WHERE id=?;";
 
     @Override
     public boolean delete(int id) {
-        return false;
+        try {
+            PreparedStatement statement = connection.prepareStatement(DELETE);
+            statement.setInt(1, id);
+            int rowsAffected = statement.executeUpdate();
+            statement.close();
+            return rowsAffected == 1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    private static final String GET_BY_ID = "SELECT * FROM posts WHERE id=?;";
 
     @Override
     public Post getById(int id) {
-        return null;
+        try {
+            PreparedStatement statement = connection.prepareStatement(GET_BY_ID);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+
+            if(rs.next()) {
+                int authorUser = rs.getInt(2);
+                int authorBand = rs.getInt(3);
+                String text = rs.getString(4);
+                Timestamp date = rs.getTimestamp(5);
+                Post post = new Post(id, authorUser, authorBand, text, date);
+                statement.close();
+                return post;
+            }
+            statement.close();
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    private List<Post> createPostsFromResultSet(ResultSet rs) throws SQLException {
+        List<Post> posts = new ArrayList<>();
+        while(rs.next()) {
+            int id = rs.getInt(1);
+            int authorUser = rs.getInt(2);
+            int authorBand = rs.getInt(3);
+            String text = rs.getString(4);
+            Timestamp date = rs.getTimestamp(5);
+            posts.add(new Post(id, authorUser, authorBand, text, date));
+        }
+        return posts;
+    }
+
+    private static final String GET_ALL = "SELECT * FROM posts;";
 
     @Override
     public List<Post> getAll() {
-        return null;
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(GET_ALL);
+            List<Post> posts = createPostsFromResultSet(rs);
+            statement.close();
+            return posts;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @Override
-    public List<Post> getUserFeedPosts(int userId) {
-        return null;
-    }
+    private static final String USER_FEED_POSTS = "SELECT * FROM posts WHERE " +
+            "author_band IS NULL AND EXISTS(SELECT * FROM follows WHERE follower=? AND followee=author_user) " +
+            "OR author_band IS NOT NULL AND EXISTS(SELECT * FROM band_followers WHERE follower=? AND followee_band=author_band) " +
+            "ORDER BY id LIMIT ? OFFSET ?;";
 
     @Override
-    public List<Post> getUserPosts(int userId) {
-        return null;
+    public List<Post> getUserFeedPosts(int userId, int postsToSkip, int postsToFetch) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(USER_FEED_POSTS);
+            statement.setInt(1, userId);
+            statement.setInt(2, userId);
+            statement.setInt(3, postsToFetch);
+            statement.setInt(4, postsToSkip);
+            ResultSet rs = statement.executeQuery();
+            List<Post> feedPosts = createPostsFromResultSet(rs);
+            statement.close();
+            return feedPosts;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @Override
-    public List<Post> getBandPosts(int bandId) {
-        return null;
-    }
+    private static final String USER_POSTS = "SELECT * FROM posts WHERE author_user=? AND author_band IS NULL " +
+            "ORDER BY id LIMIT ? OFFSET ?;";
 
     @Override
-    public List<Post> getBandPostsByMember(int memberId) {
-        return null;
+    public List<Post> getUserPosts(int userId, int postsToSkip, int postsToFetch) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(USER_POSTS);
+            statement.setInt(1, userId);
+            statement.setInt(2, postsToFetch);
+            statement.setInt(3, postsToSkip);
+            ResultSet rs = statement.executeQuery();
+            List<Post> userPosts = createPostsFromResultSet(rs);
+            statement.close();
+            return userPosts;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final String BAND_POSTS = "SELECT * FROM posts WHERE author_band=? ORDER BY id LIMIT ? OFFSET ?;";
+
+    @Override
+    public List<Post> getBandPosts(int bandId, int postsToSkip, int postsToFetch) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(BAND_POSTS);
+            statement.setInt(1, bandId);
+            statement.setInt(2, postsToFetch);
+            statement.setInt(3, postsToSkip);
+            ResultSet rs = statement.executeQuery();
+            List<Post> bandPosts = createPostsFromResultSet(rs);
+            statement.close();
+            return bandPosts;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
