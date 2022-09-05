@@ -139,8 +139,7 @@ public class SQLNotificationDAO implements NotificationDAO {
     }
 
 
-    public static final String USER_NOTIFS_QUERY_BASE = "SELECT * FROM notifications WHERE user_id = ?";
-
+    public static final String USER_NOTIFS_QUERY_BASE = "SELECT * FROM notifications WHERE user_id = ? AND band_id = ?";
     public static final String USER_NOTIFS = USER_NOTIFS_QUERY_BASE + ";";
     public static final String USER_NOTIFS_BY_END_DATE = USER_NOTIFS_QUERY_BASE + " AND date <= ?;";
     public static final String USER_NOTIFS_BY_START_DATE = USER_NOTIFS_QUERY_BASE + " AND date >= ?;";
@@ -151,12 +150,14 @@ public class SQLNotificationDAO implements NotificationDAO {
     public static final String USER_NOTIFS_BY_STATUS_AND_TIME_INTERVAL = USER_NOTIFS_QUERY_BASE + " AND is_read = ? AND date BETWEEN ? AND ?;";
 
     @Override
-    public List<Notification> getUserNotifsByStatusAndDate(int userId, Boolean isRead, Timestamp startDate, Timestamp endDate) {
+    public List<Notification> getNotifsByStatusAndDate(Integer userId, Integer bandId, Boolean isRead,
+                                                       Timestamp startDate, Timestamp endDate) {
         try {
             PreparedStatement statement = null;
 
             if(isRead == null && startDate == null && endDate == null) {
                 statement = connection.prepareStatement(USER_NOTIFS);
+                statement.setObject();
             }else if(isRead == null && startDate == null && endDate != null) {
                 statement = connection.prepareStatement(USER_NOTIFS_BY_END_DATE);
             }else if(isRead == null && startDate != null && endDate == null) {
@@ -185,12 +186,12 @@ public class SQLNotificationDAO implements NotificationDAO {
     }
 
     @Override
-    public List<Notification> getUserNotifsByStatus(int userId, Boolean isRead) {
-        return getUserNotifsByStatusAndDate(userId, isRead, null, null);
+    public List<Notification> getNotifsByStatus(Integer userId, Integer bandId, Boolean isRead) {
+        return getNotifsByStatusAndDate(userId, bandId, isRead, null, null);
     }
 
     @Override
-    public List<Notification> getUserNotifsByDate(int userId, Timestamp startDate, Timestamp endDate) {
-        return getUserNotifsByStatusAndDate(userId, null, startDate, endDate);
+    public List<Notification> getNotifsByDate(Integer userId, Integer bandId, Timestamp startDate, Timestamp endDate) {
+        return getNotifsByStatusAndDate(userId, bandId,null, startDate, endDate);
     }
 }

@@ -1,18 +1,18 @@
 package bandfinder.models;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 public class Notification {
 
     private int id;
-    private int userId;
+    private Integer userId;
+    private Integer bandId;
     private boolean isRead;
     private String message;
     private Timestamp date;
 
 
-    public Notification(int id, int userId, boolean isRead, String message, Timestamp date) {
+    public Notification(int id, Integer userId, Integer bandId, boolean isRead, String message, Timestamp date) {
         this.id = id;
         this.userId = userId;
         this.isRead = isRead;
@@ -20,7 +20,7 @@ public class Notification {
         this.date = date;
     }
 
-    public Notification(int userId, boolean isRead, String message, Timestamp date) {
+    public Notification(Integer userId, Integer bandId, boolean isRead, String message, Timestamp date) {
         this.id = -1;
         this.userId = userId;
         this.isRead = isRead;
@@ -36,12 +36,20 @@ public class Notification {
         this.id = id;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public Integer getBandId() {
+        return bandId;
+    }
+
+    public void setBandId(Integer bandId) {
+        this.bandId = bandId;
     }
 
     public boolean isRead() {

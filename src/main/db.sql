@@ -32,9 +32,11 @@ CREATE TABLE IF NOT EXISTS notifications
 (
     id INT AUTO_INCREMENT,
     user_id INT,
+    band_id INT,
     is_read BOOLEAN,
     message VARCHAR(65535),
     date TIMESTAMP,
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id) references users(id)
+    FOREIGN KEY (user_id) references users(id),
+    FOREIGN KEY (band_id) references bands(id)
 );
