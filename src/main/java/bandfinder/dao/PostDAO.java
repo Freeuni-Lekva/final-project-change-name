@@ -8,7 +8,7 @@ import java.util.List;
 public interface PostDAO extends DAO<Post> {
     String ATTRIBUTE = "PostDAO";
 
-    public Timestamp now();
+    public Timestamp timeNow();
 
     List<Post> getUserFeedPosts(int userId, Timestamp olderThan, int numPosts);
 

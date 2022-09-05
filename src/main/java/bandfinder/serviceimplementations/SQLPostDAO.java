@@ -191,7 +191,7 @@ public class SQLPostDAO implements PostDAO {
     }
 
     @Override
-    public Timestamp now() {
+    public Timestamp timeNow() {
         return new Timestamp(System.currentTimeMillis());
     }
 }
