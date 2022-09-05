@@ -12,7 +12,7 @@ public class SQLBandDAO implements BandDAO {
     private final Connection connection;
 
     private static final String CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot";
+    private static final String URL = "jdbc:mysql://localhost/bandfinder?user=root&password=R00tR**t";
 
     public SQLBandDAO() throws ClassNotFoundException, SQLException {
         Class.forName(CLASS_NAME);

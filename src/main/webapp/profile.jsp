@@ -2,6 +2,8 @@
 <%@ page import="bandfinder.models.User" %>
 <%@ page import="bandfinder.infrastructure.AutoInjectable" %>
 <%@ page import="bandfinder.dao.UserDAO" %>
+<%@ page import="bandfinder.dao.TagDAO" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="bandfinder.infrastructure.ServiceValueSetter" %>
 <%@ page import="bandfinder.dao.FollowDAO" %>
 <%@ page import="bandfinder.models.Follow" %>
@@ -9,7 +11,8 @@
 <%!
   @AutoInjectable
   private UserDAO userDAO;
-
+  @AutoInjectable
+  private TagDAO tagDAO;
   @AutoInjectable
   private FollowDAO followDAO;
 %>
@@ -68,12 +71,23 @@
       <li>Surname: <%= user.getSurname() %></li>
       <li>Email: <%= user.getEmail() %></li>
     </ul>
-
+    <h2><small>Tags</small></h2>
+    <ul>
+        <%
+            ArrayList<Integer> tagIds = (ArrayList)tagDAO.getUserTagIDs(user.getId());
+            for(Integer tagId : tagIds){
+                out.println("<li>"+ tagDAO.getById(tagId).getName() +"</li>");
+            }
+        %>
+    </ul>
     <c:if test="${loggedUser}">
       <c:choose>
         <c:when test="${sameUser}">
           <form action="editProfile.jsp" method="post" style="display: inline-flex; position: fixed; bottom: 3%; left: 2%">
             <input type="submit" value="Edit Profile"/>
+          </form>
+          <form method="post" action=<%= "/editUserTags.jsp?userId=" + user.getId() %> >
+              <input type="submit" value="Edit tags"/>
           </form>
         </c:when>
 

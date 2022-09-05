@@ -10,7 +10,7 @@ public class SQLTagDAO implements TagDAO {
     private final Connection connection;
 
     private static final String CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot";
+    private static final String URL = "jdbc:mysql://localhost/bandfinder?user=root&password=R00tR**t";
 
     public SQLTagDAO() throws ClassNotFoundException, SQLException {
         Class.forName(CLASS_NAME);
@@ -56,12 +56,12 @@ public class SQLTagDAO implements TagDAO {
     }
     @Override
     public boolean removeTagFromBand(int tagId, int bandId) {
-        return removeTagFromObject(tagId,bandId,"DELETE FROM band_tags" + "WHERE band_id = ? AND tag_id = ?;");
+        return removeTagFromObject(tagId,bandId,"DELETE FROM band_tags " + "WHERE band_id = ? AND tag_id = ?;");
     }
 
     @Override
     public boolean removeTagFromUser(int tagId, int userId) {
-        return removeTagFromObject(tagId,userId,"DELETE FROM user_tags" + "WHERE user_id = ? AND tag_id = ?;");
+        return removeTagFromObject(tagId,userId,"DELETE FROM user_tags " + "WHERE user_id = ? AND tag_id = ?;");
     }
 
     private boolean objectHasTag(int tagId, int objectId, String query) {
