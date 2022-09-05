@@ -1,5 +1,7 @@
 package bandfinder.infrastructure;
 
+import bandfinder.dao.BandDAO;
+import bandfinder.dao.FollowDAO;
 import bandfinder.serviceimplementations.*;
 import bandfinder.services.*;
 import bandfinder.dao.UserDAO;
@@ -18,6 +20,7 @@ public class Config {
         Injector.injectSingleton(UserAutoComplete.class, AllUsersAutocompleteServiceImpl.class);
         Injector.injectSingleton(UserDAO.class, SQLUserDAO.class);
         Injector.injectSingleton(BandDAO.class, SQLBandDAO.class);
+        Injector.injectSingleton(FollowDAO.class, SQLFollowDAO.class);
         Injector.injectSingleton(TagDAO.class, SQLTagDAO.class);
         isConfigured = true;
     }
