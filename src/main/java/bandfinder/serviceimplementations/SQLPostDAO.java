@@ -27,8 +27,8 @@ public class SQLPostDAO implements PostDAO {
         try {
             PreparedStatement statement = connection.prepareStatement(CREATE,
                     PreparedStatement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, model.getAuthorUser());
-            statement.setInt(2, model.getAuthorBand());
+            statement.setObject(1, model.getAuthorUser(), Types.INTEGER);
+            statement.setObject(2, model.getAuthorBand(), Types.INTEGER);
             statement.setString(3, model.getText());
             statement.setTimestamp(4, model.getDate());
 
@@ -50,8 +50,8 @@ public class SQLPostDAO implements PostDAO {
     public Post update(Post model) {
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE);
-            statement.setInt(1, model.getAuthorUser());
-            statement.setInt(2, model.getAuthorBand());
+            statement.setObject(1, model.getAuthorUser(), Types.INTEGER);
+            statement.setObject(2, model.getAuthorBand(), Types.INTEGER);
             statement.setString(3, model.getText());
             statement.setTimestamp(4, model.getDate());
             statement.setInt(5, model.getId());
@@ -88,8 +88,8 @@ public class SQLPostDAO implements PostDAO {
             ResultSet rs = statement.executeQuery();
 
             if(rs.next()) {
-                int authorUser = rs.getInt(2);
-                int authorBand = rs.getInt(3);
+                Integer authorUser = rs.getInt(2) == 0 ? null : rs.getInt(2);
+                Integer authorBand = rs.getInt(3) == 0 ? null : rs.getInt(3);
                 String text = rs.getString(4);
                 Timestamp date = rs.getTimestamp(5);
                 Post post = new Post(id, authorUser, authorBand, text, date);
@@ -107,8 +107,8 @@ public class SQLPostDAO implements PostDAO {
         List<Post> posts = new ArrayList<>();
         while(rs.next()) {
             int id = rs.getInt(1);
-            int authorUser = rs.getInt(2);
-            int authorBand = rs.getInt(3);
+            Integer authorUser = rs.getInt(2) == 0 ? null : rs.getInt(2);
+            Integer authorBand = rs.getInt(3) == 0 ? null : rs.getInt(3);
             String text = rs.getString(4);
             Timestamp date = rs.getTimestamp(5);
             posts.add(new Post(id, authorUser, authorBand, text, date));

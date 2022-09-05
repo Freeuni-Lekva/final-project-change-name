@@ -4,12 +4,12 @@ import java.sql.Timestamp;
 
 public class Post {
     private int id;
-    private int authorUser;
-    private int authorBand;
+    private Integer authorUser;
+    private Integer authorBand;
     private String text;
     private Timestamp date;
 
-    public Post(int id, int authorUser, int authorBand, String text, Timestamp date) {
+    public Post(int id, Integer authorUser, Integer authorBand, String text, Timestamp date) {
         this.id = id;
         this.authorUser = authorUser;
         this.authorBand = authorBand;
@@ -17,7 +17,7 @@ public class Post {
         this.date = date;
     }
 
-    public Post(int authorUser, int authorBand, String text, Timestamp date) {
+    public Post(Integer authorUser, Integer authorBand, String text, Timestamp date) {
         this.id = -1;
         this.authorUser = authorUser;
         this.authorBand = authorBand;
@@ -33,19 +33,19 @@ public class Post {
         this.id = id;
     }
 
-    public int getAuthorUser() {
+    public Integer getAuthorUser() {
         return authorUser;
     }
 
-    public void setAuthorUser(int authorUser) {
+    public void setAuthorUser(Integer authorUser) {
         this.authorUser = authorUser;
     }
 
-    public int getAuthorBand() {
+    public Integer getAuthorBand() {
         return authorBand;
     }
 
-    public void setAuthorBand(int authorBand) {
+    public void setAuthorBand(Integer authorBand) {
         this.authorBand = authorBand;
     }
 
