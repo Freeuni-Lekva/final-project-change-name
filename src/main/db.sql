@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS posts
     author_user INT,
     author_band INT,
     text TEXT,
-    date Timestamp,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id),
     FOREIGN KEY (author_user) references users(id),
     FOREIGN KEY (author_band) references bands(id)
