@@ -141,16 +141,12 @@ public class SQLPostDAO implements PostDAO {
         }
     }
 
-    private static final String FEED_POSTS =
-                    "SELECT * FROM " +
-                    "((SELECT * FROM posts " +
-                    "JOIN (SELECT followee FROM follows WHERE follower=?) AS followee_users " +
-                    "ON posts.author_user=followee_users.followee WHERE posts.author_band IS NULL) " +
-                    "UNION " +
-                    "(SELECT * FROM posts " +
-                    "JOIN (SELECT followee_band FROM band_follows WHERE follower_user=?) AS followee_bands " +
-                    "ON posts.author_band=followee_bands.followee_band)) AS feed_posts " +
-                    "WHERE feed_posts.id<? ORDER BY feed_posts.id DESC LIMIT ?;";
+    private static final String FEED_POSTS = """
+                        SELECT * FROM posts p
+                        LEFT JOIN follows uf ON p.author_user = uf.followee
+                        LEFT JOIN band_follows bf ON p.author_band = bf.followee_band
+                        WHERE ((uf.follower = ? AND p.author_band is null) OR (bf.follower_user = ?)) AND p.id < ?
+                        ORDER BY p.id DESC LIMIT ?;""";
 
     @Override
     public List<Post> feed(int userId, int lastPostFetchedId, int numPosts) {
