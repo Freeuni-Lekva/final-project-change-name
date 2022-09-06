@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users
     stage_name VARCHAR(255),
     tags_string VARCHAR(4095),
     PRIMARY KEY (id),
-    FULLTEXT (first_name, surname, stage_name, tags_string)
+    FULLTEXT (first_name, surname, stage_name)
 );
 
 CREATE TABLE IF NOT EXISTS bands
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS bands
   name VARCHAR(255),
   tags_string VARCHAR(4095),
   PRIMARY KEY (id),
-  FULLTEXT(name, tags_string)
+  FULLTEXT(name)
 );
 
 CREATE TABLE IF NOT EXISTS band_users
@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS follows
     FOREIGN KEY (follower) REFERENCES users(id),
     FOREIGN KEY (followee) REFERENCES users(id)
 );
+
 
 CREATE TABLE IF NOT EXISTS tags
 (
@@ -64,6 +65,28 @@ CREATE TABLE IF NOT EXISTS user_tags
   FOREIGN KEY (user_id) references users(id)
 );
 
+CREATE TABLE IF NOT EXISTS posts
+(
+    id INT AUTO_INCREMENT,
+    author_user INT,
+    author_band INT,
+    text TEXT,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id),
+    FOREIGN KEY (author_user) references users(id),
+    FOREIGN KEY (author_band) references bands(id)
+);
+
+CREATE TABLE IF NOT EXISTS band_follows
+(
+    id INT AUTO_INCREMENT,
+    followee_band INT,
+    follower_user INT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(followee_band) references bands(id),
+    FOREIGN KEY (follower_user) references users(id)
+);
+
 DELIMITER //
 
 CREATE PROCEDURE p_match_user_tags_string_with_tags_table(p_user_id INT)
@@ -81,7 +104,7 @@ proc_block: BEGIN
 
     OPEN cur;
     concat_strings: LOOP
-        FETCH FROM cur INTO current_tag_id;
+        FETCH cur INTO current_tag_id;
         IF is_done THEN LEAVE concat_strings; END IF;
         SELECT name INTO current_tag_name FROM tags WHERE id = current_tag_id;
         SET result_string = CONCAT(result_string, ' ', current_tag_name, ',');
@@ -106,7 +129,7 @@ proc_block: BEGIN
 
     OPEN cur;
     concat_strings: LOOP
-        FETCH FROM cur INTO current_tag_id;
+        FETCH cur INTO current_tag_id;
         IF is_done THEN LEAVE concat_strings; END IF;
         SELECT name INTO current_tag_name FROM tags WHERE id = current_tag_id;
         SET result_string = CONCAT(result_string, ' ', current_tag_name, ',');
@@ -161,7 +184,7 @@ BEGIN
 
     OPEN users_cursor;
     update_users: LOOP
-        FETCH FROM users_cursor INTO current_id;
+        FETCH users_cursor INTO current_id;
         IF is_done THEN LEAVE update_users; END IF;
         CALL p_match_user_tags_string_with_tags_table(current_id);
     END LOOP;
@@ -170,7 +193,7 @@ BEGIN
     SET is_done = FALSE;
     OPEN bands_cursor;
     update_bands: LOOP
-        FETCH FROM bands_cursor INTO current_id;
+        FETCH bands_cursor INTO current_id;
         IF is_done THEN LEAVE update_bands; END IF;
         CALL p_match_band_tags_string_with_tags_table(current_id);
     END LOOP;
@@ -178,3 +201,4 @@ BEGIN
 END //
 
 DELIMITER ;
+
