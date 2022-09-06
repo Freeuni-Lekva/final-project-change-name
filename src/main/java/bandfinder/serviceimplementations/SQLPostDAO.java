@@ -13,20 +13,12 @@ public class SQLPostDAO implements PostDAO {
 
     private final Connection connection;
 
-    private Integer lastFeedPostFetchedId;
-    private Integer lastUserPostFetchedId;
-    private Integer lastBandPostFetchedId;
-
     private static final String CLASS_NAME = "com.mysql.cj.jdbc.Driver";
     private static final String URL = "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot";
 
     public SQLPostDAO() throws ClassNotFoundException, SQLException {
         Class.forName(CLASS_NAME);
         connection = DriverManager.getConnection(URL);
-
-        lastFeedPostFetchedId = null;
-        lastUserPostFetchedId = null;
-        lastBandPostFetchedId = null;
     }
 
     private static final String CREATE = "INSERT INTO posts (author_user, author_band, text, date) " +
@@ -149,7 +141,7 @@ public class SQLPostDAO implements PostDAO {
                         ORDER BY p.id DESC LIMIT ?;""";
 
     @Override
-    public List<Post> feed(int userId, int lastPostFetchedId, int numPosts) {
+    public List<Post> getUserFeedPostsBeforeId(int userId, int lastPostFetchedId, int numPosts) {
         try {
             PreparedStatement statement = connection.prepareStatement(FEED_POSTS);
             statement.setInt(1, userId);
@@ -158,7 +150,6 @@ public class SQLPostDAO implements PostDAO {
             statement.setInt(4, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> feedPosts = createPostsFromResultSet(rs);
-            lastFeedPostFetchedId = feedPosts.get(feedPosts.size() - 1).getId();
             statement.close();
             return feedPosts;
         } catch (SQLException e) {
@@ -167,8 +158,8 @@ public class SQLPostDAO implements PostDAO {
     }
 
     @Override
-    public List<Post> newestFeed(int userId, int numPosts) {
-        return feed(userId, MAX_VALUE, numPosts);
+    public List<Post> getUserFeedNewestPosts(int userId, int numPosts) {
+        return getUserFeedPostsBeforeId(userId, MAX_VALUE, numPosts);
     }
 
     private static final String USER_POSTS =
@@ -176,7 +167,7 @@ public class SQLPostDAO implements PostDAO {
                     "AND id<? ORDER BY id DESC LIMIT ?;";
 
     @Override
-    public List<Post> userPosts(int userId, int lastPostFetchedId, int numPosts) {
+    public List<Post> getUserPostsBeforeId(int userId, int lastPostFetchedId, int numPosts) {
         try {
             PreparedStatement statement = connection.prepareStatement(USER_POSTS);
             statement.setInt(1, userId);
@@ -184,7 +175,6 @@ public class SQLPostDAO implements PostDAO {
             statement.setInt(3, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> userPosts = createPostsFromResultSet(rs);
-            lastUserPostFetchedId = userPosts.get(userPosts.size() - 1).getId();
             statement.close();
             return userPosts;
         } catch (SQLException e) {
@@ -193,14 +183,14 @@ public class SQLPostDAO implements PostDAO {
     }
 
     @Override
-    public List<Post> newestUserPosts(int userId, int numPosts) {
-        return userPosts(userId, MAX_VALUE, numPosts);
+    public List<Post> getUserNewestPosts(int userId, int numPosts) {
+        return getUserPostsBeforeId(userId, MAX_VALUE, numPosts);
     }
 
     private static final String BAND_POSTS = "SELECT * FROM posts WHERE author_band=? AND id<? ORDER BY id LIMIT ?;";
 
     @Override
-    public List<Post> bandPosts(int bandId, int lastPostFetchedId, int numPosts) {
+    public List<Post> getBandPostsBeforeId(int bandId, int lastPostFetchedId, int numPosts) {
         try {
             PreparedStatement statement = connection.prepareStatement(BAND_POSTS);
             statement.setInt(1, bandId);
@@ -208,7 +198,6 @@ public class SQLPostDAO implements PostDAO {
             statement.setInt(3, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> bandPosts = createPostsFromResultSet(rs);
-            lastBandPostFetchedId = bandPosts.get(bandPosts.size() - 1).getId();
             statement.close();
             return bandPosts;
         } catch (SQLException e) {
@@ -217,8 +206,7 @@ public class SQLPostDAO implements PostDAO {
     }
 
     @Override
-    public List<Post> newestBandPosts(int bandId, int numPosts) {
-        return bandPosts(bandId, MAX_VALUE, numPosts);
+    public List<Post> getBandNewestPosts(int bandId, int numPosts) {
+        return getBandPostsBeforeId(bandId, MAX_VALUE, numPosts);
     }
-
 }
