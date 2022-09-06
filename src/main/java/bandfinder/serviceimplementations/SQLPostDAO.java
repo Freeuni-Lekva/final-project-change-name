@@ -7,9 +7,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Integer.MAX_VALUE;
+
 public class SQLPostDAO implements PostDAO {
 
     private final Connection connection;
+
+    private Integer lastFeedPostFetchedId;
+    private Integer lastUserPostFetchedId;
+    private Integer lastBandPostFetchedId;
 
     private static final String CLASS_NAME = "com.mysql.cj.jdbc.Driver";
     private static final String URL = "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot";
@@ -17,6 +23,10 @@ public class SQLPostDAO implements PostDAO {
     public SQLPostDAO() throws ClassNotFoundException, SQLException {
         Class.forName(CLASS_NAME);
         connection = DriverManager.getConnection(URL);
+
+        lastFeedPostFetchedId = null;
+        lastUserPostFetchedId = null;
+        lastBandPostFetchedId = null;
     }
 
     private static final String CREATE = "INSERT INTO posts (author_user, author_band, text, date) " +
@@ -131,25 +141,6 @@ public class SQLPostDAO implements PostDAO {
         }
     }
 
-    private static final String LAST_POST_ID = "SELECT id FROM posts ORDER BY id DESC LIMIT 1;";
-
-    @Override
-    public Integer getLastPostId() {
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(LAST_POST_ID);
-            if(rs.next()) {
-                int lastPostId = rs.getInt(1);
-                statement.close();
-                return lastPostId;
-            }
-            statement.close();
-            return null;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private static final String FEED_POSTS =
                     "SELECT * FROM " +
                     "((SELECT * FROM posts " +
@@ -162,7 +153,7 @@ public class SQLPostDAO implements PostDAO {
                     "WHERE feed_posts.id<? ORDER BY feed_posts.id DESC LIMIT ?;";
 
     @Override
-    public List<Post> getFeedPosts(int userId, int lastPostFetchedId, int numPosts) {
+    public List<Post> feed(int userId, int lastPostFetchedId, int numPosts) {
         try {
             PreparedStatement statement = connection.prepareStatement(FEED_POSTS);
             statement.setInt(1, userId);
@@ -171,6 +162,7 @@ public class SQLPostDAO implements PostDAO {
             statement.setInt(4, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> feedPosts = createPostsFromResultSet(rs);
+            lastFeedPostFetchedId = feedPosts.get(feedPosts.size() - 1).getId();
             statement.close();
             return feedPosts;
         } catch (SQLException e) {
@@ -178,30 +170,15 @@ public class SQLPostDAO implements PostDAO {
         }
     }
 
-    private static final String NEWEST_FEED_POSTS =
-                    "(SELECT * FROM posts " +
-                    "JOIN (SELECT followee FROM follows WHERE follower=?) AS followee_users " +
-                    "ON posts.author_user=followee_users.followee WHERE posts.author_band IS NULL) " +
-                    "UNION " +
-                    "(SELECT * FROM posts " +
-                    "JOIN (SELECT followee_band FROM band_follows WHERE follower_user=?) AS followee_bands " +
-                    "ON posts.author_band=followee_bands.followee_band) " +
-                    "ORDER BY id DESC LIMIT ?;";
+    @Override
+    public List<Post> newestFeed(int userId, int numPosts) {
+        return feed(userId, MAX_VALUE, numPosts);
+    }
 
     @Override
-    public List<Post> getNewestFeedPosts(int userId, int numPosts) {
-        try {
-            PreparedStatement statement = connection.prepareStatement(NEWEST_FEED_POSTS);
-            statement.setInt(1, userId);
-            statement.setInt(2, userId);
-            statement.setInt(3, numPosts);
-            ResultSet rs = statement.executeQuery();
-            List<Post> feedPosts = createPostsFromResultSet(rs);
-            statement.close();
-            return feedPosts;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public List<Post> nextSetFeed(int userId, int numPosts) {
+        if(lastFeedPostFetchedId == null) return newestFeed(userId, numPosts);
+        return feed(userId, lastFeedPostFetchedId, numPosts);
     }
 
     private static final String USER_POSTS =
@@ -209,7 +186,7 @@ public class SQLPostDAO implements PostDAO {
                     "AND id < ? ORDER BY id DESC LIMIT ?;";
 
     @Override
-    public List<Post> getUserPosts(int userId, int lastPostFetchedId, int numPosts) {
+    public List<Post> userPosts(int userId, int lastPostFetchedId, int numPosts) {
         try {
             PreparedStatement statement = connection.prepareStatement(USER_POSTS);
             statement.setInt(1, userId);
@@ -217,6 +194,7 @@ public class SQLPostDAO implements PostDAO {
             statement.setInt(3, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> userPosts = createPostsFromResultSet(rs);
+            lastUserPostFetchedId = userPosts.get(userPosts.size() - 1).getId();
             statement.close();
             return userPosts;
         } catch (SQLException e) {
@@ -224,10 +202,21 @@ public class SQLPostDAO implements PostDAO {
         }
     }
 
+    @Override
+    public List<Post> newestUserPosts(int userId, int numPosts) {
+        return userPosts(userId, MAX_VALUE, numPosts);
+    }
+
+    @Override
+    public List<Post> nextSetUserPosts(int userId, int numPosts) {
+        if(lastUserPostFetchedId == null) return newestUserPosts(userId, numPosts);
+        return feed(userId, lastUserPostFetchedId, numPosts);
+    }
+
     private static final String BAND_POSTS = "SELECT * FROM posts WHERE author_band=? AND id < ? ORDER BY id LIMIT ?;";
 
     @Override
-    public List<Post> getBandPosts(int bandId, int lastPostFetchedId, int numPosts) {
+    public List<Post> bandPosts(int bandId, int lastPostFetchedId, int numPosts) {
         try {
             PreparedStatement statement = connection.prepareStatement(BAND_POSTS);
             statement.setInt(1, bandId);
@@ -235,10 +224,22 @@ public class SQLPostDAO implements PostDAO {
             statement.setInt(3, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> bandPosts = createPostsFromResultSet(rs);
+            lastBandPostFetchedId = bandPosts.get(bandPosts.size() - 1).getId();
             statement.close();
             return bandPosts;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<Post> newestBandPosts(int bandId, int numPosts) {
+        return bandPosts(bandId, MAX_VALUE, numPosts);
+    }
+
+    @Override
+    public List<Post> nextSetBandPosts(int bandId, int numPosts) {
+        if(lastBandPostFetchedId == null) return newestBandPosts(bandId, numPosts);
+        return bandPosts(bandId, lastBandPostFetchedId, numPosts);
     }
 }
