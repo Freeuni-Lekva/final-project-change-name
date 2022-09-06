@@ -18,17 +18,18 @@ public class SQLNotificationDAO implements NotificationDAO {
         connection = DriverManager.getConnection(URL);
     }
 
-    public static final String CREATE_NOTIF = "INSERT INTO notifications (user_id, is_read, message, date) " +
-                                              "VALUES (?, ?, ?, ?);";
+    public static final String CREATE_NOTIF = "INSERT INTO notifications (user_id, band_id, is_read, message, date) " +
+                                              "VALUES (?, ?, ?, ?, ?);";
 
     @Override
     public Notification create(Notification model) {
         try {
             PreparedStatement statement = connection.prepareStatement(CREATE_NOTIF, PreparedStatement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, model.getUserId());
-            statement.setBoolean(2, model.isRead());
-            statement.setString(3, model.getMessage());
-            statement.setTimestamp(4, model.getDate());
+            statement.setObject(1, model.getUserId(), Types.INTEGER);
+            statement.setObject(2, model.getBandId(), Types.INTEGER);
+            statement.setBoolean(3, model.isRead());
+            statement.setString(4, model.getMessage());
+            statement.setTimestamp(5, model.getDate());
             statement.executeUpdate();
 
             ResultSet rs = statement.getGeneratedKeys();
@@ -44,18 +45,19 @@ public class SQLNotificationDAO implements NotificationDAO {
     }
 
     public static final String UPDATE_NOTIF = "UPDATE notifications " +
-                                              "SET user_id = ?, is_read = ?, message = ?, date = ? " +
+                                              "SET user_id = ?, band_id = ?, is_read = ?, message = ?, date = ? " +
                                               "WHERE id = ?;";
 
     @Override
     public Notification update(Notification model) {
         try {
             PreparedStatement statement = connection.prepareStatement(UPDATE_NOTIF);
-            statement.setInt(1, model.getUserId());
-            statement.setBoolean(2, model.isRead());
-            statement.setString(3, model.getMessage());
-            statement.setInt(4, model.getId());
+            statement.setObject(1, model.getUserId(), Types.INTEGER);
+            statement.setObject(2, model.getBandId(), Types.INTEGER);
+            statement.setBoolean(3, model.isRead());
+            statement.setString(4, model.getMessage());
             statement.setTimestamp(5, model.getDate());
+            statement.setInt(6, model.getId());
             statement.executeUpdate();
 
             statement.close();
@@ -93,12 +95,13 @@ public class SQLNotificationDAO implements NotificationDAO {
             ResultSet rs = statement.executeQuery();
 
             if(rs.next()) {
-                Notification model = new Notification(id, rs.getInt(2),
-                                                          rs.getBoolean(3),
-                                                          rs.getString(4),
-                                                          rs.getTimestamp(5));
+                Integer userId = rs.getInt(1) == 0 ? null : rs.getInt(1);
+                Integer bandId = rs.getInt(2) == 0 ? null : rs.getInt(2);
+                boolean isRead = rs.getBoolean(3);
+                String message = rs.getString(4);
+                Timestamp date = rs.getTimestamp(5);
                 statement.close();
-                return model;
+                return new Notification(id, userId, bandId, isRead, message, date);
             }
 
             statement.close();
@@ -128,26 +131,27 @@ public class SQLNotificationDAO implements NotificationDAO {
     private List<Notification> getNotifsFromResultSet(ResultSet rs) throws SQLException {
         List<Notification> notifications = new ArrayList<>();
         while(rs.next()) {
-            Notification notification = new Notification(rs.getInt(1),
-                    rs.getInt(2),
-                    rs.getBoolean(3),
-                    rs.getString(4),
-                    rs.getTimestamp(5));
-            notifications.add(notification);
+            int id = rs.getInt(1);
+            Integer userId = rs.getInt(2) == 0 ? null : rs.getInt(2);
+            Integer bandId = rs.getInt(3) == 0 ? null : rs.getInt(3);
+            boolean isRead = rs.getBoolean(4);
+            String message = rs.getString(5);
+            Timestamp date = rs.getTimestamp(6);
+            notifications.add(new Notification(id, userId, bandId, isRead, message, date));
         }
         return notifications;
     }
 
 
-    public static final String USER_NOTIFS_QUERY_BASE = "SELECT * FROM notifications WHERE user_id = ? AND band_id = ?";
+    public static final String USER_NOTIFS_QUERY_BASE = "SELECT * FROM notifications WHERE user_id = ? AND band_id = ? ";
     public static final String USER_NOTIFS = USER_NOTIFS_QUERY_BASE + ";";
-    public static final String USER_NOTIFS_BY_END_DATE = USER_NOTIFS_QUERY_BASE + " AND date <= ?;";
-    public static final String USER_NOTIFS_BY_START_DATE = USER_NOTIFS_QUERY_BASE + " AND date >= ?;";
-    public static final String USER_NOTIFS_BY_TIME_INTERVAL = USER_NOTIFS_QUERY_BASE + " AND date BETWEEN ? AND ?;";
-    public static final String USER_NOTIFS_BY_STATUS = USER_NOTIFS_QUERY_BASE + " AND is_read = ?;";
-    public static final String USER_NOTIFS_BY_STATUS_AND_END_DATE = USER_NOTIFS_QUERY_BASE + " AND is_read = ? AND date <= ?;";
-    public static final String USER_NOTIFS_BY_STATUS_AND_START_DATE = USER_NOTIFS_QUERY_BASE + " AND is_read = ? AND date >= ?;";
-    public static final String USER_NOTIFS_BY_STATUS_AND_TIME_INTERVAL = USER_NOTIFS_QUERY_BASE + " AND is_read = ? AND date BETWEEN ? AND ?;";
+    public static final String USER_NOTIFS_BY_END_DATE = USER_NOTIFS_QUERY_BASE + "AND date <= ?;";
+    public static final String USER_NOTIFS_BY_START_DATE = USER_NOTIFS_QUERY_BASE + "AND date >= ?;";
+    public static final String USER_NOTIFS_BY_TIME_INTERVAL = USER_NOTIFS_QUERY_BASE + "AND date BETWEEN ? AND ?;";
+    public static final String USER_NOTIFS_BY_STATUS = USER_NOTIFS_QUERY_BASE + "AND is_read = ?;";
+    public static final String USER_NOTIFS_BY_STATUS_AND_END_DATE = USER_NOTIFS_QUERY_BASE + "AND is_read = ? AND date <= ?;";
+    public static final String USER_NOTIFS_BY_STATUS_AND_START_DATE = USER_NOTIFS_QUERY_BASE + "AND is_read = ? AND date >= ?;";
+    public static final String USER_NOTIFS_BY_STATUS_AND_TIME_INTERVAL = USER_NOTIFS_QUERY_BASE + "AND is_read = ? AND date BETWEEN ? AND ?;";
 
     @Override
     public List<Notification> getNotifsByStatusAndDate(Integer userId, Integer bandId, Boolean isRead,
@@ -157,22 +161,43 @@ public class SQLNotificationDAO implements NotificationDAO {
 
             if(isRead == null && startDate == null && endDate == null) {
                 statement = connection.prepareStatement(USER_NOTIFS);
-                statement.setObject();
+
             }else if(isRead == null && startDate == null && endDate != null) {
                 statement = connection.prepareStatement(USER_NOTIFS_BY_END_DATE);
+                statement.setTimestamp(3, endDate);
+
             }else if(isRead == null && startDate != null && endDate == null) {
                 statement = connection.prepareStatement(USER_NOTIFS_BY_START_DATE);
+                statement.setTimestamp(3, startDate);
+
             }else if(isRead == null && startDate != null && endDate != null) {
                 statement = connection.prepareStatement(USER_NOTIFS_BY_TIME_INTERVAL);
+                statement.setTimestamp(3, startDate);
+                statement.setTimestamp(4, endDate);
+
             }else if(isRead != null && startDate == null && endDate == null) {
                 statement = connection.prepareStatement(USER_NOTIFS_BY_STATUS);
+                statement.setBoolean(3, isRead);
+
             }else if(isRead != null && startDate == null && endDate != null) {
                 statement = connection.prepareStatement(USER_NOTIFS_BY_STATUS_AND_END_DATE);
+                statement.setBoolean(3, isRead);
+                statement.setTimestamp(4, endDate);
+
             }else if(isRead != null && startDate != null && endDate == null) {
                 statement = connection.prepareStatement(USER_NOTIFS_BY_STATUS_AND_START_DATE);
+                statement.setBoolean(3, isRead);
+                statement.setTimestamp(4, startDate);
+
             }else if(isRead != null && startDate != null && endDate != null) {
                 statement = connection.prepareStatement(USER_NOTIFS_BY_STATUS_AND_TIME_INTERVAL);
+                statement.setBoolean(3, isRead);
+                statement.setTimestamp(4, startDate);
+                statement.setTimestamp(5, endDate);
             }
+
+            statement.setObject(1, userId, Types.INTEGER);
+            statement.setObject(2, bandId, Types.INTEGER);
 
             ResultSet rs = statement.executeQuery();
 
