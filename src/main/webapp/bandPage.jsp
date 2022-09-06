@@ -14,6 +14,10 @@
 <%@ page import="bandfinder.infrastructure.Injector" %>
 
 <%
+    if((request.getAttribute("extra_display")) == null){
+        request.getRequestDispatcher("/bandPage").forward(request, response);
+    }
+
     final BandDAO bandDAO = Injector.getImplementation(BandDAO.class);
     final UserDAO userDAO = Injector.getImplementation(UserDAO.class);
     final TagDAO tagDAO = Injector.getImplementation(TagDAO.class);
@@ -61,21 +65,20 @@
             %>
         </ul>
 
-        <form method="post" action=<%= "/editBandTags.jsp?bandId=" + id %> >
-            <input type="submit" value="Edit tags"/>
-        </form>
-        <form id="leaveForm" method="post" action=<%= "/leaveBand?bandId=" + id %>></form>
-
+        <c:if test="${extra_display}">
         <div>
             <form method="post" action=<%= "/manageMembers.jsp?bandId=" + id %>>
                 <button>Manage Members</button>
             </form>
-
+            <form method="post" action=<%= "/editBandTags.jsp?bandId=" + id %> >
+                <input type="submit" value="Edit tags"/>
+            </form>
+            <form id="leaveForm" method="post" action=<%= "/leaveBand?bandId=" + id %>></form>
             <form method="post" action=<%= "/bandProperties.jsp?bandId=" + id %>>
                 <button>Band Properties</button>
             </form>
-
             <button onclick="confirmLeaving()">Leave Band</button>
         </div>
+        </c:if>
     </body>
 </html>
