@@ -21,11 +21,7 @@ public class Notification {
     }
 
     public Notification(Integer userId, Integer bandId, boolean isRead, String message, Timestamp date) {
-        this.id = -1;
-        this.userId = userId;
-        this.isRead = isRead;
-        this.message = message;
-        this.date = date;
+        this(-1, userId, bandId, isRead, message, date);
     }
 
     public int getId() {

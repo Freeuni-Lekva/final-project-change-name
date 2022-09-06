@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS notifications
     user_id INT,
     band_id INT,
     is_read BOOLEAN,
-    message VARCHAR(65535),
+    message TEXT,
     date TIMESTAMP,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) references users(id),
