@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS bands
   tags_string VARCHAR(4095),
   PRIMARY KEY (id),
   FULLTEXT(name)
+  num_members INT,
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS band_users
@@ -29,6 +31,19 @@ CREATE TABLE IF NOT EXISTS band_users
   band_id INT,
   FOREIGN KEY (user_id) references users(id),
   FOREIGN KEY (band_id) references bands(id)
+);
+
+CREATE TABLE IF NOT EXISTS notifications
+(
+    id INT AUTO_INCREMENT,
+    user_id INT,
+    band_id INT,
+    is_read BOOLEAN,
+    message TEXT,
+    date TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) references users(id),
+    FOREIGN KEY (band_id) references bands(id)
 );
 
 CREATE TABLE IF NOT EXISTS follows
