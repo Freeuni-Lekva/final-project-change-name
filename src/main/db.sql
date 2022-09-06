@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS follows
     FOREIGN KEY (followee) REFERENCES users(id)
 );
 
+
 CREATE TABLE IF NOT EXISTS tags
 (
   id INT AUTO_INCREMENT,

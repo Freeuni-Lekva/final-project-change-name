@@ -141,8 +141,12 @@ public class SQLPostDAO implements PostDAO {
         }
     }
 
-    private static final String FEED_POSTS =
-                                    "";
+    private static final String FEED_POSTS = """
+                        SELECT * FROM posts p
+                        LEFT JOIN follows uf ON p.author_user = uf.followee
+                        LEFT JOIN band_follows bf ON p.author_band = bf.followee_band
+                        WHERE ((uf.follower = ? AND p.author_band is null) OR (bf.follower_user = ?)) AND p.id < ?
+                        ORDER BY p.id DESC LIMIT ?;""";
 
     @Override
     public List<Post> feed(int userId, int lastPostFetchedId, int numPosts) {
@@ -175,7 +179,7 @@ public class SQLPostDAO implements PostDAO {
 
     private static final String USER_POSTS =
                     "SELECT * FROM posts WHERE author_user=? AND author_band IS NULL " +
-                    "AND id<? ORDER BY id DESC LIMIT ?;";
+                    "AND id < ? ORDER BY id DESC LIMIT ?;";
 
     @Override
     public List<Post> userPosts(int userId, int lastPostFetchedId, int numPosts) {
@@ -205,7 +209,7 @@ public class SQLPostDAO implements PostDAO {
         return feed(userId, lastUserPostFetchedId, numPosts);
     }
 
-    private static final String BAND_POSTS = "SELECT * FROM posts WHERE author_band=? AND id<? ORDER BY id LIMIT ?;";
+    private static final String BAND_POSTS = "SELECT * FROM posts WHERE author_band=? AND id < ? ORDER BY id LIMIT ?;";
 
     @Override
     public List<Post> bandPosts(int bandId, int lastPostFetchedId, int numPosts) {
