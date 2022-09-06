@@ -150,7 +150,7 @@ public class SQLPostDAO implements PostDAO {
         }
     }
 
-    private static final String USER_FEED_POSTS =
+    private static final String FEED_POSTS =
                     "SELECT * FROM " +
                     "((SELECT * FROM posts " +
                     "JOIN (SELECT followee FROM follows WHERE follower=?) AS followee_users " +
@@ -162,13 +162,39 @@ public class SQLPostDAO implements PostDAO {
                     "WHERE feed_posts.id<? ORDER BY feed_posts.id DESC LIMIT ?;";
 
     @Override
-    public List<Post> getUserFeedPosts(int userId, int lastPostFetchedId, int numPosts) {
+    public List<Post> getFeedPosts(int userId, int lastPostFetchedId, int numPosts) {
         try {
-            PreparedStatement statement = connection.prepareStatement(USER_FEED_POSTS);
+            PreparedStatement statement = connection.prepareStatement(FEED_POSTS);
             statement.setInt(1, userId);
             statement.setInt(2, userId);
             statement.setInt(3, lastPostFetchedId);
             statement.setInt(4, numPosts);
+            ResultSet rs = statement.executeQuery();
+            List<Post> feedPosts = createPostsFromResultSet(rs);
+            statement.close();
+            return feedPosts;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static final String NEWEST_FEED_POSTS =
+                    "(SELECT * FROM posts " +
+                    "JOIN (SELECT followee FROM follows WHERE follower=?) AS followee_users " +
+                    "ON posts.author_user=followee_users.followee WHERE posts.author_band IS NULL) " +
+                    "UNION " +
+                    "(SELECT * FROM posts " +
+                    "JOIN (SELECT followee_band FROM band_follows WHERE follower_user=?) AS followee_bands " +
+                    "ON posts.author_band=followee_bands.followee_band) " +
+                    "ORDER BY id DESC LIMIT ?;";
+
+    @Override
+    public List<Post> getNewestFeedPosts(int userId, int numPosts) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(NEWEST_FEED_POSTS);
+            statement.setInt(1, userId);
+            statement.setInt(2, userId);
+            statement.setInt(3, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> feedPosts = createPostsFromResultSet(rs);
             statement.close();

@@ -10,7 +10,9 @@ public interface PostDAO extends DAO<Post> {
 
     Integer getLastPostId();
 
-    List<Post> getUserFeedPosts(int userId, int lastPostFetchedId, int numPosts);
+    List<Post> getFeedPosts(int userId, int lastPostFetchedId, int numPosts);
+
+    List<Post> getNewestFeedPosts(int userId, int numPosts);
 
     List<Post> getUserPosts(int userId, int lastPostFetchedId, int numPosts);
 
