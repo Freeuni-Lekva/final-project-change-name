@@ -2,19 +2,26 @@ package bandfinder.dao;
 
 import bandfinder.models.Post;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public interface PostDAO extends DAO<Post> {
     String ATTRIBUTE = "PostDAO";
 
-    Integer getLastPostId();
+    List<Post> feed(int userId, int lastPostFetchedId, int numPosts);
 
-    List<Post> getFeedPosts(int userId, int lastPostFetchedId, int numPosts);
+    List<Post> newestFeed(int userId, int numPosts);
 
-    List<Post> getNewestFeedPosts(int userId, int numPosts);
+    List<Post> nextSetFeed(int userId, int numPosts);
 
-    List<Post> getUserPosts(int userId, int lastPostFetchedId, int numPosts);
+    List<Post> userPosts(int userId, int lastPostFetchedId, int numPosts);
 
-    List<Post> getBandPosts(int bandId, int lastPostFetchedId, int numPosts);
+    List<Post> newestUserPosts(int userId, int numPosts);
+
+    List<Post> nextSetUserPosts(int userId, int numPosts);
+
+    List<Post> bandPosts(int bandId, int lastPostFetchedId, int numPosts);
+
+    List<Post> newestBandPosts(int bandId, int numPosts);
+
+    List<Post> nextSetBandPosts(int bandId, int numPosts);
 }
