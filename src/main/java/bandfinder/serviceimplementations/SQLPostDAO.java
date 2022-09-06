@@ -171,15 +171,9 @@ public class SQLPostDAO implements PostDAO {
         return feed(userId, MAX_VALUE, numPosts);
     }
 
-    @Override
-    public List<Post> nextSetFeed(int userId, int numPosts) {
-        if(lastFeedPostFetchedId == null) return newestFeed(userId, numPosts);
-        return feed(userId, lastFeedPostFetchedId, numPosts);
-    }
-
     private static final String USER_POSTS =
                     "SELECT * FROM posts WHERE author_user=? AND author_band IS NULL " +
-                    "AND id < ? ORDER BY id DESC LIMIT ?;";
+                    "AND id<? ORDER BY id DESC LIMIT ?;";
 
     @Override
     public List<Post> userPosts(int userId, int lastPostFetchedId, int numPosts) {
@@ -203,13 +197,7 @@ public class SQLPostDAO implements PostDAO {
         return userPosts(userId, MAX_VALUE, numPosts);
     }
 
-    @Override
-    public List<Post> nextSetUserPosts(int userId, int numPosts) {
-        if(lastUserPostFetchedId == null) return newestUserPosts(userId, numPosts);
-        return feed(userId, lastUserPostFetchedId, numPosts);
-    }
-
-    private static final String BAND_POSTS = "SELECT * FROM posts WHERE author_band=? AND id < ? ORDER BY id LIMIT ?;";
+    private static final String BAND_POSTS = "SELECT * FROM posts WHERE author_band=? AND id<? ORDER BY id LIMIT ?;";
 
     @Override
     public List<Post> bandPosts(int bandId, int lastPostFetchedId, int numPosts) {
@@ -233,9 +221,4 @@ public class SQLPostDAO implements PostDAO {
         return bandPosts(bandId, MAX_VALUE, numPosts);
     }
 
-    @Override
-    public List<Post> nextSetBandPosts(int bandId, int numPosts) {
-        if(lastBandPostFetchedId == null) return newestBandPosts(bandId, numPosts);
-        return bandPosts(bandId, lastBandPostFetchedId, numPosts);
-    }
 }
