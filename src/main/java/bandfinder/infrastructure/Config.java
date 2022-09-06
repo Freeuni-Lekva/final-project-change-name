@@ -2,11 +2,9 @@ package bandfinder.infrastructure;
 
 import bandfinder.dao.*;
 import bandfinder.models.Post;
+import bandfinder.services.*;
 import bandfinder.serviceimplementations.*;
-import bandfinder.services.HashingService;
-import bandfinder.services.SearchService;
 import org.apache.ibatis.jdbc.SQL;
-import bandfinder.dao.BandDAO;
 
 public class Config {
     private static boolean isConfigured = false;
@@ -16,6 +14,8 @@ public class Config {
         }
         Injector.injectSingleton(HashingService.class, HashingServiceImpl.class);
         Injector.injectSingleton(SearchService.class, SimpleSearchServiceImpl.class);
+        Injector.injectSingleton(TagAutoComplete.class, AllTagsAutocompleteServiceImpl.class);
+        Injector.injectSingleton(UserAutoComplete.class, AllUsersAutocompleteServiceImpl.class);
         Injector.injectSingleton(UserDAO.class, SQLUserDAO.class);
         Injector.injectSingleton(BandDAO.class, SQLBandDAO.class);
         Injector.injectSingleton(FollowDAO.class, SQLFollowDAO.class);
