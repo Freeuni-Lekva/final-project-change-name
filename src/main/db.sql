@@ -31,6 +31,18 @@ CREATE TABLE IF NOT EXISTS band_users
   FOREIGN KEY (band_id) references bands(id)
 );
 
+CREATE TABLE IF NOT EXISTS posts
+(
+    id INT AUTO_INCREMENT,
+    author_user INT,
+    author_band INT,
+    text VARCHAR(65535),
+    date Timestamp,
+    PRIMARY KEY(id),
+    FOREIGN KEY (author_user) references users(id),
+    FOREIGN KEY (author_band) references bands(id)
+);
+
 CREATE TABLE IF NOT EXISTS follows
 (
     id INT AUTO_INCREMENT,
@@ -39,6 +51,16 @@ CREATE TABLE IF NOT EXISTS follows
     PRIMARY KEY (id),
     FOREIGN KEY (follower) REFERENCES users(id),
     FOREIGN KEY (followee) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS band_follows
+(
+    id INT AUTO_INCREMENT,
+    followee_band INT,
+    follower_user INT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(followee_band) references bands(id),
+    FOREIGN KEY (follower_user) references users(id)
 );
 
 CREATE TABLE IF NOT EXISTS tags
@@ -178,25 +200,3 @@ BEGIN
 END //
 
 DELIMITER ;
-
-CREATE TABLE IF NOT EXISTS posts
-(
-    id INT AUTO_INCREMENT,
-    author_user INT,
-    author_band INT,
-    text VARCHAR(65535),
-    date Timestamp,
-    PRIMARY KEY(id),
-    FOREIGN KEY (author_user) references users(id),
-    FOREIGN KEY (author_band) references bands(id)
-);
-
-CREATE TABLE IF NOT EXISTS band_follows
-(
-    id INT AUTO_INCREMENT,
-    followee_band INT,
-    follower_user INT,
-    PRIMARY KEY(id),
-    FOREIGN KEY(followee_band) references bands(id),
-    FOREIGN KEY (follower_user) references users(id)
-);
