@@ -18,11 +18,7 @@ public class Post {
     }
 
     public Post(Integer authorUser, Integer authorBand, String text, Timestamp date) {
-        this.id = -1;
-        this.authorUser = authorUser;
-        this.authorBand = authorBand;
-        this.text = text;
-        this.date = date;
+        this(-1, authorUser, authorBand, text, date);
     }
 
     public int getId() {

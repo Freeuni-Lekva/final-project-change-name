@@ -64,6 +64,28 @@ CREATE TABLE IF NOT EXISTS user_tags
   FOREIGN KEY (user_id) references users(id)
 );
 
+CREATE TABLE IF NOT EXISTS posts
+(
+    id INT AUTO_INCREMENT,
+    author_user INT,
+    author_band INT,
+    text TEXT,
+    date Timestamp,
+    PRIMARY KEY(id),
+    FOREIGN KEY (author_user) references users(id),
+    FOREIGN KEY (author_band) references bands(id)
+);
+
+CREATE TABLE IF NOT EXISTS band_follows
+(
+    id INT AUTO_INCREMENT,
+    followee_band INT,
+    follower_user INT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(followee_band) references bands(id),
+    FOREIGN KEY (follower_user) references users(id)
+);
+
 DELIMITER //
 
 CREATE PROCEDURE p_match_user_tags_string_with_tags_table(p_user_id INT)
@@ -179,24 +201,3 @@ END //
 
 DELIMITER ;
 
-CREATE TABLE IF NOT EXISTS posts
-(
-    id INT AUTO_INCREMENT,
-    author_user INT,
-    author_band INT,
-    text VARCHAR(65535),
-    date Timestamp,
-    PRIMARY KEY(id),
-    FOREIGN KEY (author_user) references users(id),
-    FOREIGN KEY (author_band) references bands(id)
-);
-
-CREATE TABLE IF NOT EXISTS band_follows
-(
-    id INT AUTO_INCREMENT,
-    followee_band INT,
-    follower_user INT,
-    PRIMARY KEY(id),
-    FOREIGN KEY(followee_band) references bands(id),
-    FOREIGN KEY (follower_user) references users(id)
-);
