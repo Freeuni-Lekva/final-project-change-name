@@ -191,12 +191,12 @@ CREATE TABLE IF NOT EXISTS posts
     FOREIGN KEY (author_band) references bands(id)
 );
 
-CREATE TABLE IF NOT EXISTS band_followers
+CREATE TABLE IF NOT EXISTS band_follows
 (
     id INT AUTO_INCREMENT,
     followee_band INT,
-    follower INT,
+    follower_user INT,
     PRIMARY KEY(id),
     FOREIGN KEY(followee_band) references bands(id),
-    FOREIGN KEY (follower) references users(id)
+    FOREIGN KEY (follower_user) references users(id)
 );
