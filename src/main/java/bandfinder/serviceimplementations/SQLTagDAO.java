@@ -10,7 +10,7 @@ public class SQLTagDAO implements TagDAO {
     private final Connection connection;
 
     private static final String CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost/bandfinder?user=root&password=R00tR**t";
+    private static final String URL = "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot";
 
     public SQLTagDAO() throws ClassNotFoundException, SQLException {
         Class.forName(CLASS_NAME);
