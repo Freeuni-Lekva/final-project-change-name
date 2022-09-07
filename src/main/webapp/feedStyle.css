@@ -1,0 +1,25 @@
+.feedSection {
+    margin: auto;
+    width: 500px;
+    background-color: Gray;
+    border: 1px solid DodgerBlue;
+    border-radius: 12px;
+    padding: 20px;
+}
+.post {
+    margin: 10px auto;
+    width: 450px;
+    background-color: LightGray;
+    border: 1px solid DodgerBlue;
+    border-radius: 12px;
+    padding: 10px;
+}
+.postText {
+    margin: auto;
+    width: 400px;
+    word-wrap: break-word;
+}
+
+.postProperties {
+    display: inline;
+}
