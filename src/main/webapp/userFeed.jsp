@@ -24,29 +24,20 @@
 <%
   User user = (User) session.getAttribute("user");
   int userId = user.getId();
+  int lastPostFetchedId = -1;
 %>
 
 <html>
 <head>
+    <script src="userFeed.js"></script>
     <link rel="stylesheet" href="feedStyle.css">
+
     <title>Newsfeed</title>
 </head>
 <body>
     <h1 style="position: fixed"><%= user.getStageName() %></h1>
-    <div class="feedSection">
-        <%
-            List<Post> userFeedPosts = postDAO.getUserFeedNewestPosts(userId, 10);
-            for(Post post : userFeedPosts) {
-                out.println("<div class=\"post\">");
-                if(post.getAuthorBand() == null) {
-                    out.println("<div class=\"postProperties\">" + userDAO.getById(post.getAuthorUser()).getStageName() + "</div>");
-                }else {
-                    out.println("<div class=\"postProperties\">" + bandDAO.getById(post.getAuthorUser()).getName() + "</div>");
-                }
-                out.println("<div class\"postText\">" + post.getText() + "</div>");
-                out.println("</div>");
-            }
-        %>
+    <div class="feed">
+
     </div>
 </body>
 </html>

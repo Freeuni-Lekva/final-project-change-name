@@ -1,4 +1,8 @@
-.feedSection {
+body {
+    overflow-y: scroll;
+}
+
+.feed {
     margin: auto;
     width: 500px;
     background-color: Gray;
@@ -6,6 +10,9 @@
     border-radius: 12px;
     padding: 20px;
 }
+
+.postsSection {}
+
 .post {
     margin: 10px auto;
     width: 450px;
@@ -23,3 +30,5 @@
 .postProperties {
     display: inline;
 }
+
+

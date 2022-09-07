@@ -1,0 +1,7 @@
+function loadMorePosts(userId, lastPostFetchedId) {
+
+}
+
+
+
+
