@@ -35,9 +35,20 @@
     <title>Newsfeed</title>
 </head>
 <body>
-    <h1 style="position: fixed"><%= user.getStageName() %></h1>
-    <div class="feed">
+    <h1 style="position: fixed" id="user"><%=user.getStageName()%></h1>
 
+    <div class="feed" id="feed">
+
+        <div class="postsSection" id="postsSection">
+        </div>
+
+        <div id="loadMoreButtonSection">
+            <button onclick="loadPosts(<%=userId%>)">Load More</button>
+        </div>
     </div>
+
+    <script>
+        loadPosts(<%=userId%>);
+    </script>
 </body>
 </html>
