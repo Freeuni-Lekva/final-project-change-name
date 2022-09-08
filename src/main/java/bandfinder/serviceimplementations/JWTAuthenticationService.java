@@ -1,4 +1,4 @@
-package bandfinder.servlets;
+package bandfinder.serviceimplementations;
 
 import bandfinder.infrastructure.Constants;
 import bandfinder.services.AuthenticationService;
