@@ -12,23 +12,17 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseMigrator {
-    private static final String CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost?user=root&password=rootroot";
 
     public static void migrate() {
         try {
-            Class.forName(CLASS_NAME);
-            Connection connection = DriverManager.getConnection(URL);
+            Class.forName(Constants.JDBC_CLASS_NAME);
+            Connection connection = DriverManager.getConnection(Constants.DB_URL);
 
             ScriptRunner sr = new ScriptRunner(connection);
             String path = Paths.get(System.getProperty("user.dir"), "src", "main", "db.sql").toString();
             Reader reader = new BufferedReader(new FileReader(path));
             sr.runScript(reader);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (FileNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException | FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

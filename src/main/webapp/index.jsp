@@ -30,7 +30,7 @@
             <%
                 List<Band> bands = bandDAO.getAll();
                 for(Band b : bands) {
-                    out.println("<li> <a href=\"/bandPage.jsp?bandId=" + b.getId() +
+                    out.println("<li> <a href=\"/bandPage?bandId=" + b.getId() +
                             "\">" + b.getName() + "</a></li>");
                 }
             %>

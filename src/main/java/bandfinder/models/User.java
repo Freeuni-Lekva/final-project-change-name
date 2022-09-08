@@ -1,5 +1,7 @@
 package bandfinder.models;
 
+import bandfinder.infrastructure.Constants;
+
 public class User {
     private int id;
     private String email;
@@ -17,7 +19,7 @@ public class User {
     }
 
     public User(String email, String passwordHash, String firstName, String surname, String stageName) {
-        this(-1, email, passwordHash, firstName, surname, stageName);
+        this(Constants.NO_ID, email, passwordHash, firstName, surname, stageName);
     }
 
     public int getId() {

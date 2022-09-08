@@ -18,26 +18,22 @@ public class InitializationListener implements
     }
 
     @Override
-    public void contextDestroyed(ServletContextEvent sce) {
-    }
-
-    @Override
-    public void attributeAdded(HttpSessionBindingEvent event) {
-    }
-
-    @Override
-    public void attributeRemoved(HttpSessionBindingEvent event) {
-    }
-
-    @Override
-    public void attributeReplaced(HttpSessionBindingEvent event) {
-    }
+    public void contextDestroyed(ServletContextEvent sce) {}
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
+        se.getSession().setAttribute("token", null);
     }
 
     @Override
-    public void sessionDestroyed(HttpSessionEvent se) {
-    }
+    public void sessionDestroyed(HttpSessionEvent se) {}
+
+    @Override
+    public void attributeAdded(HttpSessionBindingEvent sbe) {}
+
+    @Override
+    public void attributeRemoved(HttpSessionBindingEvent sbe) {}
+
+    @Override
+    public void attributeReplaced(HttpSessionBindingEvent sbe) {}
 }

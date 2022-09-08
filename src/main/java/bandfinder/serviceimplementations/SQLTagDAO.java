@@ -1,5 +1,6 @@
 package bandfinder.serviceimplementations;
 import bandfinder.dao.TagDAO;
+import bandfinder.infrastructure.Constants;
 import bandfinder.models.Tag;
 
 import java.sql.*;
@@ -9,12 +10,9 @@ import java.util.List;
 public class SQLTagDAO implements TagDAO {
     private final Connection connection;
 
-    private static final String CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot";
-
     public SQLTagDAO() throws ClassNotFoundException, SQLException {
-        Class.forName(CLASS_NAME);
-        connection = DriverManager.getConnection(URL);
+        Class.forName(Constants.JDBC_CLASS_NAME);
+        connection = DriverManager.getConnection(Constants.DB_URL);
     }
 
     private boolean addTagToObject(int tagId, int objectId, String query){
@@ -56,12 +54,12 @@ public class SQLTagDAO implements TagDAO {
     }
     @Override
     public boolean removeTagFromBand(int tagId, int bandId) {
-        return removeTagFromObject(tagId,bandId,"DELETE FROM band_tags" + "WHERE band_id = ? AND tag_id = ?;");
+        return removeTagFromObject(tagId,bandId,"DELETE FROM band_tags " + "WHERE band_id = ? AND tag_id = ?;");
     }
 
     @Override
     public boolean removeTagFromUser(int tagId, int userId) {
-        return removeTagFromObject(tagId,userId,"DELETE FROM user_tags" + "WHERE user_id = ? AND tag_id = ?;");
+        return removeTagFromObject(tagId,userId,"DELETE FROM user_tags " + "WHERE user_id = ? AND tag_id = ?;");
     }
 
     private boolean objectHasTag(int tagId, int objectId, String query) {

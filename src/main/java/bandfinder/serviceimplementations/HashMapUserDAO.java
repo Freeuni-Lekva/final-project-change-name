@@ -1,6 +1,7 @@
 package bandfinder.serviceimplementations;
 
 import bandfinder.dao.UserDAO;
+import bandfinder.infrastructure.Constants;
 import bandfinder.models.User;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class HashMapUserDAO implements UserDAO {
     @Override
     public synchronized User create(User model) {
         int id = model.getId();
-        if(model.getId() == -1) {
+        if(model.getId() == Constants.NO_ID) {
             id = map.size() + 1;
             model.setId(id);
         }
@@ -35,7 +36,7 @@ public class HashMapUserDAO implements UserDAO {
     public boolean delete(int id) {
         User deletedUser = map.remove(id);
         if(deletedUser != null) {
-            deletedUser.setId(-1); // Needed to behave correctly when re-adding elements with the same id
+            deletedUser.setId(Constants.NO_ID); // Needed to behave correctly when re-adding elements with the same id
             return true;
         }
         return false;

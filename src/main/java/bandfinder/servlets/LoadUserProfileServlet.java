@@ -1,10 +1,10 @@
 package bandfinder.servlets;
 
-import bandfinder.dao.BandDAO;
+import bandfinder.dao.FollowDAO;
 import bandfinder.dao.UserDAO;
 import bandfinder.infrastructure.AutoInjectable;
 import bandfinder.infrastructure.Constants;
-import bandfinder.models.Band;
+import bandfinder.models.Follow;
 import bandfinder.models.User;
 import bandfinder.services.AuthenticationService;
 
@@ -13,34 +13,35 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
-@WebServlet(name = "UserBandsServlet", value = "/myBands")
-public class UserBandsServlet extends ServletBase{
+@WebServlet(name="LoadUserProfileServlet", value = "/LoadUserProfileServlet")
+public class LoadUserProfileServlet extends ServletBase{
     @AutoInjectable
     private AuthenticationService authenticationService;
     @AutoInjectable
     private UserDAO userDAO;
     @AutoInjectable
-    private BandDAO bandDAO;
+    private FollowDAO followDAO;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String loginToken = (String) req.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
         int loggedInUserId = authenticationService.authenticate(loginToken);
-        User user = userDAO.getById(loggedInUserId);
+        User loggedUser = userDAO.getById(loggedInUserId);
+        User user = userDAO.getById(Integer.parseInt(req.getParameter("id")));
 
-        ArrayList<Integer> userBandIds = (ArrayList<Integer>) bandDAO.getAllBandIDsForUser(user.getId());
-        ArrayList<Band> userBandsList = new ArrayList<>();
-        for(Integer bandId : userBandIds){
-            userBandsList.add(bandDAO.getById(bandId));
+        Follow follow = new Follow(Constants.NO_ID, user.getId());
+
+        if(loggedUser != null){
+            req.setAttribute("loggedUser", true);
+            follow.setFollowerID(loggedUser.getId());
+            req.setAttribute("sameUser", loggedUser.equals(user));
+        }else{
+            req.setAttribute("loggedUser", false);
         }
-        req.setAttribute("UserBandsList",userBandsList);
-        req.getRequestDispatcher("/myBands.jsp").forward(req,resp);
-    }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/newBand.jsp").forward(req, resp);
+
+        req.setAttribute("following", followDAO.followExists(follow));
+        req.getRequestDispatcher("profile.jsp").forward(req, resp);
     }
 }
