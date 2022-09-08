@@ -10,6 +10,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 public class JWTAuthenticationService implements AuthenticationService {
     @Override
     public int authenticate(String token) {
+        if(token == null || token.isBlank()) {
+            return Constants.NO_ID;
+        }
         JWTVerifier verifier = JWT.require(Constants.ENCRYPT_ALGO)
                 .withIssuer("auth0")
                 .build();

@@ -3,7 +3,6 @@ package bandfinder.infrastructure;
 import bandfinder.dao.*;
 import bandfinder.services.*;
 import bandfinder.serviceimplementations.*;
-import org.apache.ibatis.jdbc.SQL;
 
 public class Config {
     private static boolean isConfigured = false;
