@@ -5,8 +5,9 @@ body {
 .feed {
     margin: auto;
     width: 500px;
-    background-color: Gray;
-    border: 1px solid DodgerBlue;
+    min-height: 100%;
+    background-color: Black;
+    border: 1px solid Purple;
     border-radius: 12px;
     padding: 20px;
 }
@@ -17,7 +18,7 @@ body {
     margin: 10px auto;
     width: 450px;
     background-color: LightGray;
-    border: 1px solid DodgerBlue;
+    border: 1px solid Purple;
     border-radius: 12px;
     padding: 10px;
 }

@@ -37,9 +37,10 @@ public class FetchUserFeedPostsServlet extends ServletBase {
         List<PostWrapper> wrappedPosts = wrapPosts(posts);
 
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(out, wrappedPosts);
+        out.print(objectMapper.writeValueAsString(wrappedPosts));
     }
 
     @Override
@@ -50,10 +51,10 @@ public class FetchUserFeedPostsServlet extends ServletBase {
     private List<Post> getPostsFromDatabase(int userId, HttpServletRequest request) {
         List<Post> posts;
         if(request.getParameter("lastPostFetchedId") == null) {
-            posts = postDAO.getUserFeedNewestPosts(userId, 10);
+            posts = postDAO.getUserFeedNewestPosts(userId, 2);
         }else {
             int lastPostFetchedId = Integer.parseInt(request.getParameter("lastPostFetchedId"));
-            posts = postDAO.getUserFeedPostsBeforeId(userId, lastPostFetchedId, 10);
+            posts = postDAO.getUserFeedPostsBeforeId(userId, lastPostFetchedId, 2);
         }
         return posts;
     }
