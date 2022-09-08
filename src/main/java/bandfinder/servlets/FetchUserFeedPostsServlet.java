@@ -42,7 +42,7 @@ public class FetchUserFeedPostsServlet extends ServletBase {
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         ObjectMapper objectMapper = new ObjectMapper();
-        out.print(objectMapper.writeValueAsString(wrappedPosts));
+        objectMapper.writeValue(out, wrappedPosts);
     }
 
     @Override
