@@ -1,8 +1,8 @@
 package bandfinder.serviceimplementations;
 
 import bandfinder.dao.BandDAO;
+import bandfinder.infrastructure.Constants;
 import bandfinder.models.Band;
-import bandfinder.models.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ public class HashmapBandDAO implements BandDAO {
     @Override
     public Band create(Band model) {
         int id = model.getId();
-        if(model.getId() == -1) {
+        if(model.getId() == Constants.NO_ID) {
             id = map.size() + 1;
             model.setId(id);
         }
@@ -39,7 +39,7 @@ public class HashmapBandDAO implements BandDAO {
     public boolean delete(int id) {
         Band deletedBand = map.remove(id);
         if(deletedBand != null) {
-            deletedBand.setId(-1);
+            deletedBand.setId(Constants.NO_ID);
             return true;
         }
         return false;

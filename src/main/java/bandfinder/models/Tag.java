@@ -1,5 +1,7 @@
 package bandfinder.models;
 
+import bandfinder.infrastructure.Constants;
+
 public class Tag {
     private int id;
     private String name;
@@ -10,7 +12,7 @@ public class Tag {
     }
 
     public Tag(String name) {
-        this(-1,name);
+        this(Constants.NO_ID,name);
     }
 
     public int getId() {

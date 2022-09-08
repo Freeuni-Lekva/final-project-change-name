@@ -1,6 +1,6 @@
 package bandfinder.dao;
 
-import bandfinder.infrastructure.AutoInjectable;
+import bandfinder.infrastructure.Constants;
 import bandfinder.models.User;
 import bandfinder.serviceimplementations.HashMapUserDAO;
 import org.junit.jupiter.api.Assertions;
@@ -30,7 +30,7 @@ public class UserDAOTest {
         Assertions.assertEquals(2, dao.getAll().size());
         User returnedUser2 = dao.getUserByEmail("2@");
         Assertions.assertEquals(returnedUser2, user2);
-        Assertions.assertNotEquals(-1, returnedUser2.getId());
+        Assertions.assertNotEquals(Constants.NO_ID, returnedUser2.getId());
         Assertions.assertNull(dao.getUserByEmail("__somewrongemailaddress@goes.here__"));
     }
 

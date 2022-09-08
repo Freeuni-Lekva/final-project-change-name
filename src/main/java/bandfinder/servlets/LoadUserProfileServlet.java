@@ -3,6 +3,7 @@ package bandfinder.servlets;
 import bandfinder.dao.FollowDAO;
 import bandfinder.dao.UserDAO;
 import bandfinder.infrastructure.AutoInjectable;
+import bandfinder.infrastructure.Constants;
 import bandfinder.models.Follow;
 import bandfinder.models.User;
 
@@ -26,7 +27,7 @@ public class LoadUserProfileServlet extends ServletBase{
         User loggedUser = (User) req.getSession().getAttribute("user");
         User user = userDAO.getById(Integer.parseInt(req.getParameter("id")));
 
-        Follow follow = new Follow(-1, user.getId());
+        Follow follow = new Follow(Constants.NO_ID, user.getId());
 
         if(loggedUser != null){
             req.setAttribute("loggedUser", true);
