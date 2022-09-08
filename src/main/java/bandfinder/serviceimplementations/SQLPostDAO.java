@@ -1,6 +1,7 @@
 package bandfinder.serviceimplementations;
 
 import bandfinder.dao.PostDAO;
+import bandfinder.infrastructure.Constants;
 import bandfinder.models.Post;
 
 import java.sql.*;
@@ -13,12 +14,9 @@ public class SQLPostDAO implements PostDAO {
 
     private final Connection connection;
 
-    private static final String CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot";
-
     public SQLPostDAO() throws ClassNotFoundException, SQLException {
-        Class.forName(CLASS_NAME);
-        connection = DriverManager.getConnection(URL);
+        Class.forName(Constants.JDBC_CLASS_NAME);
+        connection = DriverManager.getConnection(Constants.DB_URL);
     }
 
     private static final String CREATE = "INSERT INTO posts (author_user, author_band, text, date) " +

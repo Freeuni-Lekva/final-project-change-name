@@ -1,6 +1,7 @@
 package bandfinder.serviceimplementations;
 
 import bandfinder.dao.FollowDAO;
+import bandfinder.infrastructure.Constants;
 import bandfinder.models.Follow;
 
 import java.sql.*;
@@ -12,9 +13,8 @@ public class SQLFollowDAO implements FollowDAO {
     private final Connection connection;
 
     public SQLFollowDAO() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot");
+        Class.forName(Constants.JDBC_CLASS_NAME);
+        connection = DriverManager.getConnection(Constants.DB_URL);
     }
 
     private static final String CREATE_QUERY = "INSERT INTO follows (follower, followee) VALUES (?, ?);";

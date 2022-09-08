@@ -1,6 +1,7 @@
 package bandfinder.serviceimplementations;
 
 import bandfinder.dao.NotificationDAO;
+import bandfinder.infrastructure.Constants;
 import bandfinder.models.Notification;
 
 import java.sql.*;
@@ -10,12 +11,10 @@ import java.util.List;
 public class SQLNotificationDAO implements NotificationDAO {
 
     private final Connection connection;
-    private static final String CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot";
 
     public SQLNotificationDAO() throws ClassNotFoundException, SQLException {
-        Class.forName(CLASS_NAME);
-        connection = DriverManager.getConnection(URL);
+        Class.forName(Constants.JDBC_CLASS_NAME);
+        connection = DriverManager.getConnection(Constants.DB_URL);
     }
 
     public static final String CREATE_NOTIF = "INSERT INTO notifications (user_id, band_id, is_read, message, date) " +
