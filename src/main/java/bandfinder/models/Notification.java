@@ -17,6 +17,7 @@ public class Notification {
     public Notification(int id, Integer userId, Integer bandId, boolean isRead, String message, Timestamp date) {
         this.id = id;
         this.userId = userId;
+        this.bandId = bandId;
         this.isRead = isRead;
         this.message = message;
         this.date = date;
