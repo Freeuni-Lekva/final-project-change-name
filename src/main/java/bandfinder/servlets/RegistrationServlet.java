@@ -47,7 +47,7 @@ public class RegistrationServlet extends ServletBase {
             String passwordHash = hashingService.hash(password);
             User user = new User(email, passwordHash, firstName, surname, stageName);
             userDAO.create(user);
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/login").forward(request, response);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
         }
