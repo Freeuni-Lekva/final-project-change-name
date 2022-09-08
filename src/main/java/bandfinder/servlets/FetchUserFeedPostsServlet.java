@@ -30,6 +30,8 @@ public class FetchUserFeedPostsServlet extends ServletBase {
                                Integer authorBandId, String authorBandName,
                                String text, String date) {}
 
+    private static final int maxNumPostsToFetch = 2;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int userId = Integer.parseInt(request.getParameter("userId"));
@@ -51,10 +53,10 @@ public class FetchUserFeedPostsServlet extends ServletBase {
     private List<Post> getPostsFromDatabase(int userId, HttpServletRequest request) {
         List<Post> posts;
         if(request.getParameter("lastPostFetchedId") == null) {
-            posts = postDAO.getUserFeedNewestPosts(userId, 2);
+            posts = postDAO.getUserFeedNewestPosts(userId, maxNumPostsToFetch);
         }else {
             int lastPostFetchedId = Integer.parseInt(request.getParameter("lastPostFetchedId"));
-            posts = postDAO.getUserFeedPostsBeforeId(userId, lastPostFetchedId, 2);
+            posts = postDAO.getUserFeedPostsBeforeId(userId, lastPostFetchedId, maxNumPostsToFetch);
         }
         return posts;
     }
