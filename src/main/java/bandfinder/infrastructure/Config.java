@@ -1,5 +1,6 @@
 package bandfinder.infrastructure;
 
+import bandfinder.dao.MessageDAO;
 import bandfinder.dao.*;
 import bandfinder.models.Post;
 import bandfinder.services.*;
@@ -10,7 +11,11 @@ import bandfinder.models.Notification;
 import bandfinder.serviceimplementations.*;
 import bandfinder.dao.UserDAO;
 import bandfinder.services.HashingService;
+import bandfinder.services.SearchService;
 import org.apache.ibatis.jdbc.SQL;
+import bandfinder.dao.UserDAO;
+import bandfinder.dao.BandDAO;
+import bandfinder.dao.TagDAO;
 
 public class Config {
     private static boolean isConfigured = false;
@@ -28,6 +33,7 @@ public class Config {
         Injector.injectSingleton(FollowDAO.class, SQLFollowDAO.class);
         Injector.injectSingleton(TagDAO.class, SQLTagDAO.class);
         Injector.injectSingleton(PostDAO.class, SQLPostDAO.class);
+        Injector.injectSingleton(MessageDAO.class, SQLMessageDAO.class);
         isConfigured = true;
     }
 }

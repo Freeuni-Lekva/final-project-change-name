@@ -1,7 +1,6 @@
 package bandfinder.servlets;
 
 import bandfinder.dao.BandDAO;
-import bandfinder.dao.UserDAO;
 import bandfinder.infrastructure.AutoInjectable;
 
 import javax.servlet.*;
@@ -9,10 +8,9 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.List;
 
-@WebServlet(name = "removeMembersServlet", value = "/removeMembers")
-public class removeMembersServlet extends ServletBase {
+@WebServlet(name = "RemoveMembersServlet", value = "/removeMembers")
+public class RemoveMembersServlet extends ServletBase {
     @AutoInjectable
     private BandDAO bandDAO;
 

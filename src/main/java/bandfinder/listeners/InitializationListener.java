@@ -1,8 +1,5 @@
 package bandfinder.listeners;
 
-import bandfinder.infrastructure.DatabaseMigrator;
-import bandfinder.serviceimplementations.HashMapUserDAO;
-import bandfinder.dao.UserDAO;
 import bandfinder.infrastructure.Config;
 import bandfinder.models.User;
 
@@ -15,23 +12,15 @@ public class InitializationListener implements
         ServletContextListener,
         HttpSessionListener,
         HttpSessionAttributeListener {
-    public InitializationListener() {
-    }
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        DatabaseMigrator.migrate();
-
-        UserDAO currentUserDAO = new HashMapUserDAO();
-        sce.getServletContext().setAttribute(UserDAO.ATTRIBUTE_NAME, currentUserDAO);
-        currentUserDAO.create(new User(1, "guja@gmail.com", "pass", "gujaboi", "sth", "none"));
-
+//        DatabaseMigrator.migrate(); Temporarily disabled, - changing delimiters not supported
         Config.ConfigureServices();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        /* This method is called when the servlet Context is undeployed or Application Server shuts down. */
     }
 
     @Override

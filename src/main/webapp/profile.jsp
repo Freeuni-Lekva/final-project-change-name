@@ -1,12 +1,7 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="bandfinder.models.User" %>
 <%@ page import="bandfinder.infrastructure.AutoInjectable" %>
 <%@ page import="bandfinder.dao.UserDAO" %>
-<%@ page import="bandfinder.dao.TagDAO" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="bandfinder.infrastructure.ServiceValueSetter" %>
-<%@ page import="bandfinder.dao.FollowDAO" %>
-<%@ page import="bandfinder.models.Follow" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%!
   @AutoInjectable
@@ -23,7 +18,6 @@
   }
 
   ServiceValueSetter.setAutoInjectableFieldValues(this);
-
   User user = userDAO.getById(Integer.parseInt(request.getParameter("id")));
 %>
 <html>

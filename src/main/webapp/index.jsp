@@ -35,5 +35,20 @@
                 }
             %>
         </ul>
+        <br><br>
+        <i>
+            <%
+                User loggedInUser = (User) request.getSession().getAttribute("user");
+                if(loggedInUser != null) {
+                    out.println("Logged in as: " + loggedInUser.getFullName());
+                } else {
+                    out.println("You are not logged in.");
+                }
+            %>
+        </i>
+        <br>
+        <a href="/register.jsp">
+            <button>Register/Log in</button>
+        </a>
     </body>
 </html>
