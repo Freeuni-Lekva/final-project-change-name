@@ -8,17 +8,21 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="bandfinder.models.User" %>
 <%@ page import="bandfinder.models.Tag" %>
-<%@ page import="java.io.IOException" %><%--
+<%@ page import="java.io.IOException" %>
+<%@ page import="bandfinder.services.AuthenticationService" %>
+<%@ page import="bandfinder.infrastructure.Constants" %><%--
 --%>
 
 <%!
+    private AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
     private UserDAO userDAO = Injector.getImplementation(UserDAO.class);
     private TagDAO tagDAO = Injector.getImplementation(TagDAO.class);
 %>
 
 <%
-    User user = (User) request.getSession().getAttribute("user");
-    int userId = user.getId();
+    String loginToken = (String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
+    int userId = authenticationService.authenticate(loginToken);
+    User user = userDAO.getById(userId);
     TagAutoComplete defTags = Injector.getImplementation(TagAutoComplete.class);
 %>
 

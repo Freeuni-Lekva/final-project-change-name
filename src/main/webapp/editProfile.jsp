@@ -1,12 +1,20 @@
 <%@ page import="bandfinder.models.User" %>
 <%@ page import="bandfinder.dao.UserDAO" %>
 <%@ page import="java.nio.file.FileStore" %>
+<%@ page import="bandfinder.infrastructure.Constants" %>
+<%@ page import="bandfinder.services.AuthenticationService" %>
+<%@ page import="bandfinder.infrastructure.Injector" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-
+    <%!
+        private AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
+        private UserDAO userDAO = Injector.getImplementation(UserDAO.class);
+    %>
     <%
-        User user = (User) session.getAttribute("user");
+        String loginToken = (String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
+        int loggedInUserId = authenticationService.authenticate(loginToken);
+        User user = userDAO.getById(loggedInUserId);
 
         String passwordIncorrectMessage = (String) session.getAttribute("passwordIncorrect");
     %>

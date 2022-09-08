@@ -3,8 +3,10 @@ package bandfinder.servlets;
 import bandfinder.dao.BandDAO;
 import bandfinder.dao.UserDAO;
 import bandfinder.infrastructure.AutoInjectable;
+import bandfinder.infrastructure.Constants;
 import bandfinder.models.Band;
 import bandfinder.models.User;
+import bandfinder.services.AuthenticationService;
 import bandfinder.services.HashingService;
 
 import javax.servlet.*;
@@ -21,14 +23,13 @@ public class LoginServlet extends ServletBase {
     private BandDAO bandDAO;
     @AutoInjectable
     private UserDAO userDAO;
-
     @AutoInjectable
     private HashingService hashingService;
+    @AutoInjectable
+    private AuthenticationService authenticationService;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,7 +40,8 @@ public class LoginServlet extends ServletBase {
 
         try {
             if (foundUser != null && hashingService.validateHash(password, foundUser.getPasswordHash())) {
-                request.getSession().setAttribute("user", foundUser);
+                request.getSession().setAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME,
+                        authenticationService.generateToken(foundUser.getId()));
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
             } else {
                 request.getRequestDispatcher("/login.jsp").forward(request, response);

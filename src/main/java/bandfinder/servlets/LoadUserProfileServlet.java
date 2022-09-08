@@ -6,6 +6,7 @@ import bandfinder.infrastructure.AutoInjectable;
 import bandfinder.infrastructure.Constants;
 import bandfinder.models.Follow;
 import bandfinder.models.User;
+import bandfinder.services.AuthenticationService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,16 +16,18 @@ import java.io.IOException;
 
 @WebServlet(name="LoadUserProfileServlet", value = "/LoadUserProfileServlet")
 public class LoadUserProfileServlet extends ServletBase{
-
+    @AutoInjectable
+    private AuthenticationService authenticationService;
     @AutoInjectable
     private UserDAO userDAO;
-
     @AutoInjectable
     private FollowDAO followDAO;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User loggedUser = (User) req.getSession().getAttribute("user");
+        String loginToken = (String) req.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
+        int loggedInUserId = authenticationService.authenticate(loginToken);
+        User loggedUser = userDAO.getById(loggedInUserId);
         User user = userDAO.getById(Integer.parseInt(req.getParameter("id")));
 
         Follow follow = new Follow(Constants.NO_ID, user.getId());

@@ -15,47 +15,30 @@ public class InitializationListener implements
         ServletContextListener,
         HttpSessionListener,
         HttpSessionAttributeListener {
-    public InitializationListener() {
-    }
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        DatabaseMigrator.migrate();
-
-        UserDAO currentUserDAO = new HashMapUserDAO();
-        sce.getServletContext().setAttribute(UserDAO.ATTRIBUTE_NAME, currentUserDAO);
-        currentUserDAO.create(new User(1, "guja@gmail.com", "pass", "gujaboi", "sth", "none"));
-
+//        DatabaseMigrator.migrate();
         Config.ConfigureServices();
     }
 
     @Override
-    public void contextDestroyed(ServletContextEvent sce) {
-        /* This method is called when the servlet Context is undeployed or Application Server shuts down. */
-    }
+    public void contextDestroyed(ServletContextEvent sce) {}
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-        /* Session is created. */
+        se.getSession().setAttribute("token", null);
     }
 
     @Override
-    public void sessionDestroyed(HttpSessionEvent se) {
-        /* Session is destroyed. */
-    }
+    public void sessionDestroyed(HttpSessionEvent se) {}
 
     @Override
-    public void attributeAdded(HttpSessionBindingEvent sbe) {
-        /* This method is called when an attribute is added to a session. */
-    }
+    public void attributeAdded(HttpSessionBindingEvent sbe) {}
 
     @Override
-    public void attributeRemoved(HttpSessionBindingEvent sbe) {
-        /* This method is called when an attribute is removed from a session. */
-    }
+    public void attributeRemoved(HttpSessionBindingEvent sbe) {}
 
     @Override
-    public void attributeReplaced(HttpSessionBindingEvent sbe) {
-        /* This method is called when an attribute is replaced in a session. */
-    }
+    public void attributeReplaced(HttpSessionBindingEvent sbe) {}
 }

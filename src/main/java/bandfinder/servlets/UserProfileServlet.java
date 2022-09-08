@@ -2,7 +2,9 @@ package bandfinder.servlets;
 
 import bandfinder.dao.UserDAO;
 import bandfinder.infrastructure.AutoInjectable;
+import bandfinder.infrastructure.Constants;
 import bandfinder.models.User;
+import bandfinder.services.AuthenticationService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,9 +15,10 @@ import java.io.IOException;
 
 @WebServlet(name="EditProfileServlet", value="/EditProfileServlet")
 public class UserProfileServlet extends ServletBase {
-
     @AutoInjectable
-    UserDAO userDao;
+    private UserDAO userDAO;
+    @AutoInjectable
+    private AuthenticationService authenticationService;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -24,7 +27,9 @@ public class UserProfileServlet extends ServletBase {
         String surname = req.getParameter("field-surname");
         String stageName = req.getParameter("field-stageName");
 
-        User user = (User) req.getSession().getAttribute("user");
+        String loginToken = (String) req.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
+        int loggedInUserId = authenticationService.authenticate(loginToken);
+        User user = userDAO.getById(loggedInUserId);
 
         if(user == null){
             System.out.println("User object not available!");
@@ -36,8 +41,7 @@ public class UserProfileServlet extends ServletBase {
         user.setSurname(surname);
         user.setStageName(stageName);
 
-        userDao.update(user);
-        req.getSession().setAttribute("user", user);
+        userDAO.update(user);
 
         if(req.getSession().getAttribute("passwordIncorrect") != null){
             req.getSession().removeAttribute("passwordIncorrect");
