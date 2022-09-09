@@ -83,6 +83,7 @@
         <%@include  file="nav.html" %>
 </header>
 <body>
+<div class="card">
     <div id="tagsListModule">
         <%
             List<Integer> tagIds = tagDAO.getBandTagIDs(bandId);
@@ -120,17 +121,14 @@
         <%
             List<Tag> tags = defTags.get();
             for(Tag tag: tags){
-                //System.out.println(tag.getName());
                 out.println("<option value=\""+tag.getName()+"\" />");
             }
         %>
         </datalist>
 
         <button type="submit">Add tag</button>
-
         <input type="hidden" name="bandId" id="addTagButton" value=<%= bandId %>>
-
     </form>
-
+</div>
 </body>
 </html>

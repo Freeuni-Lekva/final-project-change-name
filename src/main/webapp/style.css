@@ -11,7 +11,7 @@ header {
 }
 
 body {
-    padding-top: 60px;
+    margin-top: 60px;
     background-color: #FAF8F5;
 }
 
@@ -87,7 +87,6 @@ input[type=submit] {
 }
 
 .user_data{
-    padding-left: 0;
     border-style: solid;
     border-top-width: 3px;
     border-bottom-width: 3px;

@@ -9,10 +9,12 @@
     <%@include  file="nav.html" %>
 </header>
 <body>
+<div class="card">
     <form method="POST" action="/newBand">
         <label>Band name</label>
-        <input type="text" name="bandName"/><br/>
+        <input type="text" name="bandName"/><br><br>
         <button type="submit">Create</button>
     </form>
+</div>
 </body>
 </html>

@@ -81,6 +81,7 @@
     <%@include  file="nav.html" %>
 </header>
 <body>
+<div class="card">
     <div id="tagsListModule">
         <%
             List<Integer> tagIds = tagDAO.getUserTagIDs(userId);
@@ -128,6 +129,6 @@
         <input type="hidden" name="userId" id="addTagButton" value=<%= userId %>>
 
     </form>
-
+</div>
 </body>
 </html>

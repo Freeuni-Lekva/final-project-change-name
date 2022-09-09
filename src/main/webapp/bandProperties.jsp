@@ -74,11 +74,12 @@
     <%@include  file="nav.html" %>
 </header>
 <body>
-    <div style="flex-direction: row" id="bandNameModule">
+    <div style="flex-direction: row" class="card" id="bandNameModule">
         <label>Band Name: </label>
         <label id="bandName"><%= band.getName() %></label>
         <button id="editNameButton" onclick="editProperty()">Edit</button>
+
+        <form id="saveForm" method="post" action=<%= "/editBandProperties?bandId=" + bandId %>></form>
     </div>
-    <form id="saveForm" method="post" action=<%= "/editBandProperties?bandId=" + bandId %>></form>
 </body>
 </html>

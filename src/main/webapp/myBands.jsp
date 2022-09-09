@@ -12,20 +12,20 @@
         <%@include  file="nav.html" %>
     </header>
    <body>
+       <div class="card">
+            <h1> Your Bands </h1>
+            <ul>
+                <%
+                    ArrayList<Band> l = (ArrayList)request.getAttribute("UserBandsList");
+                    for(Band band : l){
+                        out.println("<li><a href=\"bandPage.jsp?bandId=" + band.getId() + "\">"+band.getName()+"</a></li>");
+                    }
+                %>
+            </ul>
 
-        <h1> Your Bands </h1>
-
-        <ul>
-            <%
-                ArrayList<Band> l = (ArrayList)request.getAttribute("UserBandsList");
-                for(Band band : l){
-                    out.println("<li><a href=\"bandPage.jsp?bandId=" + band.getId() + "\">"+band.getName()+"</a></li>");
-                }
-            %>
-        </ul>
-
-        <form method="post">
-            <input type="submit" value="Start a new band"/>
-        </form>
+            <form method="post">
+                <input type="submit" value="Start a new band"/>
+            </form>
+        </div>
     </body>
 </html>

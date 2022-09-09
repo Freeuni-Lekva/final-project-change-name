@@ -79,6 +79,7 @@
     <%@include  file="nav.html" %>
 </header>
 <body>
+<div id="members-management-card" class="card">
     <div id="membersListModule">
         <%
             List<Integer> memberIds = bandDAO.getBandMemberIDs(bandId);
@@ -107,8 +108,9 @@
             document.getElementById("editMembersModule").remove();
             let message = document.createElement("label");
             message.innerText = "No band members to show but you.";
-            document.body.appendChild(message);
+            document.getElementById("members-management-card").appendChild(message);
         }
     </script>
+</div>
 </body>
 </html>

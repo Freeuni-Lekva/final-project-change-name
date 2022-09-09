@@ -50,6 +50,7 @@
         <%@include  file="nav.html" %>
     </header>
     <body>
+    <div class="card">
         <h1><%=band.getName()%></h1>
 
         <ul>
@@ -86,5 +87,6 @@
             <button onclick="confirmLeaving()">Leave Band</button>
         </div>
         </c:if>
+    </div>
     </body>
 </html>
