@@ -48,8 +48,7 @@ public class EditPasswordServlet extends ServletBase {
                     req.getSession().removeAttribute("passwordIncorrect");
                 }
             }else{
-                String message = "Password is incorrect!";
-                req.getSession().setAttribute("passwordIncorrect", message);
+                req.getSession().setAttribute("passwordIncorrect", true);
             }
             resp.sendRedirect("editProfile.jsp");
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {

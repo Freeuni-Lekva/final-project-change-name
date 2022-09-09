@@ -1,0 +1,107 @@
+.user_data_form{
+    padding-left: 0;
+}
+
+.user_data{
+    padding-left: 0;
+    border-style: solid;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-color: #f3f3f3;
+}
+
+.user_data li{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    border-style: solid;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-color: #f3f3f3;
+}
+
+.user_data li div{
+    padding-left: 2%;
+    padding-bottom: 4px;
+}
+
+.user_data li div:hover{
+    background-color: #f3f3f3
+}
+
+.user_data li div div{
+    padding: 0;
+    margin: 0;
+}
+
+.user_data li div input{
+    border-radius: 50px;
+    border-style: solid;
+    border-color: white;
+}
+
+.user_data li div input:focus{
+    outline: none;
+}
+
+#btn-div ul{
+    padding-left: 0;
+    list-style-type: none;
+    display: inline-flex;
+}
+
+#btn-div ul li{
+    padding-right: 5px;
+}
+
+.edit-password-block{
+    visibility: hidden;
+    padding-left: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-style: solid;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-color: #f3f3f3;
+}
+
+.edit-password-block form{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 0;
+}
+
+.edit-password-block form ul{
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.edit-password-block form ul li{
+    padding-bottom: 5px;
+}
+
+.edit-password-block form:hover{
+    background-color: #f3f3f3;
+}
+
+.pass-input{
+    border-radius: 50px;
+    border-style: solid;
+    border-color: white;
+}
+
+.pass-input:focus{
+    outline: none;
+}
+
+.password-incorrect-message{
+    color: darkred;
+    margin-bottom: 5px;
+}

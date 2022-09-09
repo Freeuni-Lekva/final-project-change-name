@@ -1,11 +1,14 @@
 var topSelected = false
 var bottomSelected = false
 
-const itemsInForm = document.getElementById('user-info').getElementsByTagName('li')
+const itemsInForm = document.getElementById('user-info').getElementsByClassName('user_data')[0].getElementsByTagName('li')
 const passwordButton = document.getElementById('password-button')
 const editButton = document.getElementById('edit-button')
-const passwordForm = createPasswordForm()
+const passwordForm = document.getElementById('edit-password-div')
 
+const cancelBtn = document.createElement('button')
+cancelBtn.setAttribute('type', 'button')
+cancelBtn.innerHTML = 'cancel';
 
 function selectTop(){
     if(bottomSelected){
@@ -24,8 +27,25 @@ function selectTop(){
     }
 
     const editBtn = document.getElementById('edit-button')
+    editBtn.remove()
     const saveBtn = createInputField('submit', '', 'save-button', 'save')
-    editBtn.replaceWith(saveBtn)
+    cancelBtn.setAttribute('onmouseup', 'deselectTop()')
+
+    const btnDiv = document.getElementById('btn-div')
+
+    const ul = document.createElement('ul')
+
+    const li1 = document.createElement('li')
+    const li2 = document.createElement('li')
+
+    li1.appendChild(saveBtn)
+    li2.appendChild(cancelBtn)
+
+    ul.appendChild(li1)
+    ul.appendChild(li2)
+    btnDiv.appendChild(ul)
+
+    btnDiv.appendChild(ul)
 
     topSelected = true
 }
@@ -35,7 +55,8 @@ function selectBottom(){
         deselectTop()
     }
 
-    passwordButton.replaceWith(passwordForm)
+    passwordButton.style.visibility = 'hidden'
+    passwordForm.style.visibility = 'visible'
 
     bottomSelected = true
 }
@@ -51,60 +72,21 @@ function deselectTop(){
         textDiv.innerHTML = oldValue
     }
 
-    const saveBtn = document.getElementById('save-button')
-    saveBtn.replaceWith(editButton)
+    const btnDiv = document.getElementById('btn-div')
+    btnDiv.firstElementChild.remove()
+    btnDiv.appendChild(editButton)
     topSelected = false
 }
 
 function deselectBottom(){
-    passwordForm.replaceWith(passwordButton)
+    passwordForm.style.visibility = 'hidden'
+    passwordButton.style.visibility = 'visible'
+
+    for(var i = 0; i < passwordForm.getElementsByClassName('pass-input').length; i++){
+        passwordForm.getElementsByClassName('pass-input')[i].value = ''
+    }
 
     bottomSelected = false
-}
-
-
-function createPasswordForm(){
-    const divElem = document.createElement('div')
-    divElem.setAttribute('id', 'edit-password-div')
-    const form = document.createElement('form')
-
-    form.setAttribute('action', 'EditPasswordServlet')
-    form.setAttribute('method', 'post')
-
-    const curPassword = createInputField('password', 'currentPassword', 'cur-password', '')
-    const newPassword = createInputField('password', 'newPassword', 'new-password', '')
-
-    const curPasswordLabel = createLabelFor('cur-password', 'Current Password: ')
-    const newPasswordLabel = createLabelFor('new-password', 'New Password: ')
-
-    const saveButton = createInputField('submit', '', '', 'save')
-
-    form.appendChild(saveButton)
-
-    const breakLine1 = document.createElement('br')
-
-    form.appendChild(breakLine1)
-
-    form.appendChild(curPasswordLabel)
-    form.appendChild(curPassword)
-
-    const breakLine = document.createElement('br')
-
-    form.appendChild(breakLine)
-
-    form.appendChild(newPasswordLabel)
-    form.appendChild(newPassword)
-
-    divElem.appendChild(form)
-
-    return divElem
-}
-
-function createLabelFor(forID, text){
-    const label = document.createElement('label')
-    label.setAttribute('for', forID)
-    label.innerHTML = text;
-    return label
 }
 
 function createInputField(type, name, id, value){

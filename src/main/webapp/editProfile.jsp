@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="bandfinder.models.User" %>
 <%@ page import="bandfinder.dao.UserDAO" %>
 <%@ page import="java.nio.file.FileStore" %>
@@ -7,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link rel="stylesheet" href="style.css">
     <%!
         private AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
         private UserDAO userDAO = Injector.getImplementation(UserDAO.class);
@@ -16,24 +18,19 @@
         int loggedInUserId = authenticationService.authenticate(loginToken);
         User user = userDAO.getById(loggedInUserId);
 
-        String passwordIncorrectMessage = (String) session.getAttribute("passwordIncorrect");
-    %>
+        Boolean passwordIncorrect= (Boolean) session.getAttribute("passwordIncorrect");
 
-    <%!
-        private boolean passwordIsIncorrect(String message){
-            if(message == null){
-                return false;
-            }
-            return true;
+        if(passwordIncorrect == null){
+            request.setAttribute("passwordIncorrect", false);
         }
     %>
 
     <title>Profile</title>
 </head>
 <body>
-        <%@include  file="nav.html" %>
-    <form action="EditProfileServlet" method="post" id="user-info">
-        <ul style="list-style-type: none">
+<%@include  file="nav.html" %>
+    <form action="EditProfileServlet" method="post" id="user-info" class="user_data_form">
+        <ul style="list-style-type: none" class="user_data">
             <li>
                 <div>
                     Your email:
@@ -63,18 +60,47 @@
                 </div>
             </li>
         </ul>
-        <button onmouseup="selectTop()" id="edit-button">Edit</button>
+        <div id="btn-div">
+            <button onmouseup="selectTop()" id="edit-button">Edit</button>
+        </div>
     </form>
 
     <br>
 
-    <%
-        if(passwordIsIncorrect(passwordIncorrectMessage)){
-            out.println("<div style=\"color: darkred\">" + passwordIncorrectMessage + "</div>");
-        }
-    %>
+    <div>
+        <c:if test="${passwordIncorrect}">
+            <div class="password-incorrect-message">
+                Incorrect password!
+            </div>
+        </c:if>
 
-    <button id="password-button" onmouseup="selectBottom()">Edit Password</button>
+        <button id="password-button" onmouseup="selectBottom()">Edit Password</button>
+    </div>
+
+    <div id="edit-password-div" class="edit-password-block">
+        <form action="EditPasswordServlet" method="post">
+            <ul>
+                <li>
+                    Current password:
+                    <input class='pass-input' type="password" name="currentPassword" id="cur-password" />
+                </li>
+                <li>
+                    New password:
+                    <input class='pass-input' type="password" name="newPassword" id="new-password" />
+                </li>
+            </ul>
+
+            <ul>
+                <li>
+                    <input type="submit" value="save" />
+                </li>
+
+                <li>
+                    <button type="button" onmouseup="deselectBottom()"> cancel </button>
+                </li>
+            </ul>
+        </form>
+    </div>
 
     <script src="editProfile.js"></script>
 </body>
