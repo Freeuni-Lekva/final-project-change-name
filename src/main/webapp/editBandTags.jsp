@@ -10,15 +10,20 @@
 <%@ page import="bandfinder.models.Tag" %>
 <%@ page import="java.io.IOException" %>
 <%@ page import="java.util.*" %>
+<%@ page import="bandfinder.infrastructure.Constants" %>
+<%@ page import="bandfinder.services.AuthenticationService" %>
 
 <%!
+    private final AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
     private BandDAO bandDAO = Injector.getImplementation(BandDAO.class);
     private UserDAO userDAO = Injector.getImplementation(UserDAO.class);
     private TagDAO tagDAO = Injector.getImplementation(TagDAO.class);
 %>
 
 <%
-    User user = (User) request.getSession().getAttribute("user");
+    String loginToken = (String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
+    int loggedInUserId = authenticationService.authenticate(loginToken);
+    User user = userDAO.getById(loggedInUserId);
     int bandId = Integer.parseInt(request.getParameter("bandId"));
     TagAutoComplete defTags = Injector.getImplementation(TagAutoComplete.class);
 %>

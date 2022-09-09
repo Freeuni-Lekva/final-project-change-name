@@ -1,8 +1,6 @@
 package bandfinder.listeners;
 
 import bandfinder.infrastructure.Config;
-import bandfinder.models.User;
-
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -20,31 +18,22 @@ public class InitializationListener implements
     }
 
     @Override
-    public void contextDestroyed(ServletContextEvent sce) {
-    }
+    public void contextDestroyed(ServletContextEvent sce) {}
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-        /* Session is created. */
+        se.getSession().setAttribute("token", null);
     }
 
     @Override
-    public void sessionDestroyed(HttpSessionEvent se) {
-        /* Session is destroyed. */
-    }
+    public void sessionDestroyed(HttpSessionEvent se) {}
 
     @Override
-    public void attributeAdded(HttpSessionBindingEvent sbe) {
-        /* This method is called when an attribute is added to a session. */
-    }
+    public void attributeAdded(HttpSessionBindingEvent sbe) {}
 
     @Override
-    public void attributeRemoved(HttpSessionBindingEvent sbe) {
-        /* This method is called when an attribute is removed from a session. */
-    }
+    public void attributeRemoved(HttpSessionBindingEvent sbe) {}
 
     @Override
-    public void attributeReplaced(HttpSessionBindingEvent sbe) {
-        /* This method is called when an attribute is replaced in a session. */
-    }
+    public void attributeReplaced(HttpSessionBindingEvent sbe) {}
 }

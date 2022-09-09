@@ -1,6 +1,6 @@
 package bandfinder.models;
 
-import java.util.Objects;
+import bandfinder.infrastructure.Constants;
 
 public class Band {
     private int id;
@@ -12,7 +12,7 @@ public class Band {
     }
 
     public Band(String name){
-        this(-1,name);
+        this(Constants.NO_ID,name);
     }
 
     public int getId() {

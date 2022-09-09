@@ -1,9 +1,6 @@
 package bandfinder.dao;
 
 import bandfinder.models.Notification;
-import sun.jvm.hotspot.types.CIntegerField;
-
-import javax.sound.midi.Receiver;
 import java.sql.Timestamp;
 import java.util.List;
 

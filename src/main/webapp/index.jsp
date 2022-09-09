@@ -5,7 +5,11 @@
 <%@ page import="bandfinder.infrastructure.ServiceValueSetter" %>
 <%@ page import="bandfinder.dao.BandDAO" %>
 <%@ page import="bandfinder.models.Band" %>
+<%@ page import="bandfinder.services.AuthenticationService" %>
+<%@ page import="bandfinder.infrastructure.Constants" %>
 <%!
+    @AutoInjectable
+    private AuthenticationService authenticationService;
     @AutoInjectable
     private UserDAO userDAO;
     @AutoInjectable
@@ -38,7 +42,10 @@
         <br><br>
         <i>
             <%
-                User loggedInUser = (User) request.getSession().getAttribute("user");
+                String loginToken = (String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
+                int loggedInUserId = authenticationService.authenticate(loginToken);
+                User loggedInUser = userDAO.getById(loggedInUserId);
+
                 if(loggedInUser != null) {
                     out.println("Logged in as: " + loggedInUser.getFullName());
                 } else {

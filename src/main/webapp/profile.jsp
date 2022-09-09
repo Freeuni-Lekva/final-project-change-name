@@ -100,6 +100,10 @@
               </form>
             </c:when>
           </c:choose>
+          <form action="/chat.jsp" method="get">
+              <input type="hidden" name="id" value="<%=user.getId()%>"/>
+              <input type="submit" value="Chat"/>
+          </form>
         </c:when>
       </c:choose>
     </c:if>

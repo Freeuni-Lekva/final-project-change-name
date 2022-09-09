@@ -76,7 +76,7 @@ const ws = new WebSocket("ws://localhost:8080/chatWebSocket"); // Server IP here
 ws.onopen = function() {
     ws.send(JSON.stringify({
         "isInfoMsg" : true,
-        "senderId" : currentUserID,
+        "senderToken" : loginToken,
         "receiverId" : recipientID,
         "content" : ""
     }));
@@ -91,7 +91,7 @@ function sendMessage() {
     const content = msgBox.value;
     const newMessage = {
         "isInfoMsg": false,
-        "senderId": currentUserID,
+        "senderToken" : loginToken,
         "receiverId": recipientID,
         "content": content
     };

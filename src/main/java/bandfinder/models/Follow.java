@@ -1,5 +1,7 @@
 package bandfinder.models;
 
+import bandfinder.infrastructure.Constants;
+
 public class Follow {
 
     private int id;
@@ -13,7 +15,7 @@ public class Follow {
     }
 
     public Follow(int followerID, int followeeID){
-        this(-1, followerID, followeeID);
+        this(Constants.NO_ID, followerID, followeeID);
     }
 
     public int getId() {

@@ -1,5 +1,7 @@
 package bandfinder.models;
 
+import bandfinder.infrastructure.Constants;
+
 import java.sql.Timestamp;
 
 public class Notification {
@@ -15,13 +17,14 @@ public class Notification {
     public Notification(int id, Integer userId, Integer bandId, boolean isRead, String message, Timestamp date) {
         this.id = id;
         this.userId = userId;
+        this.bandId = bandId;
         this.isRead = isRead;
         this.message = message;
         this.date = date;
     }
 
     public Notification(Integer userId, Integer bandId, boolean isRead, String message, Timestamp date) {
-        this(-1, userId, bandId, isRead, message, date);
+        this(Constants.NO_ID, userId, bandId, isRead, message, date);
     }
 
     public int getId() {

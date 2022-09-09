@@ -1,6 +1,7 @@
 package bandfinder.serviceimplementations;
 
 import bandfinder.dao.TagDAO;
+import bandfinder.infrastructure.Constants;
 import bandfinder.models.Tag;
 
 import java.util.*;
@@ -19,7 +20,7 @@ public class HashMapTagDAO implements TagDAO {
     @Override
     public Tag create(Tag model) {
         int id = model.getId();
-        if(model.getId() == -1) {
+        if(model.getId() == Constants.NO_ID) {
             id = tags.size() + 1;
             model.setId(id);
         }
@@ -37,7 +38,7 @@ public class HashMapTagDAO implements TagDAO {
     public boolean delete(int id) {
         Tag deletedTag = tags.remove(id);
         if(deletedTag != null) {
-            deletedTag.setId(-1); // Needed to behave correctly when re-adding elements with the same id
+            deletedTag.setId(Constants.NO_ID); // Needed to behave correctly when re-adding elements with the same id
             return true;
         }
         return false;

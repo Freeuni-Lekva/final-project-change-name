@@ -1,5 +1,7 @@
 package bandfinder.models;
 
+import bandfinder.infrastructure.Constants;
+
 import java.sql.Timestamp;
 
 public class Post {
@@ -18,7 +20,7 @@ public class Post {
     }
 
     public Post(Integer authorUser, Integer authorBand, String text, Timestamp date) {
-        this(-1, authorUser, authorBand, text, date);
+        this(Constants.NO_ID, authorUser, authorBand, text, date);
     }
 
     public int getId() {

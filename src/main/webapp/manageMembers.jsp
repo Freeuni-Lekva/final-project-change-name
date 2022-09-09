@@ -3,21 +3,20 @@
 <%@ page import="bandfinder.infrastructure.Injector" %>
 <%@ page import="java.util.List" %>
 <%@ page import="bandfinder.models.User" %>
-<%@ page import="java.io.IOException" %><%--
-  Created by IntelliJ IDEA.
-  User: LenovoIdeapadF5
-  Date: 7/26/2022
-  Time: 4:40 PM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.io.IOException" %>
+<%@ page import="bandfinder.services.AuthenticationService" %>
+<%@ page import="bandfinder.infrastructure.Constants" %>
 
 <%!
-    private BandDAO bandDAO = Injector.getImplementation(BandDAO.class);
-    private UserDAO userDAO = Injector.getImplementation(UserDAO.class);
+    private final AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
+    private final BandDAO bandDAO = Injector.getImplementation(BandDAO.class);
+    private final UserDAO userDAO = Injector.getImplementation(UserDAO.class);
 %>
 
 <%
-    User user = (User) request.getSession().getAttribute("user");
+    String loginToken = (String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
+    int loggedInUserId = authenticationService.authenticate(loginToken);
+    User user = userDAO.getById(loggedInUserId);
     int bandId = Integer.parseInt(request.getParameter("bandId"));
 %>
 

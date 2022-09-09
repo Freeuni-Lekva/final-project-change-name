@@ -1,20 +1,26 @@
 <%@ page import="bandfinder.dao.UserDAO" %>
 <%@ page import="bandfinder.infrastructure.Injector" %>
 <%@ page import="bandfinder.models.User" %>
+<%@ page import="bandfinder.services.AuthenticationService" %>
+<%@ page import="bandfinder.infrastructure.Constants" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%!
     private final UserDAO userDAO = Injector.getImplementation(UserDAO.class);
+    private final AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
     private User currentUser;
     private User recipientUser;
 %>
 <%
-    currentUser = (User) request.getSession().getAttribute("user");
+    String loginToken = (String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
+    int loggedInUserId = authenticationService.authenticate(loginToken);
+    User currentUser = userDAO.getById(loggedInUserId);
     recipientUser = userDAO.getById(Integer.parseInt(request.getParameter("id")));
 %>
 <html>
     <head>
         <title>Chat with <%=recipientUser.getFullName()%>></title>
         <script>
+            const loginToken = "<%=loginToken%>";
             const currentUserID = <%=currentUser.getId()%>;
             const recipientID = <%=recipientUser.getId()%>;
         </script>

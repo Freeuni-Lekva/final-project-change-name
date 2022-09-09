@@ -1,6 +1,7 @@
 package bandfinder.serviceimplementations;
 
 import bandfinder.dao.UserDAO;
+import bandfinder.infrastructure.Constants;
 import bandfinder.models.User;
 
 import java.sql.*;
@@ -12,9 +13,8 @@ public class SQLUserDAO implements UserDAO {
     private final Connection connection;
 
     public SQLUserDAO() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost/bandfinder?user=root&password=R00tR**t");
+        Class.forName(Constants.JDBC_CLASS_NAME);
+        connection = DriverManager.getConnection(Constants.DB_URL);
     }
 
     @Override

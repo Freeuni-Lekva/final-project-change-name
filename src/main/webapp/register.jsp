@@ -6,7 +6,7 @@
 <body>
     <a href="/login.jsp">Login</a>
     <form method="POST" action="/register">
-        <label>Username</label>
+        <label>Email</label>
         <input type="text" name="email"/><br/>
         <label>Password</label>
         <input type="password" name="password" /><br/>

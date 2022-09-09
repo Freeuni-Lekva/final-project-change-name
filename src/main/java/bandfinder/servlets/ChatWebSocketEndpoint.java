@@ -2,6 +2,7 @@ package bandfinder.servlets;
 
 import bandfinder.dao.MessageDAO;
 import bandfinder.infrastructure.Injector;
+import bandfinder.services.AuthenticationService;
 import bandfinder.models.Message;
 import bandfinder.models.MessageViewModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,18 +15,19 @@ import java.time.Instant;
 
 @ServerEndpoint("/chatWebSocket")
 public class ChatWebSocketEndpoint {
+    private AuthenticationService authenticationService;
     private MessageDAO messageDAO;
 
-    private record MessageJSONRequest(boolean isInfoMsg, int senderId, int receiverId, String content){}
+    private record MessageJSONRequest(boolean isInfoMsg, String senderToken, int receiverId, String content){}
 
     @OnOpen
     public void onOpen(Session session, EndpointConfig config) {
         messageDAO = Injector.getImplementation(MessageDAO.class);
+        authenticationService = Injector.getImplementation(AuthenticationService.class);
     }
 
     @OnMessage
     public void onMessage(Session session, String msg) {
-        //TODO Extremely insecure
         ObjectMapper messageMapper = new ObjectMapper();
         MessageJSONRequest newMessageRequest;
 
@@ -41,13 +43,9 @@ public class ChatWebSocketEndpoint {
         }
     }
 
-    @OnError
-    public void onError(Session session, Throwable throwable) {
-        throwable.printStackTrace();
-    }
-
     private void sendMessage(Session session, MessageJSONRequest newMessageRequest) throws IOException {
-        Message newMessage = new Message(newMessageRequest.senderId,
+        int senderId = authenticationService.authenticate(newMessageRequest.senderToken);
+        Message newMessage = new Message(senderId,
                 newMessageRequest.receiverId,
                 newMessageRequest.content,
                 Timestamp.from(Instant.now()));
@@ -56,23 +54,25 @@ public class ChatWebSocketEndpoint {
 
         ObjectMapper messageMapper = new ObjectMapper();
         String messageJson = messageMapper.writeValueAsString(responseMsg);
-        for(Session s : session.getOpenSessions()
+        session.getOpenSessions()
                         .stream()
                         .filter((s -> messageRequestBelongsToUser(s, newMessageRequest)))
-                        .toList()) {
-            if(s.isOpen())
-                s.getAsyncRemote().sendText(messageJson);
-        }
+                        .forEach(s -> {
+                            if(s.isOpen())
+                                s.getAsyncRemote().sendText(messageJson);
+                        });
     }
 
     private boolean messageRequestBelongsToUser(Session s, MessageJSONRequest msgRequest) {
+        int senderId = authenticationService.authenticate(msgRequest.senderToken);
         int sessionUserId = (int) s.getUserProperties().get("userId");
         int sessionRecipientId = (int) s.getUserProperties().get("recipientId");
-        return (sessionUserId == msgRequest.senderId && sessionRecipientId == msgRequest.receiverId) ||
-                (sessionUserId == msgRequest.receiverId && sessionRecipientId == msgRequest.senderId);
+        return (sessionUserId == senderId && sessionRecipientId == msgRequest.receiverId) ||
+                (sessionUserId == msgRequest.receiverId && sessionRecipientId == senderId);
     }
     private void registerInfo(Session session, MessageJSONRequest message) {
-        session.getUserProperties().put("userId", message.senderId);
+        int userId = authenticationService.authenticate(String.valueOf(message.senderToken));
+        session.getUserProperties().put("userId", userId);
         session.getUserProperties().put("recipientId", message.receiverId);
     }
 }
