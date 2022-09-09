@@ -4,6 +4,7 @@
         <title>StartNewBand</title>
     </head>
 <body>
+    <%@include  file="nav.html" %>
     <form method="POST" action="/newBand">
         <label>Band name</label>
         <input type="text" name="bandName"/><br/>

@@ -20,6 +20,7 @@
     <title>Search</title>
 </head>
 <body>
+    <%@include  file="nav.html" %>
     <h1>Search</h1>
     <form action="/search">
         <input list="defaults" name="query">

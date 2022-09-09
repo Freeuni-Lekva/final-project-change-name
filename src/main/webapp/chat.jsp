@@ -27,6 +27,7 @@
         <script src="chat.js"></script>
     </head>
     <body>
+        <%@include  file="nav.html" %>
         <h1>Chat with <%=recipientUser.getFullName()%></h1>
         <form id="chat-input" method="post" onsubmit="sendMessage(); return false;">
             <input type="text" name="msg-text" id="msg-text"/>

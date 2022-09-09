@@ -14,7 +14,7 @@ public class SQLMessageDAO implements MessageDAO {
     public SQLMessageDAO() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot");
+                "jdbc:mysql://localhost/bandfinder?user=root&password=R00tR**t");
     }
 
     @Override

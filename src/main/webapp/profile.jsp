@@ -1,7 +1,9 @@
-<%@ page import="bandfinder.models.User" %>
-<%@ page import="bandfinder.infrastructure.AutoInjectable" %>
-<%@ page import="bandfinder.dao.UserDAO" %>
-<%@ page import="bandfinder.infrastructure.ServiceValueSetter" %>
+<%@ page import="bandfinder.models.*" %>
+<%@ page import="bandfinder.infrastructure.*" %>
+<%@ page import="bandfinder.dao.*" %>
+<%@ page import="bandfinder.services.*" %>
+<%@ page import="bandfinder.services.*" %>
+<%@ page import="java.util.*"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%!
   @AutoInjectable
@@ -10,15 +12,23 @@
   private TagDAO tagDAO;
   @AutoInjectable
   private FollowDAO followDAO;
+
+  private final AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
+  private User user;
 %>
 
 <%
-  if(request.getAttribute("following") == null){
-    request.getRequestDispatcher("LoadUserProfileServlet").forward(request, response);
-  }
-
   ServiceValueSetter.setAutoInjectableFieldValues(this);
-  User user = userDAO.getById(Integer.parseInt(request.getParameter("id")));
+  if(request.getParameter("id") == null){
+    String loginToken = (String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
+    int loggedInUserId = authenticationService.authenticate(loginToken);
+    user = userDAO.getById(loggedInUserId);
+  }else{
+    if(request.getAttribute("following") == null){
+      request.getRequestDispatcher("LoadUserProfileServlet").forward(request, response);
+    }
+    user = userDAO.getById(Integer.parseInt(request.getParameter("id")));
+  }
 %>
 <html>
   <head>
@@ -26,6 +36,7 @@
   </head>
 
   <body>
+    <%@include  file="nav.html" %>
     <ul style="list-style: none; margin: 0; padding: 0; display: inline-flex;">
       <li>
         <h1 style="margin: 0"><%= user.getStageName() %></h1>

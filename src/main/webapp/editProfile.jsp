@@ -31,6 +31,7 @@
     <title>Profile</title>
 </head>
 <body>
+        <%@include  file="nav.html" %>
     <form action="EditProfileServlet" method="post" id="user-info">
         <ul style="list-style-type: none">
             <li>
