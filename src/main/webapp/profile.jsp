@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="bandfinder.models.*" %>
 <%@ page import="bandfinder.infrastructure.*" %>
 <%@ page import="bandfinder.dao.*" %>
@@ -84,6 +85,8 @@
             }
         %>
     </ul>
+
+
     <c:if test="${loggedUser}">
       <c:choose>
         <c:when test="${sameUser}">
@@ -110,9 +113,10 @@
               </form>
             </c:when>
           </c:choose>
+
           <form action="/chat.jsp" method="get">
-              <input type="hidden" name="id" value="<%=user.getId()%>"/>
-              <input type="submit" value="Chat"/>
+            <input type="hidden" name="id" value="<%=user.getId()%>"/>
+            <input type="submit" value="Chat"/>
           </form>
         </c:when>
       </c:choose>
