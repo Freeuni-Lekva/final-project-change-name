@@ -1,6 +1,7 @@
 * {
     font-family: "Helvetica", sans-serif;
 }
+
 header {
     position: fixed;
     top: 0;
@@ -8,6 +9,40 @@ header {
     right: 0;
     height: 60px;
 }
+
+body {
+    padding-top: 60px;
+}
+
+button {
+    background-color: #EF5350;
+    border-radius: 128px;
+    border:none;
+    color: #FFF;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 8px 32px;
+    text-align: center;
+    transition: all 200ms;
+}
+
+input {
+    border-radius: 128px;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 8px 32px;
+    transition: all 200ms;
+}
+
+input[type=submit] {
+    background-color: #EF5350;
+    border:none;
+    color: #FFF;
+    font-weight: bold;
+    text-align: center;
+}
+
 .navMenu {
     background-color: #EF5350;
     position: sticky;
@@ -37,8 +72,11 @@ header {
     text-decoration: none;
 }
 
-body {
-    padding-top: 60px;
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border-radius: 10px;
+    padding: 16px 32px
 }
 
 .user_data_form{
@@ -147,4 +185,9 @@ body {
 .password-incorrect-message{
     color: darkred;
     margin-bottom: 5px;
+}
+
+.chat-thread {
+    width: 50%;
+    margin: auto;
 }
