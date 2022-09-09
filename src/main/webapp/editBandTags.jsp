@@ -77,8 +77,10 @@
         }
     </script>
 </head>
-<body>
+<header>
         <%@include  file="nav.html" %>
+</header>
+<body>
     <div id="tagsListModule">
         <%
             List<Integer> tagIds = tagDAO.getBandTagIDs(bandId);

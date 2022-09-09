@@ -27,8 +27,10 @@
 
     <title>Profile</title>
 </head>
+<header>
+    <%@include  file="nav.html" %>
+</header>
 <body>
-<%@include  file="nav.html" %>
     <form action="EditProfileServlet" method="post" id="user-info" class="user_data_form">
         <ul style="list-style-type: none" class="user_data">
             <li>

@@ -49,8 +49,11 @@
             }
         </script>
     </head>
-    <body>
+
+    <header>
         <%@include  file="nav.html" %>
+    </header>
+    <body>
         <h1><%=band.getName()%></h1>
 
         <ul>

@@ -3,8 +3,10 @@
     <head>
         <title>StartNewBand</title>
     </head>
-<body>
+<header>
     <%@include  file="nav.html" %>
+</header>
+<body>
     <form method="POST" action="/newBand">
         <label>Band name</label>
         <input type="text" name="bandName"/><br/>

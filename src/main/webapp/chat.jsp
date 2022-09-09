@@ -26,8 +26,10 @@
         </script>
         <script src="chat.js"></script>
     </head>
-    <body>
+    <header>
         <%@include  file="nav.html" %>
+    </header>
+    <body>
         <h1>Chat with <%=recipientUser.getFullName()%></h1>
         <form id="chat-input" method="post" onsubmit="sendMessage(); return false;">
             <input type="text" name="msg-text" id="msg-text"/>

@@ -16,8 +16,10 @@
     private BandDAO bandDAO;
 %>
 <html>
-    <body>
+    <header>
         <%@include  file="nav.html" %>
+    </header>
+    <body>
         <h3>Users:</h3>
         <ul>
             <%

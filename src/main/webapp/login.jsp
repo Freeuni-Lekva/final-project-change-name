@@ -3,6 +3,9 @@
     <head>
         <title>Login</title>
     </head>
+<header>
+    <%@include  file="nav.html" %>
+</header>
 <body>
     <a href="/register.jsp">Register</a>
     <form method="POST" action="/login">

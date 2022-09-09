@@ -73,8 +73,10 @@
         }
     </script>
 </head>
-<body>
+<header>
     <%@include  file="nav.html" %>
+</header>
+<body>
     <div id="membersListModule">
         <%
             List<Integer> memberIds = bandDAO.getBandMemberIDs(bandId);

@@ -19,8 +19,10 @@
 <head>
     <title>Search</title>
 </head>
-<body>
+<header>
     <%@include  file="nav.html" %>
+</header>
+<body>
     <h1>Search</h1>
     <form action="/search">
         <input list="defaults" name="query">

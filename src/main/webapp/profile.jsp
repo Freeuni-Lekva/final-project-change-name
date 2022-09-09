@@ -35,8 +35,10 @@
     <title><%= user.getStageName() %> | Profile</title>
   </head>
 
-  <body>
+  <header>
     <%@include  file="nav.html" %>
+  </header>
+  <body>
     <ul style="list-style: none; margin: 0; padding: 0; display: inline-flex;">
       <li>
         <h1 style="margin: 0"><%= user.getStageName() %></h1>
