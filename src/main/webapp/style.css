@@ -12,6 +12,7 @@ header {
 
 body {
     padding-top: 60px;
+    background-color: #FAF8F5;
 }
 
 button {
@@ -22,7 +23,7 @@ button {
     font-weight: bold;
     font-size: 14px;
     line-height: 20px;
-    padding: 8px 32px;
+    padding: 8px 48px;
     text-align: center;
     transition: all 200ms;
 }
@@ -31,7 +32,7 @@ input {
     border-radius: 128px;
     font-size: 14px;
     line-height: 20px;
-    padding: 8px 32px;
+    padding: 8px 48px;
     transition: all 200ms;
 }
 
