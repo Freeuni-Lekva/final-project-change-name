@@ -18,7 +18,7 @@ body {
 button {
     background-color: #EF5350;
     border-radius: 128px;
-    border:none;
+    border: none;
     color: #FFF;
     font-weight: bold;
     font-size: 14px;
@@ -38,7 +38,7 @@ input {
 
 input[type=submit] {
     background-color: #EF5350;
-    border:none;
+    border: none;
     color: #FFF;
     font-weight: bold;
     text-align: center;
@@ -98,8 +98,8 @@ input[type=submit] {
 .user_data li{
     padding-top: 5px;
     padding-bottom: 5px;
-    margin-top: 0px;
-    margin-bottom: 0px;
+    margin-top: 0;
+    margin-bottom: 0;
     border-style: solid;
     border-top-width: 1px;
     border-bottom-width: 1px;
@@ -192,4 +192,8 @@ input[type=submit] {
 .chat-thread {
     width: 50%;
     margin: auto;
+}
+
+.auth-container {
+
 }
