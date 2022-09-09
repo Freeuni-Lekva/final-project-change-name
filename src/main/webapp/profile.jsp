@@ -23,7 +23,10 @@
     String loginToken = (String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
     int loggedInUserId = authenticationService.authenticate(loginToken);
     user = userDAO.getById(loggedInUserId);
-  }else{
+    if(user != null) {
+      request.getRequestDispatcher("/profile.jsp?id=" + user.getId()).forward(request, response);
+    }
+  } else {
     if(request.getAttribute("following") == null){
       request.getRequestDispatcher("LoadUserProfileServlet").forward(request, response);
     }
@@ -41,89 +44,93 @@
     <%@include  file="nav.html" %>
   </header>
   <body>
-    <ul style="list-style: none; margin: 0; padding: 0; display: inline-flex;">
-      <li>
-        <h1 style="margin: 0"><%= user.getStageName() %></h1>
-      </li>
+    <div class="card">
+      <ul style="list-style: none; margin: 0; padding: 0; display: inline-flex;">
+        <li>
+          <h1 style="margin: 0"><%= user.getFullName() %></h1>
+        </li>
 
-      <li>
-          <ul style="list-style: none">
-            <li style="font-weight: bold">
-              Followers
-            </li>
-            <li>
-              <%
-                out.println(followDAO.getFollowerCount(user.getId()));
-              %>
-            </li>
-          </ul>
-      </li>
+        <li>
+            <ul style="list-style: none">
+              <li style="font-weight: bold">
+                Followers
+              </li>
+              <li>
+                <%
+                  out.println(followDAO.getFollowerCount(user.getId()));
+                %>
+              </li>
+            </ul>
+        </li>
 
-      <li>
-        <div>
-          <ul style="list-style: none">
-            <li style="font-weight: bold">
-              Following
-            </li>
-            <li>
-              <%
-                out.println(followDAO.getFolloweeCount(user.getId()));
-              %>
-            </li>
-          </ul>
-        </div>
-      </li>
-    </ul>
+        <li>
+          <div>
+            <ul style="list-style: none">
+              <li style="font-weight: bold">
+                Following
+              </li>
+              <li>
+                <%
+                  out.println(followDAO.getFolloweeCount(user.getId()));
+                %>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
 
-    <ul style="list-style: none">
-      <li>Name: <%= user.getFirstName() %></li>
-      <li>Surname: <%= user.getSurname() %></li>
-      <li>Email: <%= user.getEmail() %></li>
-    </ul>
-    <h2><small>Tags</small></h2>
-    <ul>
-        <%
-            ArrayList<Integer> tagIds = (ArrayList)tagDAO.getUserTagIDs(user.getId());
-            for(Integer tagId : tagIds){
-                out.println("<li>"+ tagDAO.getById(tagId).getName() +"</li>");
-            }
-        %>
-    </ul>
+      <ul style="list-style: none">
+        <li>Name: <%= user.getFirstName() %></li>
+        <li>Surname: <%= user.getSurname() %></li>
+        <li>Email: <%= user.getEmail() %></li>
+      </ul>
+      <h2><small>Tags</small></h2>
+      <ul>
+          <%
+              ArrayList<Integer> tagIds = (ArrayList<Integer>)tagDAO.getUserTagIDs(user.getId());
+              for(Integer tagId : tagIds){
+                  out.println("<li>"+ tagDAO.getById(tagId).getName() +"</li>");
+              }
+          %>
+      </ul>
 
 
-    <c:if test="${loggedUser}">
-      <c:choose>
-        <c:when test="${sameUser}">
-          <form action="editProfile.jsp" method="post" style="display: inline-flex; position: fixed; bottom: 3%; left: 2%">
-            <input type="submit" value="Edit Profile"/>
-          </form>
-          <form method="post" action=<%= "/editUserTags.jsp?userId=" + user.getId() %> >
-              <input type="submit" value="Edit tags"/>
-          </form>
-        </c:when>
-
-        <c:when test="${!sameUser}">
-          <c:choose>
-            <c:when test="${!following}">
-              <form action="FollowServlet" method="post">
-                <input type="submit" value="Follow"/>
-                <input type="hidden" name="user_id" value= <%= user.getId() %> />
+      <c:if test="${loggedUser}">
+        <c:choose>
+          <c:when test="${sameUser}">
+            <div>
+              <form method="post" action="editProfile.jsp" style="display:inline-block">
+                <input type="submit" value="Edit Profile"/>
               </form>
-            </c:when>
-            <c:when test="${following}">
-              <form action="UnfollowServlet" method="post">
-                <input type="submit" value="Unfollow"/>
-                <input type="hidden" name="user_id" value= <%= user.getId() %> />
+              <form method="post" action="<%= "/editUserTags.jsp?userId=" + user.getId() %>" style="display:inline-block">
+                  <input type="submit" value="Edit tags"/>
               </form>
-            </c:when>
-          </c:choose>
+            </div>
+          </c:when>
 
-          <form action="/chat.jsp" method="get">
-            <input type="hidden" name="id" value="<%=user.getId()%>"/>
-            <input type="submit" value="Chat"/>
-          </form>
-        </c:when>
-      </c:choose>
-    </c:if>
+          <c:when test="${!sameUser}">
+            <c:choose>
+              <c:when test="${!following}">
+                <form action="FollowServlet" method="post">
+                  <input type="submit" value="Follow"/>
+                  <input type="hidden" name="user_id" value= <%= user.getId() %> />
+                </form>
+              </c:when>
+              <c:when test="${following}">
+                <form action="UnfollowServlet" method="post">
+                  <input type="submit" value="Unfollow"/>
+                  <input type="hidden" name="user_id" value= <%= user.getId() %> />
+                </form>
+              </c:when>
+            </c:choose>
+
+            <form action="/chat.jsp" method="get">
+              <input type="hidden" name="id" value="<%=user.getId()%>"/>
+              <input type="submit" value="Chat"/>
+            </form>
+          </c:when>
+        </c:choose>
+      </c:if>
+    </div>
   </body>
 </html>
