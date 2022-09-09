@@ -7,7 +7,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-public class JWTAuthenticationService implements AuthenticationService {
+public class JWTAuthenticationServiceImpl implements AuthenticationService {
     @Override
     public int authenticate(String token) {
         if(token == null || token.isBlank()) {
