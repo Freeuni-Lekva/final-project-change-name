@@ -32,6 +32,7 @@
 <head>
     <link rel="icon" href="icon.png">
     <script src="userFeed.js"></script>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="feedStyle.css">
 
     <title>Newsfeed</title>
