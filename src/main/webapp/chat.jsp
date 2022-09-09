@@ -19,6 +19,7 @@
 <html>
     <head>
         <link rel="icon" href="icon.png">
+        <link rel="stylesheet" href="style.css">
         <title>Chat with <%=recipientUser.getFullName()%>></title>
         <script>
             const loginToken = "<%=loginToken%>";

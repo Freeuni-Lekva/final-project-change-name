@@ -17,9 +17,9 @@
 %>
 <html>
     <head>
+        <title>Bandfinder</title>
         <link rel="icon" href="icon.png">
         <link rel="stylesheet" href="style.css">
-        <title>Bandfinder</title>
     </head>
     <header>
         <%@include  file="nav.html" %>
