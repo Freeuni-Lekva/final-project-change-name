@@ -2,7 +2,6 @@
 <%@ page import="bandfinder.infrastructure.*" %>
 <%@ page import="bandfinder.dao.*" %>
 <%@ page import="bandfinder.services.*" %>
-<%@ page import="bandfinder.services.*" %>
 <%@ page import="java.util.*"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%!

@@ -1,12 +1,9 @@
-<%@ page import="bandfinder.infrastructure.AutoInjectable" %>
-<%@ page import="bandfinder.dao.UserDAO" %>
-<%@ page import="bandfinder.dao.PostDAO" %>
-<%@ page import="bandfinder.models.User" %>
-<%@ page import="bandfinder.models.Post" %>
-<%@ page import="java.util.List" %>
-<%@ page import="bandfinder.infrastructure.Injector" %>
-<%@ page import="bandfinder.dao.BandDAO" %>
-<%@ page import="bandfinder.models.Band" %><%--
+<%@ page import="bandfinder.models.*" %>
+<%@ page import="bandfinder.infrastructure.*" %>
+<%@ page import="bandfinder.dao.*" %>
+<%@ page import="bandfinder.services.*" %>
+<%@ page import="java.util.*"%>
+<%--
   Created by IntelliJ IDEA.
   User: LenovoIdeapadF5
   Date: 9/6/2022
@@ -21,10 +18,14 @@
     private PostDAO postDAO = Injector.getImplementation(PostDAO.class);
 %>
 
+<%!
+    private final AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
+    private User user;
+%>
 <%
-  User user = (User) session.getAttribute("user");
-  int userId = user.getId();
-  int lastPostFetchedId = -1;
+    String loginToken = (String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
+    int userId = authenticationService.authenticate(loginToken);
+    User user = userDAO.getById(userId);
 %>
 
 <html>
