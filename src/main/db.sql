@@ -114,6 +114,18 @@ CREATE TABLE IF NOT EXISTS messages
     PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS comments(
+    id INT AUTO_INCREMENT,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    content TEXT,
+    user_id INT,
+    post_id INT,
+    likes INT,
+    FOREIGN KEY (post_id) references posts(id),
+    FOREIGN KEY (user_id) references users(id),
+    PRIMARY KEY (id)
+);
+
 -- Handle tag updates
 DELIMITER //
 
