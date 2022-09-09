@@ -19,11 +19,8 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-
-<style>
-
-</style>
 <head>
+    <link rel="icon" href="icon.png">
     <title>Band Properties</title>
 
     <script>

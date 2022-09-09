@@ -31,6 +31,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link rel="icon" href="icon.png">
     <title>Manage tags</title>
 
     <script>

@@ -32,6 +32,7 @@
 %>
 <html>
   <head>
+        <link rel="icon" href="icon.png">
     <title><%= user.getStageName() %> | Profile</title>
   </head>
 

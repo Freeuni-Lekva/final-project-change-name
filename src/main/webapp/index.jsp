@@ -16,6 +16,11 @@
     private BandDAO bandDAO;
 %>
 <html>
+    <head>
+        <link rel="icon" href="icon.png">
+        <link rel="stylesheet" href="style.css">
+        <title>Bandfinder</title>
+    </head>
     <header>
         <%@include  file="nav.html" %>
     </header>

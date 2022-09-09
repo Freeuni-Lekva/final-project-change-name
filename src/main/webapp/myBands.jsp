@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
     <head>
+        <link rel="icon" href="icon.png">
         <title>My Bands</title>
     </head>
     <header>

@@ -7,7 +7,7 @@
 <%@ page import="bandfinder.infrastructure.Injector" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
+    <link rel="icon" href="icon.png">
     <link rel="stylesheet" href="style.css">
     <%!
         private AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);

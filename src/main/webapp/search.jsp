@@ -17,6 +17,7 @@
 %>
 <html>
 <head>
+        <link rel="icon" href="icon.png">
     <title>Search</title>
 </head>
 <header>
