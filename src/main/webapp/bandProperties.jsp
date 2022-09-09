@@ -73,6 +73,7 @@
     </script>
 </head>
 <body>
+    <%@include  file="nav.html" %>
     <div style="flex-direction: row" id="bandNameModule">
         <label>Band Name: </label>
         <label id="bandName"><%= band.getName() %></label>

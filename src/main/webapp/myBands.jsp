@@ -7,6 +7,8 @@
         <title>My Bands</title>
     </head>
     <body>
+        <%@include  file="nav.html" %>
+
         <h1> Your Bands </h1>
 
         <ul>

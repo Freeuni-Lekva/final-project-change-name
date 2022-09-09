@@ -50,6 +50,7 @@
         </script>
     </head>
     <body>
+        <%@include  file="nav.html" %>
         <h1><%=band.getName()%></h1>
 
         <ul>
