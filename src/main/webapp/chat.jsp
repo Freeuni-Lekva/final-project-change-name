@@ -32,13 +32,16 @@
         <%@include  file="nav.html" %>
     </header>
     <body>
-        <h1>Chat with <%=recipientUser.getFullName()%></h1>
-        <form id="chat-input" method="post" onsubmit="sendMessage(); return false;">
-            <input type="text" name="msg-text" id="msg-text"/>
-            <input type="submit" name="send-btn" id="send-btn"/>
-        </form>
-        <div id="messages">
+        <div class="card chat-thread">
+            <h1>Chat with <%=recipientUser.getFullName()%></h1>
+            <form id="chat-input" method="post" onsubmit="sendMessage(); return false;">
+                <input type="text" name="msg-text" id="msg-text"/>
+                <input type="submit" name="send-btn" id="send-btn"/>
+            </form>
+            <hr>
+            <div id="messages">
+            </div>
+            <button id="load" onclick="loadMore()">Load more...</button>
         </div>
-        <button id="load" onclick="loadMore()">Load more...</button>
     </body>
 </html>

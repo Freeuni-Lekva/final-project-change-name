@@ -18,8 +18,9 @@ function createMessageDiv(message) {
         newestMsgId = message.id;
     }
     messageDiv.setAttribute("id", message.id);
+    messageDiv.setAttribute("class", "msg");
     messageDiv.innerHTML =
-        "<b>" + message.senderName + "</b><br>" + message.content + " - <i>" + message.time +"</i><br><br>";
+        "<b class=\"msg-sender\">" + message.senderName + "</b><br>" + message.content + " - <i class=\"msg-time\">" + message.time +"</i><br><br>";
     return messageDiv;
 }
 
