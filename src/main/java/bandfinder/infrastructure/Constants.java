@@ -14,4 +14,9 @@ public interface Constants {
 
     // Attribute names
     String LOGIN_TOKEN_ATTRIBUTE_NAME = "login-token";
+
+    // URLs
+
+    String URL_JOIN_BAND_REQUEST = "/joinBandRequest";
+    String URL_BAND_PAGE = "/bandPage";
 }

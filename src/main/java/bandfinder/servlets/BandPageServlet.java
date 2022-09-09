@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name="bandPage", value="/bandPage")
+@WebServlet(name="bandPage", value=Constants.URL_BAND_PAGE)
 public class BandPageServlet extends ServletBase {
     @AutoInjectable
     private AuthenticationService authenticationService;
