@@ -30,7 +30,7 @@ public class FetchUserFeedPostsServlet extends ServletBase {
                                Integer authorBandId, String authorBandName,
                                String text, String date) {}
 
-    private static final int maxNumPostsToFetch = 2;
+    private static final int maxNumPostsToFetch = 5;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

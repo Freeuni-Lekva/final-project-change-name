@@ -1,13 +1,15 @@
-async function loadMorePosts(userId) {
+async function loadMorePosts() {
     let lastPostFetchedId = getLastPostFetchedId();
     let url = "/fetchUserFeedPosts?userId=" + userId;
     if(lastPostFetchedId !== null) url += "&lastPostFetchedId=" + lastPostFetchedId;
-    getPostsArray(url).then(displayPosts, console.log);
+    getPostsArray(url)
+        .then(displayPosts)
+        .catch((error) => { console.log(error);
+                            return Promise.resolve(0); });
 }
 
 function getLastPostFetchedId() {
-    let postsSection = document.getElementById("postsSection");
-    let lastPostFetched = postsSection.lastElementChild;
+    let lastPostFetched = document.getElementById("postsSection").lastElementChild;
     if(lastPostFetched == null) return null;
     return lastPostFetched.getAttribute("id");
 }
@@ -29,34 +31,44 @@ async function getPostsArray(url) {
 
 function displayPosts(posts) {
     if(posts === null) return;
-    if(posts.length === 0) noMorePostsToShow();
     posts.forEach(displayEachPost);
+    if(posts.length === 0 && document.getElementById("loadMoreButton") !== null)
+        deleteLoadMoreButton();
+    return Promise.resolve(posts.length);
 }
 
-function noMorePostsToShow() {
+function deleteLoadMoreButton() {
     document.getElementById("loadMoreButton").remove();
+    alert("No more posts to load!");
+}
+
+function createLoadMoreButton(loadedPostsNum) {
+    if(loadedPostsNum === 0) return;
+    let loadMoreButtonSection = document.createElement("div");
+    loadMoreButtonSection.setAttribute("class", "loadMoreButtonSection");
+    let loadMoreButton = document.createElement("button");
+    loadMoreButton.setAttribute("id", "loadMoreButton");
+    loadMoreButton.setAttribute("class", "loadMoreButton");
+    loadMoreButton.setAttribute("onclick", "loadMorePosts()");
+    loadMoreButton.innerHTML = "Load More";
+
+    loadMoreButtonSection.appendChild(loadMoreButton);
+    document.getElementById("userFeed").appendChild(loadMoreButtonSection);
 }
 
 function displayEachPost(post) {
-    let postsSection = document.getElementById("postsSection");
+    let postAuthor = post.authorBandId == null ? post.authorUserName : post.authorBandName;
+    let postText = post.text.replace(/&/g, "&amp")
+        .replace(/</g, "&lt")
+        .replace(/>/g, "&gt");
 
-    let newPostSection = document.createElement("div");
-    newPostSection.setAttribute("id", post.id);
-    newPostSection.setAttribute("class", "post");
-
-    let textSection = document.createElement("div");
-    textSection.setAttribute("class", "postText");
-    textSection.innerHTML = post.text.replace(/&/g, "&amp")
-        .replace(/</g, "&lt").replace(/>/g, "&gt");
-
-    let bandPropertiesSection = document.createElement("div");
-    bandPropertiesSection.setAttribute("class", "bandProperties");
-    bandPropertiesSection.innerHTML = post.authorUserName + " " + post.date;
-
-    newPostSection.appendChild(bandPropertiesSection);
-    newPostSection.appendChild(textSection);
-    postsSection.appendChild(newPostSection);
+    document.getElementById("postsSection").innerHTML +=   "<div class=\"post\" id=\"" + post.id + "\">" +
+                                "<h2 class=\"postAuthorName\">" + postAuthor + "</h2>" +
+                                "<h5 class=\"postDate\">" + post.date + "</h5>" +
+                                "<p class=\"postText\">" + postText + "</p>" +
+                                "</div>";
 }
+
 
 
 

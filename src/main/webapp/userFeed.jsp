@@ -16,11 +16,7 @@
     private UserDAO userDAO = Injector.getImplementation(UserDAO.class);
     private BandDAO bandDAO = Injector.getImplementation(BandDAO.class);
     private PostDAO postDAO = Injector.getImplementation(PostDAO.class);
-%>
-
-<%!
     private final AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
-    private User user;
 %>
 <%
     String loginToken = (String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
@@ -38,15 +34,14 @@
 <body>
     <h1 style="position: fixed" id="user"><%=user.getStageName()%></h1>
 
-    <div class="feed" id="feed">
+    <div class="userFeed" id="userFeed">
         <div class="postsSection" id="postsSection">
         </div>
-        <div style="text-align: center" id="loadMorePostsSection">
-            <button onclick="loadMorePosts(<%=userId%>)" id="loadMoreButton">Load More</button>
-        </div>
     </div>
+
     <script>
-        loadMorePosts(<%=userId%>);
+        const userId = <%=userId%>;
+        loadMorePosts().then(createLoadMoreButton);
     </script>
 </body>
 </html>

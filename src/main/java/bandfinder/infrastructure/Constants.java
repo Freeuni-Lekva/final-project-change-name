@@ -10,7 +10,7 @@ public interface Constants {
 
     // DB
     String JDBC_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-    String DB_URL = "jdbc:mysql://localhost/bandfinder?user=root&password=R00tR**t";
+    String DB_URL = "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot";
 
     // Attribute names
     String LOGIN_TOKEN_ATTRIBUTE_NAME = "login-token";
