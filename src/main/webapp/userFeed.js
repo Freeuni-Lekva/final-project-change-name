@@ -1,10 +1,8 @@
-async function loadPosts(userId) {
+async function loadMorePosts(userId) {
     let lastPostFetchedId = getLastPostFetchedId();
     let url = "/fetchUserFeedPosts?userId=" + userId;
-    if(lastPostFetchedId != null) url += "&lastPostFetchedId=" + lastPostFetchedId;
-    let posts = await getPostsArray(url);
-    if(posts == null) return;
-    posts.forEach(displayPost);
+    if(lastPostFetchedId !== null) url += "&lastPostFetchedId=" + lastPostFetchedId;
+    getPostsArray(url).then(displayPosts, console.log);
 }
 
 function getLastPostFetchedId() {
@@ -19,16 +17,27 @@ async function getPostsArray(url) {
         let response = await fetch(url);
         if(response.status !== 200) {
             console.log(response.status, response.statusText);
-            return null;
+            return Promise.resolve(null);
         }else {
             return response.json();
         }
     }catch(error) {
-        alert(error.message);
+        console.log(error);
+        return Promise.resolve(null);
     }
 }
 
-function displayPost(post) {
+function displayPosts(posts) {
+    if(posts === null) return;
+    if(posts.length === 0) noMorePostsToShow();
+    posts.forEach(displayEachPost);
+}
+
+function noMorePostsToShow() {
+    document.getElementById("loadMoreButton").remove();
+}
+
+function displayEachPost(post) {
     let postsSection = document.getElementById("postsSection");
 
     let newPostSection = document.createElement("div");
@@ -48,6 +57,8 @@ function displayPost(post) {
     newPostSection.appendChild(textSection);
     postsSection.appendChild(newPostSection);
 }
+
+
 
 
 

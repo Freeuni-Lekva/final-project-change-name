@@ -40,12 +40,12 @@
     <div class="feed" id="feed">
         <div class="postsSection" id="postsSection">
         </div>
-        <div id="loadMoreButtonSection">
-            <button onclick="loadPosts(<%=userId%>)">Load More</button>
+        <div style="text-align: center" id="loadMorePostsSection">
+            <button onclick="loadMorePosts(<%=userId%>)" id="loadMoreButton">Load More</button>
         </div>
     </div>
     <script>
-        loadPosts(<%=userId%>);
+        loadMorePosts(<%=userId%>);
     </script>
 </body>
 </html>
