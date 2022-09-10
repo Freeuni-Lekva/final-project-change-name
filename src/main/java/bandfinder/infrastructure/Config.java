@@ -14,7 +14,7 @@ public class Config {
         Injector.injectSingleton(SearchService.class, SimpleSearchServiceImpl.class);
         Injector.injectSingleton(TagAutoComplete.class, AllTagsAutocompleteServiceImpl.class);
         Injector.injectSingleton(UserAutoComplete.class, AllUsersAutocompleteServiceImpl.class);
-        Injector.injectSingleton(AuthenticationService.class, JWTAuthenticationService.class);
+        Injector.injectSingleton(AuthenticationService.class, JWTAuthenticationServiceImpl.class);
         Injector.injectSingleton(UserDAO.class, SQLUserDAO.class);
         Injector.injectSingleton(NotificationDAO.class, SQLNotificationDAO.class);
         Injector.injectSingleton(BandDAO.class, SQLBandDAO.class);

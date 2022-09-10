@@ -1,12 +1,15 @@
-async function loadMorePosts(userId) {
+async function loadPosts() {
+    let url = servletUrl + "?userId=" + userId;
+    if (bandId !== null) url += "&bandId=" + bandId;
     let lastPostFetchedId = getLastPostFetchedId();
-    let url = "/fetchUserFeedPosts?userId=" + userId;
-    if(lastPostFetchedId !== null) url += "&lastPostFetchedId=" + lastPostFetchedId;
-    getPostsArray(url).then(displayPosts, console.log);
+    if (lastPostFetchedId !== null) url += "&lastPostFetchedId=" + lastPostFetchedId;
+    return getPostsArray(url).then(displayPosts)
+                             .catch((error) => { alert(error);
+                                                 return Promise.resolve(0);
+                                                });
 }
 
 function getLastPostFetchedId() {
-    let postsSection = document.getElementById("postsSection");
     let lastPostFetched = postsSection.lastElementChild;
     if(lastPostFetched == null) return null;
     return lastPostFetched.getAttribute("id");
@@ -16,47 +19,72 @@ async function getPostsArray(url) {
     try {
         let response = await fetch(url);
         if(response.status !== 200) {
-            console.log(response.status, response.statusText);
+            alert("Error " + response.status + "\n" + response.statusText);
             return Promise.resolve(null);
         }else {
             return response.json();
         }
     }catch(error) {
-        console.log(error);
+        alert(error);
         return Promise.resolve(null);
     }
 }
 
 function displayPosts(posts) {
-    if(posts === null) return;
-    if(posts.length === 0) noMorePostsToShow();
+    if(posts === null) return Promise.resolve(0);
+
     posts.forEach(displayEachPost);
+    let loadMoreButton = document.getElementById("loadMoreButton");
+    if(posts.length === 0 && loadMoreButton !== null) {
+        loadMoreButton.remove();
+        showMessageInFeed("No more posts to show");
+    }
+    return Promise.resolve(posts.length);
 }
 
-function noMorePostsToShow() {
-    document.getElementById("loadMoreButton").remove();
+
+function checkLoadedPosts(loadedPostsNum) {
+    if(loadedPostsNum === 0) {
+        showMessageInFeed("No posts to show");
+    }else {
+        createLoadMoreButton();
+    }
 }
 
 function displayEachPost(post) {
-    let postsSection = document.getElementById("postsSection");
+    let postAuthor = post.authorBandId === null ? post.authorUserName : post.authorBandName;
+    let postText = post.text.replace(/&/g, "&amp")
+        .replace(/</g, "&lt")
+        .replace(/>/g, "&gt");
 
-    let newPostSection = document.createElement("div");
-    newPostSection.setAttribute("id", post.id);
-    newPostSection.setAttribute("class", "post");
-
-    let textSection = document.createElement("div");
-    textSection.setAttribute("class", "postText");
-    textSection.innerHTML = post.text.replace(/&/g, "&amp")
-        .replace(/</g, "&lt").replace(/>/g, "&gt");
-
-    let bandPropertiesSection = document.createElement("div");
-    bandPropertiesSection.setAttribute("class", "bandProperties");
-    bandPropertiesSection.innerHTML = post.authorUserName + " " + post.date;
-
-    newPostSection.appendChild(bandPropertiesSection);
-    newPostSection.appendChild(textSection);
-    postsSection.appendChild(newPostSection);
+    postsSection.innerHTML +=   "<div class=\"post\" id=\"" + post.id + "\">" +
+                                "<h2 class=\"postAuthorName\">" + postAuthor + "</h2>" +
+                                "<h5 class=\"postDate\">" + post.date + "</h5>" +
+                                "<p class=\"postText\">" + postText + "</p>" +
+                                "</div>";
 }
+
+function createLoadMoreButton() {
+    let loadMoreButtonSection = document.createElement("div");
+    loadMoreButtonSection.setAttribute("class", "loadMoreButtonSection");
+    let loadMoreButton = document.createElement("button");
+    loadMoreButton.setAttribute("id", "loadMoreButton");
+    loadMoreButton.setAttribute("class", "loadMoreButton");
+    loadMoreButton.setAttribute("onclick", "loadPosts()");
+    loadMoreButton.innerHTML = "Show More";
+
+    loadMoreButtonSection.appendChild(loadMoreButton);
+    feed.appendChild(loadMoreButtonSection);
+}
+
+function showMessageInFeed(message) {
+    feed.innerHTML += "<div class=\"noPostsLoaded\">" +
+        message +
+        "</div>";
+}
+
+
+
 
 
 
