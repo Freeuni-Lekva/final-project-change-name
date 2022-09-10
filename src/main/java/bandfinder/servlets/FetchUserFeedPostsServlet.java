@@ -5,6 +5,7 @@ import bandfinder.dao.PostDAO;
 import bandfinder.dao.UserDAO;
 import bandfinder.infrastructure.AutoInjectable;
 import bandfinder.infrastructure.Constants;
+import bandfinder.infrastructure.Injector;
 import bandfinder.models.Post;
 import bandfinder.models.PostWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,12 +20,7 @@ import java.util.List;
 @WebServlet(name = "FetchUserFeedPostsServlet", value = "/fetchUserFeedPosts")
 public class FetchUserFeedPostsServlet extends ServletBase {
 
-    @AutoInjectable
-    private PostDAO postDAO;
-    @AutoInjectable
-    private UserDAO userDAO;
-    @AutoInjectable
-    private BandDAO bandDAO;
+    private final PostDAO postDAO = Injector.getImplementation(PostDAO.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

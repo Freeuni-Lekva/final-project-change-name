@@ -32,18 +32,20 @@
     <title>Newsfeed</title>
 </head>
 <body>
-    <h1 style="position: fixed" id="user"><%=user.getStageName()%></h1>
+    <h1 style="position: fixed"><%=user.getStageName()%></h1>
 
-    <div class="userFeed" id="userFeed">
+    <div class="feed" id="feed">
         <div class="postsSection" id="postsSection">
         </div>
     </div>
 
     <script>
+        const feed = document.getElementById("feed");
+        const postsSection = document.getElementById("postsSection");
         const userId = <%=userId%>;
         const bandId = null;
         const servletUrl = "/fetchUserFeedPosts";
-        loadMorePosts().then(createLoadMoreButton);
+        loadPosts().then(checkLoadedPosts);
     </script>
 </body>
 </html>

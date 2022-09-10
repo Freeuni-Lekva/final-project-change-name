@@ -1,4 +1,4 @@
-.userFeed {
+.feed {
     margin: auto;
     width: 450px;
     min-height: 100%;
@@ -52,4 +52,11 @@
 
 .postDate {
     font-size: 10px;
+}
+
+.noPostsLoaded {
+    font-size: 12px;
+    text-align: center;
+    color: White;
+    margin-bottom: 10px;
 }
