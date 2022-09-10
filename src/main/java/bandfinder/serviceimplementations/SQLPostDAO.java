@@ -136,8 +136,10 @@ public class SQLPostDAO implements PostDAO {
                ((SELECT p.* FROM posts p JOIN follows uf 
                ON p.author_user=uf.followee WHERE uf.follower=?)
                UNION
-               (SELECT p.* FROM posts p JOIN band_users bu
-               ON p.author_user=bu.user_id)) fp
+               (SELECT p.* FROM posts p JOIN (SELECT band_id FROM band_users WHERE user_id=?) ub
+                ON p.author_band=ub.band_id)
+                UNION
+                (SELECT * FROM posts WHERE author_user=?)) fp
                WHERE fp.id<? ORDER BY fp.id DESC LIMIT ?;
                                                  """;
 
@@ -146,8 +148,10 @@ public class SQLPostDAO implements PostDAO {
         try {
             PreparedStatement statement = connection.prepareStatement(FEED_POSTS_1);
             statement.setInt(1, userId);
-            statement.setInt(2, lastPostFetchedId);
-            statement.setInt(3, numPosts);
+            statement.setInt(2, userId);
+            statement.setInt(3, userId);
+            statement.setInt(4, lastPostFetchedId);
+            statement.setInt(5, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> feedPosts = createPostsFromResultSet(rs);
             statement.close();
