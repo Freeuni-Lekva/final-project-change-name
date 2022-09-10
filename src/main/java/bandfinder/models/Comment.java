@@ -76,4 +76,36 @@ public class Comment {
     public void setLikes(int likes) {
         this.likes = likes;
     }
+
+    public static class CommentDisplay{
+        private String username;
+        private String date;
+        private String text;
+
+        public String getUsername() {
+            return username;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public int getLikes() {
+            return likes;
+        }
+
+        private int likes;
+
+        public CommentDisplay(String username, String date, String text, int likes) {
+            this.username = username;
+            this.date = date;
+            this.text = text;
+            this.likes = likes;
+        }
+
+    }
 }

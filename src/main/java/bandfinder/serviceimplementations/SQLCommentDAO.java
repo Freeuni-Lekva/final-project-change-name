@@ -14,28 +14,24 @@ public class SQLCommentDAO implements CommentDAO{
     public SQLCommentDAO() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost/bandfinder?user=root&password=R00tR**t");
+                "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot");
     }
 
-    private static String QUERY_PRIORITY_LIKES=
+    private static final String QUERY_PRIORITY =
             "SELECT * FROM comments WHERE post_id = ? " +
                     "ORDER BY CASE " +
                         "WHEN user_id = ? THEN 1 " +
-                        "ELSE 2 END asc, likes desc ";
+                        "ELSE 2 END asc, ";
     @Override
     public List<Comment> getCommentBatchPriorityLikes(int postId, int userId, int limit, int offset) {
-        QUERY_PRIORITY_LIKES = QUERY_PRIORITY_LIKES + "LIMIT = " + limit + " OFFSET = " + offset + ";";
+        String QUERY_PRIORITY_LIKES = QUERY_PRIORITY + "likes desc " + "LIMIT " + limit + " OFFSET " + offset + ";";
         return getBatch(QUERY_PRIORITY_LIKES, postId, userId);
     }
 
 
-    private static String QUERY_PRIORITY_DATE =
-            "SELECT * FROM comments WHERE post_id = ? ORDER BY CASE " +
-                                                "WHEN user_id = ? THEN 1 " +
-                                                "ELSE 2 END asc, date asc ";
     @Override
     public List<Comment> getCommentBatchPriorityDate(int postId, int userId, int limit, int offset) {
-        QUERY_PRIORITY_DATE = QUERY_PRIORITY_DATE + "LIMIT = " + limit + " OFFSET = " + offset + ";";
+        String QUERY_PRIORITY_DATE = QUERY_PRIORITY + "date desc " + "LIMIT " + limit + " OFFSET " + offset + ";";
         return getBatch(QUERY_PRIORITY_DATE, postId, userId);
     }
 
