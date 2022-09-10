@@ -16,7 +16,7 @@
     @AutoInjectable
     private BandDAO bandDAO;
     @AutoInjectable
-    private RequestDAO requestDAO;
+    private InvitationDAO invitationDAO;
 
   private final AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
   private User user;
@@ -135,20 +135,18 @@
                         List<Integer> bandIds = bandDAO.getAllBandIDsForUser(inviterId);
                         for(Integer bandId: bandIds){
                             Band band = bandDAO.getById(bandId);
-                            if(!bandDAO.isUserInBand(targetId,bandId)){
-
-                                out.println("<option value=\""+band.getId()+"\" />");
+                            if(bandDAO.isUserInBand(targetId,bandId)){
+                                out.println("<option value=\""+band.getId()+"\" disabled>"+ band.getName() +" - already in band </option>");
+                            }else{
+                                int invitationId = invitationDAO.getId(targetId,bandId);
+                                if(invitationId==Constants.NO_ID || invitationDAO.getById(invitationId).isProcessed()){
+                                    out.println("<option value=\""+band.getId()+"\">"+ band.getName() +"</option>");
+                                }else{
+                                    out.println("<option value=\""+band.getId()+"\" disabled>"+ band.getName() +" - invitation pending </option>");
+                                }
                             }
                         }
                     %>
-                  <option value="javascript">JavaScript</option>
-                  <option value="php">PHP</option>
-                  <option value="java">Java</option>
-                  <option value="golang">Golang</option>
-                  <option value="python">Python</option>
-                  <option value="c#">C#</option>
-                  <option value="C++">C++</option>
-                  <option value="erlang">Erlang</option>
                 </select>
                 <input type="submit" value="Submit" />
                 <input type="hidden" name="targetId" id="targetIdContainer" value=<%= targetId %>>
