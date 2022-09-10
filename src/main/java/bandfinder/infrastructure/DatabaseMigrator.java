@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 public class DatabaseMigrator {
     private static final String CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost?user=root&password=rootroot";
+    private static final String URL = "jdbc:mysql://localhost?user=root&password=R00tR**t";
 
     public static void migrate() {
         try {
