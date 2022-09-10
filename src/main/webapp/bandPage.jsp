@@ -88,11 +88,16 @@
         </div>
         </c:if>
 
-        <c:if test="${!extra_display}">
+        <c:if test="${!extra_display && !isPending}">
             <div>
                 <form method="post" action=<%= Constants.URL_JOIN_BAND_REQUEST+"?bandId=" + id %>>
                     <button>Send join request</button>
                 </form>
+            </div>
+        </c:if>
+        <c:if test="${isPending}">
+            <div>
+                <button>Join request pending...</button>
             </div>
         </c:if>
     </body>

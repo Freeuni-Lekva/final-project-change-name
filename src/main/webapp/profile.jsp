@@ -13,6 +13,11 @@
   @AutoInjectable
   private FollowDAO followDAO;
 
+    @AutoInjectable
+    private BandDAO bandDAO;
+    @AutoInjectable
+    private RequestDAO requestDAO;
+
   private final AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
   private User user;
 %>
@@ -118,6 +123,37 @@
             <input type="hidden" name="id" value="<%=user.getId()%>"/>
             <input type="submit" value="Chat"/>
           </form>
+
+           <form action="/inviteMember.jsp" method="POST">
+                <label for="info">Invite member to your band</label>
+                <select name="bands" id="info" multiple>
+
+                    <%
+                        String loginToken = (String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
+                        int inviterId = authenticationService.authenticate(loginToken);
+                        int targetId = user.getId();
+                        List<Integer> bandIds = bandDAO.getAllBandIDsForUser(inviterId);
+                        for(Integer bandId: bandIds){
+                            Band band = bandDAO.getById(bandId);
+                            if(!bandDAO.isUserInBand(targetId,bandId)){
+
+                                out.println("<option value=\""+band.getId()+"\" />");
+                            }
+                        }
+                    %>
+                  <option value="javascript">JavaScript</option>
+                  <option value="php">PHP</option>
+                  <option value="java">Java</option>
+                  <option value="golang">Golang</option>
+                  <option value="python">Python</option>
+                  <option value="c#">C#</option>
+                  <option value="C++">C++</option>
+                  <option value="erlang">Erlang</option>
+                </select>
+                <input type="submit" value="Submit" />
+                <input type="hidden" name="targetId" id="targetIdContainer" value=<%= targetId %>>
+          </form>
+
         </c:when>
       </c:choose>
     </c:if>
