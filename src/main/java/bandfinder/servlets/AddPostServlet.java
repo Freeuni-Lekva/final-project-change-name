@@ -27,8 +27,18 @@ public class AddPostServlet extends ServletBase {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int userId = authenticationService.authenticate((String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME));
         String postContent = request.getParameter("post-content");
+
+        String postType = request.getParameter("post-type");
         if(!postContent.isBlank()) {
-            Post newPost = new Post(userId, null, postContent, new Timestamp(System.currentTimeMillis()));
+            Post newPost;
+            if(postType.equals("user")) {
+                newPost = new Post(userId, null, postContent, new Timestamp(System.currentTimeMillis()));
+            } else if (postType.equals("band")){
+                int authorBandId = Integer.parseInt(request.getParameter("band-id"));
+                newPost = new Post(userId, authorBandId, postContent, new Timestamp(System.currentTimeMillis()));
+            } else {
+                throw new RuntimeException("No valid \"post-type\" parameter.");
+            }
             postDAO.create(newPost);
         }
         request.getRequestDispatcher("/userFeed.jsp").forward(request, response);

@@ -104,6 +104,15 @@
 
     </div>
 
+    <div class="card">
+        <form method="post" action="/addPost" name="Add Post">
+            <input type="hidden" name="post-type" value="band">
+            <input type="hidden" name="band-id" value="<%=id%>">
+            <input name="post-content">
+            <input type="submit" value="Add Post">
+        </form>
+    </div>
+
     <%------------FEED-----------%>
     <div class="feed" id="feed">
         <div class="postsSection" id="postsSection">
