@@ -1,36 +1,62 @@
-body {
-    overflow-y: scroll;
-}
-
 .feed {
     margin: auto;
-    width: 500px;
+    width: 450px;
     min-height: 100%;
-    background-color: Black;
-    border: 1px solid Purple;
-    border-radius: 12px;
-    padding: 20px;
+    background-color: #404040;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: Verdana, sans-serif;
 }
 
-.postsSection {}
+.postsSection {
+    margin-top: 10px;
+    margin-left: 5px;
+    width: 400px;
+}
 
 .post {
-    margin: 10px auto;
-    width: 450px;
-    background-color: LightGray;
-    border: 1px solid Purple;
-    border-radius: 12px;
-    padding: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    background-color: White;
+    padding: 15px;
+    border-left: 5px solid Black;
+    border-radius: 5px;
 }
+
+.loadMoreButtonSection {
+    text-align: center;
+}
+
+.loadMoreButton {
+    background-color: DimGray;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    border-radius:5px
+}
+
+.loadMoreButton:hover {
+    background-color: lightgray;
+}
+
+.postAuthorName {
+    font-size: 20px;
+}
+
 .postText {
-    margin: auto;
-    width: 400px;
-    word-wrap: break-word;
+    font-size: 15px;
 }
 
-.postProperties {
-    display: inline;
+.postDate {
+    font-size: 10px;
 }
 
-
-
+.noPostsLoaded {
+    font-size: 12px;
+    text-align: center;
+    color: White;
+    margin-bottom: 10px;
+}
