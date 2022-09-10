@@ -1,11 +1,19 @@
-async function loadMorePosts() {
-    let lastPostFetchedId = getLastPostFetchedId();
-    let url = "/fetchUserFeedPosts?userId=" + userId;
-    if(lastPostFetchedId !== null) url += "&lastPostFetchedId=" + lastPostFetchedId;
+async function loadMorePosts(userId, bandId, postsType) {
+    let url = getUrl(userId, bandId, postsType);
     getPostsArray(url)
         .then(displayPosts)
         .catch((error) => { console.log(error);
                             return Promise.resolve(0); });
+}
+
+function getUrl(userId, bandId, postsType) {
+    if(postsType === null) return;
+    if(userId === null) return;
+    let url = "/fetchPosts?postsType=" + postsType + "&userId=" + userId;
+    if(bandId !== null) url += "&bandId=" + bandId;
+    let lastPostFetchedId = getLastPostFetchedId();
+    if(lastPostFetchedId !== null) url += "&lastPostFetchedId=" + lastPostFetchedId;
+    return url;
 }
 
 function getLastPostFetchedId() {

@@ -40,8 +40,8 @@
     </div>
 
     <script>
-        const userId = <%=userId%>;
-        loadMorePosts().then(createLoadMoreButton);
+        loadMorePosts(<%=userId%>, null, <%=Constants.USER_FEED_POSTS%>)
+            .then(createLoadMoreButton);
     </script>
 </body>
 </html>
