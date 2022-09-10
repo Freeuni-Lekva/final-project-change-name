@@ -3,11 +3,29 @@ let numComments = 0
 
 let postId = document.getElementById("post_id").getAttribute('value')
 
+let sort_type = "sort_by_likes"
+
+let limit_reached = false
+
 addEventListener('load', (event) => fetchComments(true));
 
 function noMoreComments(){
     let fetch_button = document.getElementById('fetch-button')
-    fetch_button.remove()
+    fetch_button.style.visibility = 'hidden'
+    limit_reached = true
+}
+
+function changeSortType(combo){
+    sort_type = combo.value
+
+    numComments = 0
+    document.getElementById('comment-section').innerHTML = ''
+
+    limit_reached = false
+    let fetch_button = document.getElementById('fetch-button')
+    fetch_button.style.visibility = 'visible'
+
+    fetchComments()
 }
 
 function displayComment(comment){
@@ -44,7 +62,6 @@ function displayComment(comment){
     com_section.appendChild(new_com)
 
     numComments++;
-    console.log(numComments)
 }
 
 function convertToDisplay(arr){
@@ -56,8 +73,6 @@ function convertToDisplay(arr){
 }
 
 function fetchComments(){
-    let sort_type = 'sort_by_likes'
-
     fetch("/LoadMoreComments?post_id=" + postId + "&num_comments=" + numComments + "&sort_type=" + sort_type)
         .then(response => response.json())
         .then(arr => convertToDisplay(arr)).catch(x => console.log(x))
@@ -67,7 +82,7 @@ function postComment(){
     let text_content = document.getElementById("text-content").value
     document.getElementById("text-content").value = ""
 
-    if(!validateText(text_content)){
+    if(!validateAndSecureText(text_content)){
         return
     }
 
@@ -81,10 +96,14 @@ function postComment(){
     }).then(x => x.json()).then(displayComment)
 }
 
-function validateText(text){
+function validateAndSecureText(text){
     if(text === ""){
         return false
     }
+
+    text.replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 
     return true
 }

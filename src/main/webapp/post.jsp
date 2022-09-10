@@ -18,6 +18,10 @@
     </div>
 
     <div>
+        <select id="select-sort-type" onchange="changeSortType(this)">
+            <option value="sort_by_likes">Most liked</option>
+            <option value="sort_by_date">Newest first</option>
+        </select>
         <div id="comment-section" class="comment-section"></div>
         <button id="fetch-button" type="button" onmouseup="fetchComments()">Load More</button>
     </div>
