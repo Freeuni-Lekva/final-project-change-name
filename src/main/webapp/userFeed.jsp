@@ -26,10 +26,10 @@
 
 <html>
 <head>
+    <script src="feed.js"></script>
     <link rel="icon" href="icon.png">
-    <script src="userFeed.js"></script>
+    <script src="feed.js"></script>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="feedStyle.css">
 
     <title>Newsfeed</title>
 </head>
@@ -37,20 +37,21 @@
     <%@include  file="nav.html" %>
 </header>
 <body>
-    <h1 style="position: fixed"><%=user.getStageName()%></h1>
-
+    <h1 style="position: fixed"><%=user.getFullName()%></h1>
+    <%------FEED---------%>
     <div class="feed" id="feed">
         <div class="postsSection" id="postsSection">
         </div>
     </div>
-
     <script>
         const feed = document.getElementById("feed");
         const postsSection = document.getElementById("postsSection");
+        const postsToFetchMaxNum = 5;
         const userId = <%=userId%>;
         const bandId = null;
-        const servletUrl = "/fetchBandPosts";
+        const servletUrl = "/fetchUserFeedPosts";
         loadPosts().then(checkLoadedPosts);
     </script>
+    <%-------FEED--------%>
 </body>
 </html>
