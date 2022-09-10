@@ -40,8 +40,10 @@
     </div>
 
     <script>
-        loadMorePosts(<%=userId%>, null, <%=Constants.USER_FEED_POSTS%>)
-            .then(createLoadMoreButton);
+        const userId = <%=userId%>;
+        const bandId = null;
+        const servletUrl = "/fetchUserFeedPosts";
+        loadMorePosts().then(createLoadMoreButton);
     </script>
 </body>
 </html>

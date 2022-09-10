@@ -16,8 +16,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "FetchUserFeedPostsServlet", value = "/fetchUserFeedPosts")
-public class FetchUserFeedPostsServlet extends ServletBase {
+
+@WebServlet(name = "FetchBandPostsServlet", value = "/fetchBandPosts")
+public class FetchBandPostsServlet extends HttpServlet {
 
     @AutoInjectable
     private PostDAO postDAO;
@@ -28,8 +29,8 @@ public class FetchUserFeedPostsServlet extends ServletBase {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        List<Post> posts = getUserFeedPostsFromDatabase(userId, request);
+        int bandId = Integer.parseInt(request.getParameter("bandId"));
+        List<Post> posts = getBandPostsFromDatabase(bandId, request);
         List<PostWrapper> wrappedPosts = PostWrapper.wrapPosts(posts);
 
         response.setContentType("application/json");
@@ -39,13 +40,13 @@ public class FetchUserFeedPostsServlet extends ServletBase {
         objectMapper.writeValue(out, wrappedPosts);
     }
 
-    private List<Post> getUserFeedPostsFromDatabase(int userId, HttpServletRequest request) {
+    private List<Post> getBandPostsFromDatabase(int bandId, HttpServletRequest request) {
         List<Post> posts;
         if(request.getParameter("lastPostFetchedId") == null) {
-            posts = postDAO.getUserFeedNewestPosts(userId, Constants.POSTS_TO_FETCH_MAX_NUM);
+            posts = postDAO.getBandNewestPosts(bandId, Constants.POSTS_TO_FETCH_MAX_NUM);
         }else {
             int lastPostFetchedId = Integer.parseInt(request.getParameter("lastPostFetchedId"));
-            posts = postDAO.getUserFeedPostsBeforeId(userId, lastPostFetchedId, Constants.POSTS_TO_FETCH_MAX_NUM);
+            posts = postDAO.getBandPostsBeforeId(bandId, lastPostFetchedId, Constants.POSTS_TO_FETCH_MAX_NUM);
         }
         return posts;
     }

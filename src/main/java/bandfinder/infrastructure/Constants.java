@@ -14,4 +14,6 @@ public interface Constants {
 
     // Attribute names
     String LOGIN_TOKEN_ATTRIBUTE_NAME = "login-token";
+
+    int POSTS_TO_FETCH_MAX_NUM = 5;
 }

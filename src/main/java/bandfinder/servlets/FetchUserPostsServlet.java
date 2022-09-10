@@ -1,8 +1,6 @@
 package bandfinder.servlets;
 
-import bandfinder.dao.BandDAO;
 import bandfinder.dao.PostDAO;
-import bandfinder.dao.UserDAO;
 import bandfinder.infrastructure.AutoInjectable;
 import bandfinder.infrastructure.Constants;
 import bandfinder.models.Post;
@@ -16,20 +14,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "FetchUserFeedPostsServlet", value = "/fetchUserFeedPosts")
-public class FetchUserFeedPostsServlet extends ServletBase {
+@WebServlet(name = "FetchUserPostsServlet", value = "/fetchUserPosts")
+public class FetchUserPostsServlet extends HttpServlet {
 
     @AutoInjectable
     private PostDAO postDAO;
-    @AutoInjectable
-    private UserDAO userDAO;
-    @AutoInjectable
-    private BandDAO bandDAO;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int userId = Integer.parseInt(request.getParameter("userId"));
-        List<Post> posts = getUserFeedPostsFromDatabase(userId, request);
+        List<Post> posts = getUserPostsFromDatabase(userId, request);
         List<PostWrapper> wrappedPosts = PostWrapper.wrapPosts(posts);
 
         response.setContentType("application/json");
@@ -39,13 +33,13 @@ public class FetchUserFeedPostsServlet extends ServletBase {
         objectMapper.writeValue(out, wrappedPosts);
     }
 
-    private List<Post> getUserFeedPostsFromDatabase(int userId, HttpServletRequest request) {
+    private List<Post> getUserPostsFromDatabase(int userId, HttpServletRequest request) {
         List<Post> posts;
         if(request.getParameter("lastPostFetchedId") == null) {
-            posts = postDAO.getUserFeedNewestPosts(userId, Constants.POSTS_TO_FETCH_MAX_NUM);
+            posts = postDAO.getUserNewestPosts(userId, Constants.POSTS_TO_FETCH_MAX_NUM);
         }else {
             int lastPostFetchedId = Integer.parseInt(request.getParameter("lastPostFetchedId"));
-            posts = postDAO.getUserFeedPostsBeforeId(userId, lastPostFetchedId, Constants.POSTS_TO_FETCH_MAX_NUM);
+            posts = postDAO.getUserPostsBeforeId(userId, lastPostFetchedId, Constants.POSTS_TO_FETCH_MAX_NUM);
         }
         return posts;
     }
