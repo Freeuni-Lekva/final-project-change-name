@@ -41,8 +41,9 @@
     <div class="feed" id="feed">
         <div class="card" id="add-post-section">
             <form method="post" action="/addPost" name="Add Post">
+                <input type="hidden" name="post-type" value="user">
                 <input name="post-content">
-                <input type="submit">
+                <input type="submit" value="Add Post">
             </form>
         </div>
         <div class="postsSection" id="postsSection">
