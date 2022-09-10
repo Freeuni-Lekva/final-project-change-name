@@ -12,9 +12,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseMigrator {
-    private static final String CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost?user=root&password=rootroot";
-
     public static void migrate() {
         try {
             Class.forName(Constants.JDBC_CLASS_NAME);
