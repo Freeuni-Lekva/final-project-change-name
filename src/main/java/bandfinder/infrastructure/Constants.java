@@ -15,5 +15,13 @@ public interface Constants {
     // Attribute names
     String LOGIN_TOKEN_ATTRIBUTE_NAME = "login-token";
 
+    // URLs
+
+    String URL_JOIN_BAND_REQUEST = "/joinBandRequest";
+    String URL_BAND_PAGE = "/bandPage";
+    String URL_RESPONSE_TO_JOIN_BAND_REQUEST = "/responseToJoinBandRequest";
+    String URL_INVITE_MEMBER_TO_BAND_REQUEST = "/InviteMemberToBandServlet";
+    String URL_RESPONSE_TO_INVITATION = "/ResponseToInvitationServlet";
+
     int POSTS_TO_FETCH_MAX_NUM = 5;
 }

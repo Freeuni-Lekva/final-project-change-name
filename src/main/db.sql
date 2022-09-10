@@ -1,3 +1,4 @@
+
 -- Init table
 CREATE DATABASE IF NOT EXISTS bandfinder;
 USE bandfinder;
@@ -23,6 +24,28 @@ CREATE TABLE IF NOT EXISTS bands
     num_members INT,
     PRIMARY KEY (id),
     FULLTEXT(name, tags_string)
+);
+
+CREATE TABLE IF NOT EXISTS requests
+(
+    id INT AUTO_INCREMENT,
+    userId INT,
+    bandId INT,
+    isProcessed BOOLEAN,
+    PRIMARY KEY (id),
+    FOREIGN KEY (userId) references users(id),
+    FOREIGN KEY (bandId) references bands(id)
+);
+
+CREATE TABLE IF NOT EXISTS invitations
+(
+    id INT AUTO_INCREMENT,
+    userId INT,
+    bandId INT,
+    isProcessed BOOLEAN,
+    PRIMARY KEY (id),
+    FOREIGN KEY (userId) references users(id),
+    FOREIGN KEY (bandId) references bands(id)
 );
 
 CREATE TABLE IF NOT EXISTS band_users

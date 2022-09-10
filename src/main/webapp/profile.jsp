@@ -13,6 +13,11 @@
   @AutoInjectable
   private FollowDAO followDAO;
 
+    @AutoInjectable
+    private BandDAO bandDAO;
+    @AutoInjectable
+    private InvitationDAO invitationDAO;
+
   private final AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
   private User user;
 %>
@@ -149,5 +154,43 @@
     </script>
     <%------------FEED-----------%>
 
+
+          <form action="/chat.jsp" method="get">
+            <input type="hidden" name="id" value="<%=user.getId()%>"/>
+            <input type="submit" value="Chat"/>
+          </form>
+
+           <form action="InviteMemberToBandServlet" method="POST">
+                <label for="info">Invite member to your band</label>
+                <select name="bandId" id="info" multiple>
+
+                    <%
+                        String loginToken = (String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
+                        int inviterId = authenticationService.authenticate(loginToken);
+                        int targetId = user.getId();
+                        List<Integer> bandIds = bandDAO.getAllBandIDsForUser(inviterId);
+                        for(Integer bandId: bandIds){
+                            Band band = bandDAO.getById(bandId);
+                            if(bandDAO.isUserInBand(targetId,bandId)){
+                                out.println("<option value=\""+band.getId()+"\">"+ band.getName() +" [already in band] </option>");
+                            }else{
+                                int invitationId = invitationDAO.getId(targetId,bandId);
+                                if(invitationId==Constants.NO_ID || invitationDAO.getById(invitationId).isProcessed()){
+                                    out.println("<option value=\""+band.getId()+"\">"+ band.getName() +"</option>");
+                                }else{
+                                    out.println("<option value=\""+band.getId()+"\">"+ band.getName() +" [invitation pending] </option>");
+                                }
+                            }
+                        }
+                    %>
+                </select>
+                <input type="submit" value="Submit" />
+                <input type="hidden" name="targetId" id="targetIdContainer" value=<%= targetId %>>
+          </form>
+
+        </c:when>
+      </c:choose>
+    </c:if>
+    
   </body>
 </html>
