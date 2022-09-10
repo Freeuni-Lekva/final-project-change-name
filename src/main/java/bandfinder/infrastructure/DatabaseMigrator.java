@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseMigrator {
+
     public static void migrate() {
         try {
             Class.forName(Constants.JDBC_CLASS_NAME);

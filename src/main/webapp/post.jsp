@@ -1,0 +1,58 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="bandfinder.services.AuthenticationService" %>
+<%@ page import="bandfinder.infrastructure.Constants" %>
+<%@ page import="bandfinder.infrastructure.Injector" %>
+<%@ page import="bandfinder.infrastructure.ServiceValueSetter" %>
+<%@ page import="bandfinder.dao.PostDAO" %>
+<%@ page import="bandfinder.models.Post" %>
+<%@ page import="bandfinder.dao.UserDAO" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <%
+        int post_id = -1;
+        try {
+            post_id = Integer.valueOf(request.getParameter("post_id"));
+        }
+        catch (NumberFormatException e){
+            response.sendRedirect("errorPage.html");
+        }
+
+        if(request.getAttribute("servlet_loaded") == null){
+            request.getRequestDispatcher("/comments?post_id=" + post_id);
+        }
+
+        PostDAO postDAO = Injector.getImplementation(PostDAO.class);
+        UserDAO userDAO = Injector.getImplementation(UserDAO.class);
+        Post post = postDAO.getById(post_id);
+    %>
+    <title>comments</title>
+</head>
+<body>
+    <input type="hidden" id="post_id" value= <%= post_id %> />
+
+    <div class="post-section">
+        <h1> Author: <%= userDAO.getById(post.getAuthorUser()).getStageName() %> </h1>
+        <p> Date posted: <%= post.getDate().toString() %> </p>
+        <p> <%= post.getText() %> </p>
+    </div>
+
+    <c:if test="${logged_in}">
+        <div class="comment-field">
+            <input type="text" name="comment" id="text-content"/>
+            <button type="button" onmouseup="postComment()">Submit</button>
+        </div>
+    </c:if>
+
+    <div>
+        <select id="select-sort-type" onchange="changeSortType(this)">
+            <option value="sort_by_likes">Most liked</option>
+            <option value="sort_by_date">Newest first</option>
+        </select>
+        <div id="comment-section" class="comment-section"></div>
+        <button id="fetch-button" type="button" onmouseup="fetchComments()">Load More</button>
+    </div>
+
+    <script src="post.js"></script>
+</body>
+</html>

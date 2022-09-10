@@ -22,6 +22,10 @@ public class Config {
         Injector.injectSingleton(TagDAO.class, SQLTagDAO.class);
         Injector.injectSingleton(PostDAO.class, SQLPostDAO.class);
         Injector.injectSingleton(MessageDAO.class, SQLMessageDAO.class);
+        Injector.injectSingleton(CommentDAO.class, SQLCommentDAO.class);
+        Injector.injectSingleton(RequestDAO.class, SQLRequestDAO.class);
+        Injector.injectSingleton(InvitationDAO.class, SQLInvitationDAO.class);
+
         isConfigured = true;
     }
 }

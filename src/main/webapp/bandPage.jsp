@@ -6,7 +6,7 @@
 <%@ page import="bandfinder.dao.BandDAO" %>
 <%@ page import="bandfinder.dao.UserDAO" %>
 <%@ page import="bandfinder.dao.TagDAO" %>
-<%@ page import="bandfinder.infrastructure.AutoInjectable" %>
+<%@ page import="bandfinder.infrastructure.*" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.*" %>
 
@@ -88,6 +88,20 @@
             <button onclick="confirmLeaving()">Leave Band</button>
         </div>
         </c:if>
+
+        <c:if test="${!extra_display && !isPending}">
+            <div>
+                <form method="post" action=<%= Constants.URL_JOIN_BAND_REQUEST+"?bandId=" + id %>>
+                    <button>Send join request</button>
+                </form>
+            </div>
+        </c:if>
+        <c:if test="${isPending}">
+            <div>
+                <button>Join request pending...</button>
+            </div>
+        </c:if>
+
     </div>
 
     <%------------FEED-----------%>
@@ -104,5 +118,6 @@
         loadPosts().then(checkLoadedPosts);
     </script>
     <%------------FEED-----------%>
+    
     </body>
 </html>
