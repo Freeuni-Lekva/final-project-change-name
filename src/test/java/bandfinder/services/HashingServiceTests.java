@@ -1,4 +1,4 @@
-package bandfinder.dao;
+package bandfinder.services;
 
 import bandfinder.infrastructure.AutoInjectable;
 import bandfinder.infrastructure.Config;
