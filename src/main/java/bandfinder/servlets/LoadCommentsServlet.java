@@ -23,8 +23,8 @@ import java.util.List;
 @WebServlet(value = "/LoadMoreComments", name = "LoadMoreComments")
 public class LoadCommentsServlet extends ServletBase{
 
-
-    CommentDAO commentDAO = new SQLCommentDAO();
+    @AutoInjectable
+    CommentDAO commentDAO;
 
     @AutoInjectable
     UserDAO userDAO;
