@@ -44,7 +44,7 @@
         const postsSection = document.getElementById("postsSection");
         const userId = <%=userId%>;
         const bandId = null;
-        const servletUrl = "/fetchUserFeedPosts";
+        const servletUrl = "/fetchBandPosts";
         loadPosts().then(checkLoadedPosts);
     </script>
 </body>

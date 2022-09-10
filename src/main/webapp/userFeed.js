@@ -52,7 +52,7 @@ function checkLoadedPosts(loadedPostsNum) {
 }
 
 function displayEachPost(post) {
-    let postAuthor = post.authorBandId == null ? post.authorUserName : post.authorBandName;
+    let postAuthor = post.authorBandId === null ? post.authorUserName : post.authorBandName;
     let postText = post.text.replace(/&/g, "&amp")
         .replace(/</g, "&lt")
         .replace(/>/g, "&gt");

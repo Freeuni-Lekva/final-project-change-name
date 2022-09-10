@@ -17,6 +17,7 @@ public record PostWrapper(int id, Integer authorUserId, String authorUserName,
         List<PostWrapper> wrappedPosts = new ArrayList<>();
         for(Post post : posts) {
             int id = post.getId();
+            System.out.println(post.getAuthorBand());
             Integer authorUserId = post.getAuthorUser();
             String authorUserName = userDAO.getById(authorUserId).getFullName();
             Integer authorBandId = post.getAuthorBand();
