@@ -12,7 +12,7 @@
     <%
         int post_id = -1;
         try {
-            post_id = Integer.valueOf(request.getParameter("post_id"));
+            post_id = Integer.parseInt(request.getParameter("post_id"));
         }
         catch (NumberFormatException e){
             response.sendRedirect("errorPage.html");
@@ -22,9 +22,8 @@
             request.getRequestDispatcher("/comments?post_id=" + post_id);
         }
 
-        PostDAO postDAO = Injector.getImplementation(PostDAO.class);
         UserDAO userDAO = Injector.getImplementation(UserDAO.class);
-        Post post = postDAO.getById(post_id);
+        Post post = (Post) request.getAttribute("post");
     %>
     <title>comments</title>
 </head>

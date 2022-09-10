@@ -34,16 +34,13 @@ public class LoadCommentsServlet extends ServletBase{
 
     private static final int MAX_BATCH_SIZE = 10;
 
-    public LoadCommentsServlet() throws SQLException, ClassNotFoundException {
-    }
-
     private List<Comment.CommentDisplay> CommentsToDisplayComments(List<Comment> l){
         List<Comment.CommentDisplay> list = new ArrayList<>();
         for (Comment c : l){
             Timestamp t = new Timestamp(c.getDate().getTime());
             String date = t.toString();
 
-            String username = userDAO.getById(c.getAuthorId()).getStageName();
+            String username = userDAO.getById(c.getAuthorId()).getFullName();
 
 
             Comment.CommentDisplay commentDisplay = new Comment.CommentDisplay(username, date, c.getText(), c.getLikes());
@@ -54,11 +51,16 @@ public class LoadCommentsServlet extends ServletBase{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int user_id = authenticationService.authenticate((String) req.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME));
+
+        if(user_id == Constants.NO_ID){
+            resp.sendRedirect("login.jsp");
+            return;
+        }
+
         int post_id = Integer.parseInt(req.getParameter("post_id"));
 
         int num_comments = Integer.parseInt(req.getParameter("num_comments"));
-
-        int user_id = authenticationService.authenticate((String) req.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME));
 
         List<Comment> l = new ArrayList<>();
 
