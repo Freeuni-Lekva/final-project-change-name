@@ -31,7 +31,9 @@ function changeSortType(combo){
 function displayComment(comment){
     let name = comment.username
     let date = comment.date
-    let text = comment.text
+    let text =  comment.text.replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
     let likes = comment.likes
 
     let com_section = document.getElementById('comment-section')
@@ -82,7 +84,7 @@ function postComment(){
     let text_content = document.getElementById("text-content").value
     document.getElementById("text-content").value = ""
 
-    if(!validateAndSecureText(text_content)){
+    if(!validateText(text_content)){
         return
     }
 
@@ -96,14 +98,10 @@ function postComment(){
     }).then(x => x.json()).then(displayComment)
 }
 
-function validateAndSecureText(text){
+function validateText(text){
     if(text === ""){
         return false
     }
-
-    text.replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
 
     return true
 }
