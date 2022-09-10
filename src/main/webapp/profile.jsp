@@ -124,9 +124,9 @@
             <input type="submit" value="Chat"/>
           </form>
 
-           <form action="/inviteMember.jsp" method="POST">
+           <form action="InviteMemberToBandServlet" method="POST">
                 <label for="info">Invite member to your band</label>
-                <select name="bands" id="info" multiple>
+                <select name="bandId" id="info" multiple>
 
                     <%
                         String loginToken = (String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
@@ -136,13 +136,13 @@
                         for(Integer bandId: bandIds){
                             Band band = bandDAO.getById(bandId);
                             if(bandDAO.isUserInBand(targetId,bandId)){
-                                out.println("<option value=\""+band.getId()+"\" disabled>"+ band.getName() +" - already in band </option>");
+                                out.println("<option value=\""+band.getId()+"\">"+ band.getName() +" [already in band] </option>");
                             }else{
                                 int invitationId = invitationDAO.getId(targetId,bandId);
                                 if(invitationId==Constants.NO_ID || invitationDAO.getById(invitationId).isProcessed()){
                                     out.println("<option value=\""+band.getId()+"\">"+ band.getName() +"</option>");
                                 }else{
-                                    out.println("<option value=\""+band.getId()+"\" disabled>"+ band.getName() +" - invitation pending </option>");
+                                    out.println("<option value=\""+band.getId()+"\">"+ band.getName() +" [invitation pending] </option>");
                                 }
                             }
                         }

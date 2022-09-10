@@ -20,4 +20,6 @@ public interface Constants {
     String URL_JOIN_BAND_REQUEST = "/joinBandRequest";
     String URL_BAND_PAGE = "/bandPage";
     String URL_RESPONSE_TO_JOIN_BAND_REQUEST = "/responseToJoinBandRequest";
+    String URL_INVITE_MEMBER_TO_BAND_REQUEST = "/InviteMemberToBandServlet";
+    String URL_RESPONSE_TO_INVITATION = "/ResponseToInvitationServlet";
 }
