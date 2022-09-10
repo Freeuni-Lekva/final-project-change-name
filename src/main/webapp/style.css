@@ -206,8 +206,9 @@ input[type=submit]:hover {
 
 }
 
-.notificationsLink {
-    margin-left: 500px;
+.logOutLink {
+    position: absolute;
+    right: 10px;
 }
 
 /**************FEED STYLE******************************************/
@@ -230,6 +231,7 @@ input[type=submit]:hover {
     margin-bottom: 20px;
     width: 100%;
     padding: 15px;
+    cursor: pointer;
 }
 
 .post:hover {
