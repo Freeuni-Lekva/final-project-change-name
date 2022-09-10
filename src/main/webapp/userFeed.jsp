@@ -26,6 +26,7 @@
 
 <html>
 <head>
+    <script src="feed.js"></script>
     <link rel="icon" href="icon.png">
     <script src="feed.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -51,7 +52,6 @@
         const servletUrl = "/fetchUserFeedPosts";
         loadPosts().then(checkLoadedPosts);
     </script>
-    <script src="feed.js"></script>
     <%-------FEED--------%>
 </body>
 </html>

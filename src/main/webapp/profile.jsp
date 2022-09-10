@@ -35,6 +35,7 @@
 %>
 <html>
   <head>
+    <script src="feed.js"></script>
     <link rel="icon" href="icon.png">
     <link rel="stylesheet" href="style.css">
     <title><%= user.getStageName() %> | Profile</title>
@@ -146,7 +147,6 @@
       const servletUrl = "/fetchUserPosts";
       loadPosts().then(checkLoadedPosts);
     </script>
-    <script src="feed.js"></script>
     <%------------FEED-----------%>
 
   </body>

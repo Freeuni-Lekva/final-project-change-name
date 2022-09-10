@@ -35,6 +35,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
     <head>
+        <script src="feed.js"></script>
         <link rel="icon" href="icon.png">
         <link rel="stylesheet" href="style.css">
         <title>Band Page</title>
@@ -102,7 +103,6 @@
         const servletUrl = "/fetchBandPosts";
         loadPosts().then(checkLoadedPosts);
     </script>
-    <script src="feed.js"></script>
     <%------------FEED-----------%>
     </body>
 </html>
