@@ -131,21 +131,23 @@ public class SQLPostDAO implements PostDAO {
         }
     }
 
-    private static final String FEED_POSTS = """
-                        SELECT * FROM posts p
-                        LEFT JOIN follows uf ON p.author_user = uf.followee
-                        LEFT JOIN band_follows bf ON p.author_band = bf.followee_band
-                        WHERE ((uf.follower = ? AND p.author_band is null) OR (bf.follower_user = ?)) AND p.id < ?
-                        ORDER BY p.id DESC LIMIT ?;""";
+    private static final String FEED_POSTS_1 = """
+               SELECT * FROM
+               ((SELECT p.* FROM posts p JOIN follows uf 
+               ON p.author_user=uf.followee WHERE uf.follower=?)
+               UNION
+               (SELECT p.* FROM posts p JOIN band_users bu
+               ON p.author_user=bu.user_id)) fp
+               WHERE fp.id<? ORDER BY fp.id DESC LIMIT ?;
+                                                 """;
 
     @Override
     public List<Post> getUserFeedPostsBeforeId(int userId, int lastPostFetchedId, int numPosts) {
         try {
-            PreparedStatement statement = connection.prepareStatement(FEED_POSTS);
+            PreparedStatement statement = connection.prepareStatement(FEED_POSTS_1);
             statement.setInt(1, userId);
-            statement.setInt(2, userId);
-            statement.setInt(3, lastPostFetchedId);
-            statement.setInt(4, numPosts);
+            statement.setInt(2, lastPostFetchedId);
+            statement.setInt(3, numPosts);
             ResultSet rs = statement.executeQuery();
             List<Post> feedPosts = createPostsFromResultSet(rs);
             statement.close();

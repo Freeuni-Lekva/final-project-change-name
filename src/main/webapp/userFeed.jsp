@@ -16,11 +16,7 @@
     private UserDAO userDAO = Injector.getImplementation(UserDAO.class);
     private BandDAO bandDAO = Injector.getImplementation(BandDAO.class);
     private PostDAO postDAO = Injector.getImplementation(PostDAO.class);
-%>
-
-<%!
     private final AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
-    private User user;
 %>
 <%
     String loginToken = (String) request.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
@@ -30,23 +26,32 @@
 
 <html>
 <head>
-    <script src="userFeed.js"></script>
-    <link rel="stylesheet" href="feedStyle.css">
+    <script src="feed.js"></script>
+    <link rel="icon" href="icon.png">
+    <script src="feed.js"></script>
+    <link rel="stylesheet" href="style.css">
 
     <title>Newsfeed</title>
 </head>
+<header>
+    <%@include  file="nav.html" %>
+</header>
 <body>
-    <h1 style="position: fixed" id="user"><%=user.getStageName()%></h1>
-
+    <h1 style="position: fixed"><%=user.getFullName()%></h1>
+    <%------FEED---------%>
     <div class="feed" id="feed">
         <div class="postsSection" id="postsSection">
         </div>
-        <div style="text-align: center" id="loadMorePostsSection">
-            <button onclick="loadMorePosts(<%=userId%>)" id="loadMoreButton">Load More</button>
-        </div>
     </div>
     <script>
-        loadMorePosts(<%=userId%>);
+        const feed = document.getElementById("feed");
+        const postsSection = document.getElementById("postsSection");
+        const postsToFetchMaxNum = 5;
+        const userId = <%=userId%>;
+        const bandId = null;
+        const servletUrl = "/fetchUserFeedPosts";
+        loadPosts().then(checkLoadedPosts);
     </script>
+    <%-------FEED--------%>
 </body>
 </html>

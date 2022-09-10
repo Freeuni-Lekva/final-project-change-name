@@ -1,9 +1,92 @@
+* {
+    font-family: "Helvetica", sans-serif;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+}
+
+body {
+    margin-top: 60px;
+    background-color: #FAF8F5;
+}
+
+button {
+    background-color: #EF5350;
+    border-radius: 128px;
+    border: none;
+    color: #FFF;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 8px 48px;
+    text-align: center;
+    transition: all 200ms;
+}
+
+input {
+    border-radius: 128px;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 8px 48px;
+    transition: all 200ms;
+}
+
+input[type=submit] {
+    background-color: #EF5350;
+    border: none;
+    color: #FFF;
+    font-weight: bold;
+    text-align: center;
+}
+
+.navMenu {
+    background-color: #EF5350;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.navMenu * {
+    font-weight: bold;
+    font-size: 16px;
+    color: #FFF;
+    display: inline;
+}
+
+.navMenu .logo {
+    text-align: center;
+    margin: 20px;
+    height: 40px;
+}
+
+.navMenu a {
+    margin: 20px;
+    text-decoration: none;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border-radius: 10px;
+    padding: 16px 32px;
+    width: fit-content;
+    margin: auto;
+}
+
 .user_data_form{
     padding-left: 0;
 }
 
 .user_data{
-    padding-left: 0;
     border-style: solid;
     border-top-width: 3px;
     border-bottom-width: 3px;
@@ -15,8 +98,8 @@
 .user_data li{
     padding-top: 5px;
     padding-bottom: 5px;
-    margin-top: 0px;
-    margin-bottom: 0px;
+    margin-top: 0;
+    margin-bottom: 0;
     border-style: solid;
     border-top-width: 1px;
     border-bottom-width: 1px;
@@ -105,3 +188,79 @@
     color: darkred;
     margin-bottom: 5px;
 }
+
+.chat-thread {
+    width: 50%;
+    margin: auto;
+}
+
+.auth-container {
+
+}
+
+/**************FEED STYLE******************************************/
+
+.feed {
+    margin: auto;
+    width: 450px;
+    min-height: 100%;
+    background-color: #404040;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: Verdana, sans-serif;
+}
+
+.postsSection {
+    margin-top: 10px;
+    margin-left: 5px;
+    width: 400px;
+}
+
+.post {
+    margin-bottom: 20px;
+    width: 100%;
+    background-color: White;
+    padding: 15px;
+    border-left: 5px solid #EF5350;
+    border-radius: 5px;
+}
+
+.loadMoreButtonSection {
+    text-align: center;
+}
+
+.loadMoreButton {
+    background-color: DimGray;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    border-radius:5px
+}
+
+.loadMoreButton:hover {
+    background-color: lightgray;
+}
+
+.postAuthorName {
+    font-size: 20px;
+}
+
+.postText {
+    font-size: 15px;
+}
+
+.postDate {
+    font-size: 10px;
+}
+
+.noPostsLoaded {
+    font-size: 12px;
+    text-align: center;
+    color: White;
+    margin-bottom: 10px;
+}
+
+/**************FEED STYLE END************************************/

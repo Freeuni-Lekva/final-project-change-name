@@ -17,10 +17,15 @@
 %>
 <html>
 <head>
+    <link rel="icon" href="icon.png">
+    <link rel="stylesheet" href="style.css">
     <title>Search</title>
 </head>
-<body>
+<header>
     <%@include  file="nav.html" %>
+</header>
+<body>
+<div class="card">
     <h1>Search</h1>
     <form action="/search">
         <input list="defaults" name="query">
@@ -66,5 +71,6 @@
             out.println("No such bands.");
         }
     }%>
+</div>
 </body>
 </html>

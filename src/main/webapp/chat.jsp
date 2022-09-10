@@ -18,6 +18,8 @@
 %>
 <html>
     <head>
+        <link rel="icon" href="icon.png">
+        <link rel="stylesheet" href="style.css">
         <title>Chat with <%=recipientUser.getFullName()%>></title>
         <script>
             const loginToken = "<%=loginToken%>";
@@ -26,15 +28,20 @@
         </script>
         <script src="chat.js"></script>
     </head>
-    <body>
+    <header>
         <%@include  file="nav.html" %>
-        <h1>Chat with <%=recipientUser.getFullName()%></h1>
-        <form id="chat-input" method="post" onsubmit="sendMessage(); return false;">
-            <input type="text" name="msg-text" id="msg-text"/>
-            <input type="submit" name="send-btn" id="send-btn"/>
-        </form>
-        <div id="messages">
+    </header>
+    <body>
+        <div class="card chat-thread">
+            <h1>Chat with <%=recipientUser.getFullName()%></h1>
+            <form id="chat-input" method="post" onsubmit="sendMessage(); return false;">
+                <input type="text" name="msg-text" id="msg-text"/>
+                <input type="submit" name="send-btn" id="send-btn"/>
+            </form>
+            <hr>
+            <div id="messages">
+            </div>
+            <button id="load" onclick="loadMore()">Load more...</button>
         </div>
-        <button id="load" onclick="loadMore()">Load more...</button>
     </body>
 </html>

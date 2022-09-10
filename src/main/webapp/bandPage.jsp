@@ -34,13 +34,10 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-    <style>
-        button {
-            font-size: 14px;
-        }
-    </style>
-
     <head>
+        <script src="feed.js"></script>
+        <link rel="icon" href="icon.png">
+        <link rel="stylesheet" href="style.css">
         <title>Band Page</title>
         <script>
             function confirmLeaving() {
@@ -49,8 +46,12 @@
             }
         </script>
     </head>
-    <body>
+
+    <header>
         <%@include  file="nav.html" %>
+    </header>
+    <body>
+    <div class="card">
         <h1><%=band.getName()%></h1>
 
         <ul>
@@ -100,5 +101,23 @@
                 <button>Join request pending...</button>
             </div>
         </c:if>
+
+    </div>
+
+    <%------------FEED-----------%>
+    <div class="feed" id="feed">
+        <div class="postsSection" id="postsSection">
+        </div>
+    </div>
+    <script>
+        const feed = document.getElementById("feed");
+        const postsSection = document.getElementById("postsSection");
+        const userId = <%=id%>;
+        const bandId = <%=band.getId()%>;
+        const servletUrl = "/fetchBandPosts";
+        loadPosts().then(checkLoadedPosts);
+    </script>
+    <%------------FEED-----------%>
+    
     </body>
 </html>

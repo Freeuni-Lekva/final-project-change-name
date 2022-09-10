@@ -7,7 +7,7 @@
 <%@ page import="bandfinder.infrastructure.Injector" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
+    <link rel="icon" href="icon.png">
     <link rel="stylesheet" href="style.css">
     <%!
         private AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
@@ -27,8 +27,11 @@
 
     <title>Profile</title>
 </head>
+<header>
+    <%@include  file="nav.html" %>
+</header>
 <body>
-<%@include  file="nav.html" %>
+    <div class="card">
     <form action="EditProfileServlet" method="post" id="user-info" class="user_data_form">
         <ul style="list-style-type: none" class="user_data">
             <li>
@@ -92,16 +95,16 @@
 
             <ul>
                 <li>
-                    <input type="submit" value="save" />
+                    <input type="submit" value="Save" />
                 </li>
 
                 <li>
-                    <button type="button" onmouseup="deselectBottom()"> cancel </button>
+                    <button type="button" onmouseup="deselectBottom()">Cancel</button>
                 </li>
             </ul>
         </form>
     </div>
-
     <script src="editProfile.js"></script>
+    </div>
 </body>
 </html>
