@@ -37,9 +37,14 @@
     <%@include  file="nav.html" %>
 </header>
 <body>
-    <h1 style="position: fixed"><%=user.getFullName()%></h1>
     <%------FEED---------%>
     <div class="feed" id="feed">
+        <div class="card" id="add-post-section">
+            <form method="post" action="/addPost" name="Add Post">
+                <input name="post-content">
+                <input type="submit">
+            </form>
+        </div>
         <div class="postsSection" id="postsSection">
         </div>
     </div>

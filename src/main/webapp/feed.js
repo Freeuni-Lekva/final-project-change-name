@@ -60,7 +60,7 @@ function displayEachPost(post) {
     let authorUrl = post.authorBandId === null ?
         "/profile.jsp?id=" + post.authorUserId : "/bandPage.jsp?bandId=" + post.authorBandId;
 
-    postsSection.innerHTML +=   "<div class=\"post\" id=\"" + post.id + "\">" +
+    postsSection.innerHTML +=   "<div class=\"card post\" id=\"" + post.id + "\">" +
                                 "<a class=\"postAuthorName\" href=\""+ authorUrl + "\">" + postAuthor + "</a>" +
                                 "<h5 class=\"postDate\">" + post.date + "</h5>" +
                                 "<p class=\"postText\">" + postText + "</p>" +

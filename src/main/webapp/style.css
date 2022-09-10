@@ -28,6 +28,10 @@ button {
     transition: all 200ms;
 }
 
+button:hover {
+    background-color: lightgray;
+}
+
 input {
     border-radius: 128px;
     font-size: 14px;
@@ -42,6 +46,10 @@ input[type=submit] {
     color: #FFF;
     font-weight: bold;
     text-align: center;
+}
+
+input[type=submit]:hover {
+    background-color: lightgray;
 }
 
 .navMenu {
@@ -202,46 +210,31 @@ input[type=submit] {
 
 .feed {
     margin: auto;
-    width: 450px;
+    width: 60%;
     min-height: 100%;
-    background-color: #404040;
     padding: 10px;
-    border-radius: 5px;
-    font-family: Verdana, sans-serif;
 }
 
 .postsSection {
     margin-top: 10px;
-    margin-left: 5px;
-    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
 }
 
 .post {
     margin-bottom: 20px;
     width: 100%;
-    background-color: White;
     padding: 15px;
+}
+
+.post:hover {
     border-left: 5px solid #EF5350;
     border-radius: 5px;
 }
 
 .loadMoreButtonSection {
     text-align: center;
-}
-
-.loadMoreButton {
-    background-color: DimGray;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    font-size: 12px;
-    cursor: pointer;
-    margin-bottom: 10px;
-    border-radius:5px
-}
-
-.loadMoreButton:hover {
-    background-color: lightgray;
 }
 
 .postAuthorName {
