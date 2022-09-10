@@ -198,6 +198,10 @@ input[type=submit] {
 
 }
 
+.notificationsLink {
+    margin-left: 500px;
+}
+
 /**************FEED STYLE******************************************/
 
 .feed {

@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS messages
     PRIMARY KEY (id)
 );
 
--- Handle tag updates
+
 DELIMITER //
 
 CREATE PROCEDURE p_match_user_tags_string_with_tags_table(p_user_id INT)

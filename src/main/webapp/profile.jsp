@@ -188,9 +188,5 @@
                 <input type="hidden" name="targetId" id="targetIdContainer" value=<%= targetId %>>
           </form>
 
-        </c:when>
-      </c:choose>
-    </c:if>
-    
   </body>
 </html>
