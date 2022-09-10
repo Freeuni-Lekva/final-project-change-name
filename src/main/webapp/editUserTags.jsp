@@ -29,6 +29,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link rel="icon" href="icon.png">
+    <link rel="stylesheet" href="style.css">
     <title>Manage tags</title>
 
     <script>
@@ -75,8 +77,11 @@
         }
     </script>
 </head>
-<body>
+<header>
     <%@include  file="nav.html" %>
+</header>
+<body>
+<div class="card">
     <div id="tagsListModule">
         <%
             List<Integer> tagIds = tagDAO.getUserTagIDs(userId);
@@ -124,6 +129,6 @@
         <input type="hidden" name="userId" id="addTagButton" value=<%= userId %>>
 
     </form>
-
+</div>
 </body>
 </html>

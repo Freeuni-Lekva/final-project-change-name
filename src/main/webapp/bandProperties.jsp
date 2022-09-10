@@ -19,11 +19,9 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-
-<style>
-
-</style>
 <head>
+    <link rel="icon" href="icon.png">
+    <link rel="stylesheet" href="style.css">
     <title>Band Properties</title>
 
     <script>
@@ -72,13 +70,16 @@
         }
     </script>
 </head>
-<body>
+<header>
     <%@include  file="nav.html" %>
-    <div style="flex-direction: row" id="bandNameModule">
+</header>
+<body>
+    <div style="flex-direction: row" class="card" id="bandNameModule">
         <label>Band Name: </label>
         <label id="bandName"><%= band.getName() %></label>
         <button id="editNameButton" onclick="editProperty()">Edit</button>
+
+        <form id="saveForm" method="post" action=<%= "/editBandProperties?bandId=" + bandId %>></form>
     </div>
-    <form id="saveForm" method="post" action=<%= "/editBandProperties?bandId=" + bandId %>></form>
 </body>
 </html>

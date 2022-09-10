@@ -34,13 +34,9 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-    <style>
-        button {
-            font-size: 14px;
-        }
-    </style>
-
     <head>
+        <link rel="icon" href="icon.png">
+        <link rel="stylesheet" href="style.css">
         <title>Band Page</title>
         <script>
             function confirmLeaving() {
@@ -49,8 +45,12 @@
             }
         </script>
     </head>
-    <body>
+
+    <header>
         <%@include  file="nav.html" %>
+    </header>
+    <body>
+    <div class="card">
         <h1><%=band.getName()%></h1>
 
         <ul>
@@ -87,5 +87,6 @@
             <button onclick="confirmLeaving()">Leave Band</button>
         </div>
         </c:if>
+    </div>
     </body>
 </html>

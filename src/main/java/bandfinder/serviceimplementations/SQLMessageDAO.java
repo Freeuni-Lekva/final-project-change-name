@@ -1,6 +1,7 @@
 package bandfinder.serviceimplementations;
 
 import bandfinder.dao.MessageDAO;
+import bandfinder.infrastructure.Constants;
 import bandfinder.models.Message;
 import bandfinder.models.MessageViewModel;
 
@@ -12,9 +13,8 @@ public class SQLMessageDAO implements MessageDAO {
     private final Connection connection;
 
     public SQLMessageDAO() throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost/bandfinder?user=root&password=R00tR**t");
+        Class.forName(Constants.JDBC_CLASS_NAME);
+        connection = DriverManager.getConnection(Constants.DB_URL);
     }
 
     @Override

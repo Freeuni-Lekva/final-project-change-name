@@ -30,11 +30,16 @@
 
 <html>
 <head>
+    <link rel="icon" href="icon.png">
     <script src="userFeed.js"></script>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="feedStyle.css">
 
     <title>Newsfeed</title>
 </head>
+<header>
+    <%@include  file="nav.html" %>
+</header>
 <body>
     <h1 style="position: fixed" id="user"><%=user.getStageName()%></h1>
 
