@@ -57,8 +57,11 @@ function displayEachPost(post) {
         .replace(/</g, "&lt")
         .replace(/>/g, "&gt");
 
+    let authorUrl = post.authorBandId === null ?
+        "/profile.jsp?id=" + post.authorUserId : "/bandPage.jsp?bandId=" + post.authorBandId;
+
     postsSection.innerHTML +=   "<div class=\"post\" id=\"" + post.id + "\">" +
-                                "<h2 class=\"postAuthorName\">" + postAuthor + "</h2>" +
+                                "<a class=\"postAuthorName\" href=\""+ authorUrl + "\">" + postAuthor + "</a>" +
                                 "<h5 class=\"postDate\">" + post.date + "</h5>" +
                                 "<p class=\"postText\">" + postText + "</p>" +
                                 "</div>";

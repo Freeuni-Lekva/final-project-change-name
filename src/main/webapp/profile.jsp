@@ -35,6 +35,7 @@
 %>
 <html>
   <head>
+    <script src="feed.js"></script>
     <link rel="icon" href="icon.png">
     <link rel="stylesheet" href="style.css">
     <title><%= user.getStageName() %> | Profile</title>
@@ -132,5 +133,21 @@
         </c:choose>
       </c:if>
     </div>
+
+    <%------------FEED-----------%>
+    <div class="feed" id="feed">
+      <div class="postsSection" id="postsSection">
+      </div>
+    </div>
+    <script>
+      const feed = document.getElementById("feed");
+      const postsSection = document.getElementById("postsSection");
+      const userId = <%=user.getId()%>;
+      const bandId = null;
+      const servletUrl = "/fetchUserPosts";
+      loadPosts().then(checkLoadedPosts);
+    </script>
+    <%------------FEED-----------%>
+
   </body>
 </html>
