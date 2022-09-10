@@ -56,16 +56,16 @@ public class LoadCommentsServlet extends ServletBase{
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int post_id = Integer.parseInt(req.getParameter("post_id"));
 
-        int batch_num = Integer.parseInt(req.getParameter("batch_num"));
+        int num_comments = Integer.parseInt(req.getParameter("num_comments"));
 
         int user_id = authenticationService.authenticate((String) req.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME));
 
         List<Comment> l = new ArrayList<>();
 
         if(req.getParameter("sort_type").equals("sort_by_likes")){
-            l = commentDAO.getCommentBatchPriorityLikes(post_id, user_id, MAX_BATCH_SIZE, batch_num * MAX_BATCH_SIZE);
+            l = commentDAO.getCommentBatchPriorityLikes(post_id, user_id, MAX_BATCH_SIZE, num_comments);
         }else if(req.getParameter("sort_type").equals("sort_by_date")){
-            l = commentDAO.getCommentBatchPriorityDate(post_id, user_id, MAX_BATCH_SIZE, batch_num * MAX_BATCH_SIZE);
+            l = commentDAO.getCommentBatchPriorityDate(post_id, user_id, MAX_BATCH_SIZE, num_comments);
         }
 
         resp.setContentType("application/json");

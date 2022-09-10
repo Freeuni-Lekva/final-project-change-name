@@ -1,7 +1,9 @@
 const batch_size = 10;
-let currBatch = 0
+let numComments = 0
 
-addEventListener('load', (event) => fetchComments());
+let postId = document.getElementById("post_id").getAttribute('value')
+
+addEventListener('load', (event) => fetchComments(true));
 
 function noMoreComments(){
     let fetch_button = document.getElementById('fetch-button')
@@ -40,10 +42,13 @@ function displayComment(comment){
     new_com.appendChild(likes_tag)
 
     com_section.appendChild(new_com)
+
+    numComments++;
+    console.log(numComments)
 }
 
 function convertToDisplay(arr){
-    if(arr.size < batch_size){
+    if(arr.length < batch_size){
         noMoreComments()
     }
 
@@ -51,13 +56,35 @@ function convertToDisplay(arr){
 }
 
 function fetchComments(){
-    let postId = document.getElementById("post_id").getAttribute('value')
-
     let sort_type = 'sort_by_likes'
 
-    fetch("/LoadMoreComments?post_id=" + postId + "&batch_num=" + currBatch + "&sort_type=" + sort_type)
+    fetch("/LoadMoreComments?post_id=" + postId + "&num_comments=" + numComments + "&sort_type=" + sort_type)
         .then(response => response.json())
-        .then(convertToDisplay).catch(x => console.log(x))
+        .then(arr => convertToDisplay(arr)).catch(x => console.log(x))
+}
 
-    currBatch++;
+function postComment(){
+    let text_content = document.getElementById("text-content").value
+    document.getElementById("text-content").value = ""
+
+    if(!validateText(text_content)){
+        return
+    }
+
+    fetch("/SubmitComment", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"text": text_content, 'post_id': postId, 'date': (new Date()).getTime().toString()})
+    }).then(x => x.json()).then(displayComment)
+}
+
+function validateText(text){
+    if(text === ""){
+        return false
+    }
+
+    return true
 }

@@ -106,6 +106,36 @@ public class Comment {
             this.text = text;
             this.likes = likes;
         }
+    }
 
+    public static class CommentData{
+        private String text;
+        private String post_id;
+
+        private String date;
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public String getPost_id() {
+            return post_id;
+        }
+
+        public void setPost_id(String post_id) {
+            this.post_id = post_id;
+        }
     }
 }

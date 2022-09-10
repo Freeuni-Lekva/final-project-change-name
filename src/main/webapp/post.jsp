@@ -13,9 +13,8 @@
     </div>
 
     <div class="comment-field">
-        <form>
-            <input type="text" name="comment" />
-        </form>
+        <input type="text" name="comment" id="text-content"/>
+        <button type="button" onmouseup="postComment()">Submit</button>
     </div>
 
     <div>
