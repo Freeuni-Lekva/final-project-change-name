@@ -25,7 +25,7 @@ class AuthenticationServiceTest {
     @Test
     public void testWrong() {
         int user1Id = 2;
-        
+
         int user2Id = 3;
         String user2Token = authService.generateToken(user2Id);
         int user3Id = 22;
