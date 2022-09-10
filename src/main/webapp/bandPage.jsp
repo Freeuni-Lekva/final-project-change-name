@@ -88,5 +88,21 @@
         </div>
         </c:if>
     </div>
+
+    <%------------FEED-----------%>
+    <div class="feed" id="feed">
+        <div class="postsSection" id="postsSection">
+        </div>
+    </div>
+    <script>
+        const feed = document.getElementById("feed");
+        const postsSection = document.getElementById("postsSection");
+        const userId = <%=id%>;
+        const bandId = <%=band.getId()%>;
+        const servletUrl = "/fetchBandPosts";
+        loadPosts().then(checkLoadedPosts);
+    </script>
+    <script src="feed.js"></script>
+    <%------------FEED-----------%>
     </body>
 </html>
