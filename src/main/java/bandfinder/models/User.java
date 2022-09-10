@@ -63,6 +63,8 @@ public class User {
     }
 
     public String getStageName() {
+        if(stageName == null || stageName.isBlank())
+            return getFullName();
         return stageName;
     }
 
