@@ -14,7 +14,7 @@ public class SQLCommentDAO implements CommentDAO{
     public SQLCommentDAO() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot");
+                "jdbc:mysql://localhost/bandfinder?user=root&password=R00tR**t");
     }
 
     private static final String QUERY_PRIORITY =

@@ -10,7 +10,7 @@ public interface Constants {
 
     // DB
     String JDBC_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
-    String DB_URL = "jdbc:mysql://localhost/bandfinder?user=root&password=rootroot";
+    String DB_URL = "jdbc:mysql://localhost/bandfinder?user=root&password=R00tR**t";
 
     // Attribute names
     String LOGIN_TOKEN_ATTRIBUTE_NAME = "login-token";
@@ -19,9 +19,9 @@ public interface Constants {
 
     String URL_JOIN_BAND_REQUEST = "/joinBandRequest";
     String URL_BAND_PAGE = "/bandPage";
-    String URL_RESPONSE_TO_JOIN_BAND_REQUEST = "/responseToJoinBandRequest";
+    String URL_RESPONSE_TO_JOIN_BAND_REQUEST = "/responseToRequest";
     String URL_INVITE_MEMBER_TO_BAND_REQUEST = "/InviteMemberToBandServlet";
-    String URL_RESPONSE_TO_INVITATION = "/ResponseToInvitationServlet";
+    String URL_RESPONSE_TO_INVITATION = "/responseToInvitation";
 
     int POSTS_TO_FETCH_MAX_NUM = 5;
 }
