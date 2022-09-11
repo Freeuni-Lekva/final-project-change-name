@@ -191,7 +191,7 @@ public class SQLPostDAO implements PostDAO {
         return getUserPostsBeforeId(userId, MAX_VALUE, numPosts);
     }
 
-    private static final String BAND_POSTS = "SELECT * FROM posts WHERE author_band=? AND id<? ORDER BY id LIMIT ?;";
+    private static final String BAND_POSTS = "SELECT * FROM posts WHERE author_band=? AND id<? ORDER BY id DESC LIMIT ?;";
 
     @Override
     public List<Post> getBandPostsBeforeId(int bandId, int lastPostFetchedId, int numPosts) {
