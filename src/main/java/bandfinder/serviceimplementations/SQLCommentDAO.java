@@ -1,6 +1,7 @@
 package bandfinder.serviceimplementations;
 
 import bandfinder.dao.CommentDAO;
+import bandfinder.infrastructure.Constants;
 import bandfinder.models.Comment;
 
 import java.sql.*;
@@ -14,7 +15,7 @@ public class SQLCommentDAO implements CommentDAO{
     public SQLCommentDAO() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost/bandfinder?user=root&password=R00tR**t");
+                Constants.DB_URL);
     }
 
     private static final String QUERY_PRIORITY =
