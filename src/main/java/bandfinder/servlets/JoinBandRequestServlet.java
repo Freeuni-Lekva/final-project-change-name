@@ -39,22 +39,19 @@ public class JoinBandRequestServlet extends ServletBase{
             resp.sendRedirect(Constants.URL_BAND_PAGE+".jsp?bandId=" + bandId); //reload the page, user is already in band
             return;
         }
-        try {
-            int requestId = requestDAO.getId(userId,bandId);
-            if(requestId==Constants.NO_ID){ //request does not exist, create new one
-                requestDAO.create(new Request(userId,bandId));
-            }else{
-                Request request = requestDAO.getById(requestId);
-                if(request.isProcessed()){ //processed request already exists in db, means user had requested join before, was accepted, then kicked, now sending again
-                    request.setProcessed(false); //set to unprocessed
-                    requestDAO.update(request);
-                }else{ //unprocessed request already exists, meaning request is pending
-                    //do nothing
-                }
+
+        int requestId = requestDAO.getId(userId,bandId);
+        if(requestId==Constants.NO_ID){ //request does not exist, create new one
+            requestDAO.create(new Request(userId,bandId));
+        }else{
+            Request request = requestDAO.getById(requestId);
+            if(request.isProcessed()){ //processed request already exists in db, means user had requested join before, was accepted, then kicked, now sending again
+                request.setProcessed(false); //set to unprocessed
+                requestDAO.update(request);
+            }else{ //unprocessed request already exists, meaning request is pending
+                //do nothing
             }
-            resp.sendRedirect(Constants.URL_BAND_PAGE+".jsp?bandId=" + bandId); //reload the page
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
+        resp.sendRedirect(Constants.URL_BAND_PAGE+".jsp?bandId=" + bandId); //reload the page
     }
 }

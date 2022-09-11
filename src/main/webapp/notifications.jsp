@@ -1,10 +1,9 @@
-<%@ page import="bandfinder.models.User" %>
-<%@ page import="bandfinder.infrastructure.Constants" %>
-<%@ page import="bandfinder.services.AuthenticationService" %>
-<%@ page import="bandfinder.dao.PostDAO" %>
-<%@ page import="bandfinder.dao.BandDAO" %>
-<%@ page import="bandfinder.dao.UserDAO" %>
-<%@ page import="bandfinder.infrastructure.Injector" %><%--
+<%@ page import="bandfinder.models.*" %>
+<%@ page import="bandfinder.infrastructure.*" %>
+<%@ page import="bandfinder.dao.*" %>
+<%@ page import="bandfinder.services.*" %>
+<%@ page import="java.util.*"%>
+<%--
   Created by IntelliJ IDEA.
   User: LenovoIdeapadF5
   Date: 9/10/2022
@@ -15,8 +14,10 @@
 
 <%!
     private UserDAO userDAO = Injector.getImplementation(UserDAO.class);
-    private BandDAO bandDAO = Injector.getImplementation(BandDAO.class);
     private PostDAO postDAO = Injector.getImplementation(PostDAO.class);
+    private InvitationDAO invitationDAO = Injector.getImplementation(InvitationDAO.class);
+    private BandDAO bandDAO = Injector.getImplementation(BandDAO.class);
+    private RequestDAO requestDAO = Injector.getImplementation(RequestDAO.class);
     private final AuthenticationService authenticationService = Injector.getImplementation(AuthenticationService.class);
 %>
 <%
@@ -35,6 +36,47 @@
     <title><%= user.getStageName() %> | Notifications</title>
 </header>
 <body>
-
+    <ul>
+        <%
+            List<Invitation> allInvs = invitationDAO.getAll();
+            for(Invitation inv : allInvs){
+                if(inv.getUserId()!=userId||inv.isProcessed()) continue;
+                out.println("<li> <small> <b>"+ bandDAO.getById(inv.getBandId()).getName()+"</b> invited you to join them </small>");
+                out.println("<form method=\"POST\" action=/responseToInvitation>"+
+                        "<button type=\"submit\">Accept</button>"+
+                        "<input type=\"hidden\" name=\"bandId\" value="+inv.getBandId()+">"+
+                        "<input type=\"hidden\" name=\"answer\" value="+true+">"+
+                    "</form>");
+                out.println("<form method=\"POST\" action=/responseToInvitation>"+
+                        "<button type=\"submit\">Reject</button>"+
+                        "<input type=\"hidden\" name=\"bandId\" value="+inv.getBandId()+">"+
+                        "<input type=\"hidden\" name=\"answer\" value="+false+">"+
+                    "</form>");
+                out.println("</li>");
+            }
+        %>
+    </ul>
+    <ul>
+        <%
+            List<Request> allReqs = requestDAO.getAll();
+            for(Request req : allReqs){
+                if(req.isProcessed() || !bandDAO.isUserInBand(userId,req.getBandId())) continue;
+                out.println("<li> <small> <b>"+ userDAO.getById(req.getUserId()).getFullName()+"</b> wants to join your band: <b>"+ bandDAO.getById(req.getBandId()).getName()+"</b> </small>");
+                out.println("<form method=\"POST\" action=/responseToRequest>"+
+                        "<button type=\"submit\">Accept</button>"+
+                        "<input type=\"hidden\" name=\"bandId\" value="+req.getBandId()+">"+
+                        "<input type=\"hidden\" name=\"userId\" value="+req.getUserId()+">"+
+                        "<input type=\"hidden\" name=\"answer\" value="+true+">"+
+                    "</form>");
+                out.println("<form method=\"POST\" action=/responseToRequest>"+
+                        "<button type=\"submit\">Reject</button>"+
+                        "<input type=\"hidden\" name=\"bandId\" value="+req.getBandId()+">"+
+                        "<input type=\"hidden\" name=\"userId\" value="+req.getUserId()+">"+
+                        "<input type=\"hidden\" name=\"answer\" value="+false+">"+
+                    "</form>");
+                out.println("</li>");
+            }
+        %>
+    </ul>
 </body>
 </html>

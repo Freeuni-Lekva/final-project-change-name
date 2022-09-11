@@ -32,42 +32,38 @@ public class ResponseToJoinBandRequestServlet extends ServletBase{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //when user clicks accept/reject to received band joining request notification from user B
         int bandId = Integer.parseInt(req.getParameter("bandId"));
-        int requesterId = Integer.parseInt(req.getParameter("requesterId"));
+        int requesterId = Integer.parseInt(req.getParameter("userId"));
         boolean answer = Boolean.parseBoolean((req.getParameter("answer")));
         String loginToken = (String) req.getSession().getAttribute(Constants.LOGIN_TOKEN_ATTRIBUTE_NAME);
         int userId = authenticationService.authenticate(loginToken);
 
         if(!bandDAO.isUserInBand(userId,bandId)){
-            //user is not in band, therefore he can't manage requests, RELOAD PAGE
+            resp.sendRedirect("/notifications.jsp");//user is not in band, therefore he can't manage requests, RELOAD PAGE
             return;
         }
         if(bandDAO.isUserInBand(requesterId,bandId)){
-            //requester is already in band, no point in reaccepting him, RELOAD PAGE
+            resp.sendRedirect("/notifications.jsp");//requester is already in band, no point in reaccepting him, RELOAD PAGE
             return;
         }
 
-        try {
-            int reqId = requestDAO.getId(userId,bandId);
-            if(reqId!=Constants.NO_ID){
-                Request request = requestDAO.getById(reqId);
-                if(request.isProcessed()){
-                    //request was already processed by other band members, RELOAD PAGE
-                }else{
-                    request.setProcessed(true);
-                    requestDAO.update(request);
-                    if(answer){
-                        //join request was accepted
-                        bandDAO.addMemberToBand(requesterId,bandId);
-                        resp.sendRedirect(Constants.URL_BAND_PAGE+".jsp?bandId=" + bandId); //send to band page
-                    }else{
-                        //join request was rejected
-                    }
-                }
+        int reqId = requestDAO.getId(requesterId,bandId);
+        if(reqId!=Constants.NO_ID){
+            Request request = requestDAO.getById(reqId);
+            if(request.isProcessed()){
+                resp.sendRedirect("/notifications.jsp");//request was already processed by other band members, RELOAD PAGE
             }else{
-                //there was no request at all, RELOAD PAGE
+                request.setProcessed(true);
+                requestDAO.update(request);
+                if(answer){
+                    //join request was accepted
+                    bandDAO.addMemberToBand(requesterId,bandId);
+                    resp.sendRedirect(Constants.URL_BAND_PAGE+".jsp?bandId=" + bandId); //send to band page
+                }else{
+                    resp.sendRedirect("/notifications.jsp");//join request was rejected
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }else{
+            resp.sendRedirect("/notifications.jsp");//there was no request at all, RELOAD PAGE
         }
     }
 }
