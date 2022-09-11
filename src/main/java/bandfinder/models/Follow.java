@@ -41,4 +41,14 @@ public class Follow {
     public void setFolloweeID(int followeeID) {
         this.followeeID = followeeID;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Follow follow = (Follow) o;
+
+        return id == follow.id || (followerID == follow.followerID && followeeID == follow.followeeID);
+    }
 }
