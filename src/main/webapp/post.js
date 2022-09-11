@@ -38,7 +38,8 @@ function displayComment(comment){
 
     let com_section = document.getElementById('comment-section')
     let new_com = document.createElement('div')
-    new_com.setAttribute('class', 'comment')
+    new_com.setAttribute('class', 'card comment')
+
 
     let username = document.createElement('h5')
     username.setAttribute('class', 'username')
