@@ -44,7 +44,7 @@ public class SQLInvitationDAO implements InvitationDAO {
             PreparedStatement statement = connection.prepareStatement(
                     "UPDATE invitations SET userId = ?, " +
                             "bandId = ?, " +
-                            "isProcessed = ?, WHERE id = ?;");
+                            "isProcessed = ? WHERE id = ?;");
             statement.setInt(4, model.getId());
             statement.setInt(1, model.getUserId());
             statement.setInt(2, model.getBandId());

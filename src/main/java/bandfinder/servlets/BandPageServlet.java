@@ -44,16 +44,11 @@ public class BandPageServlet extends ServletBase {
 
         req.setAttribute("isPending",false);
         if(currUser != null && !bandDAO.isUserInBand(currUser.getId(), bandId)){
-            try {
-                int reqId = requestDAO.getId(loggedInUserId,bandId);
-                if(reqId!=Constants.NO_ID){
-                    Request request = requestDAO.getById(reqId);
-                    req.setAttribute("isPending",!request.isProcessed());
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            int reqId = requestDAO.getId(loggedInUserId,bandId);
+            if(reqId!=Constants.NO_ID){
+                Request request = requestDAO.getById(reqId);
+                req.setAttribute("isPending",!request.isProcessed());
             }
-
         }
         RequestDispatcher rd = req.getRequestDispatcher("bandPage.jsp");
         rd.forward(req, resp);

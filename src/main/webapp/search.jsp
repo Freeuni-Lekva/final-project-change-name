@@ -1,19 +1,14 @@
-<%@ page import="bandfinder.models.User" %>
-<%@ page import="java.util.List" %>
-<%@ page import="bandfinder.models.Band" %>
-<%@ page import="bandfinder.services.TagAutoComplete" %>
-<%@ page import="bandfinder.services.UserAutoComplete" %>
-<%@ page import="bandfinder.infrastructure.AutoInjectable" %>
-<%@ page import="bandfinder.infrastructure.Injector" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="bandfinder.models.User" %>
-<%@ page import="bandfinder.models.Tag" %>
+<%@ page import="bandfinder.models.*" %>
+<%@ page import="bandfinder.infrastructure.*" %>
+<%@ page import="bandfinder.dao.*" %>
+<%@ page import="bandfinder.services.*" %>
+<%@ page import="java.util.*"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     TagAutoComplete defTags = Injector.getImplementation(TagAutoComplete.class);
     UserAutoComplete defUsers = Injector.getImplementation(UserAutoComplete.class);
+    BandAutoComplete defBands = Injector.getImplementation(BandAutoComplete.class);
 %>
 <html>
 <head>
@@ -38,6 +33,10 @@
             List<User> users = defUsers.get();
             for(User user: users){
                 out.println("<option value=\""+user.getFullName()+"\" />");
+            }
+            List<Band> bands = defBands.get();
+            for(Band band: bands){
+                out.println("<option value=\""+band.getName()+"\" />");
             }
         %>
         </datalist>

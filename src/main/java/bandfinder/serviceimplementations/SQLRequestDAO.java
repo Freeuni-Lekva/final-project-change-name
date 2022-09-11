@@ -45,7 +45,7 @@ public class SQLRequestDAO implements RequestDAO {
             PreparedStatement statement = connection.prepareStatement(
                     "UPDATE requests SET userId = ?, " +
                             "bandId = ?, " +
-                            "isProcessed = ?, WHERE id = ?;");
+                            "isProcessed = ? WHERE id = ?;");
             statement.setInt(4, model.getId());
             statement.setInt(1, model.getUserId());
             statement.setInt(2, model.getBandId());
