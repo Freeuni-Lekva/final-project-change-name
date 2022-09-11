@@ -32,6 +32,7 @@ public class RegistrationServlet extends ServletBase {
         boolean userExists = userDAO.getUserByEmail(email) != null;
         if(userExists){
             request.getRequestDispatcher("/register.jsp").forward(request, response);
+            return;
         }
 
         String password = request.getParameter("password");
@@ -41,6 +42,7 @@ public class RegistrationServlet extends ServletBase {
 
         if(email == null || password == null || firstName == null || surname == null || stageName == null){
             request.getRequestDispatcher("/register.jsp").forward(request, response);
+            return;
         }
 
         try {
